@@ -54,7 +54,7 @@ run command "sudo make uninstall"(unload develop library).
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7,Ubuntu/Mint),可以显示声音河流 .
  
-    这里有目录ffmpeg-4.3-src-3.3ok10,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
+这里有目录ffmpeg-4.3-src-3.3ok10,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
     用ffmpeg-4.3-src-3.3ok10/fftools里的文件,替换掉ffmpeg-4.3/fftools里的同名文件
     用ffmpeg-4.3-src-3.3ok10/libavdevice里的文件,替换掉ffmpeg-4.3/libavdevice里的同名文件
     用ffmpeg-4.3-src-3.3ok10/configure文件,替换掉ffmpeg-4.3里的同名文件
@@ -88,13 +88,14 @@ run command "sudo make uninstall"(unload develop library).
     sudo make install
     把ffplay拷贝到App目录.
  
-    Windows Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
-    Ubuntu 14.04 16.04下面需要安装SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
-所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr)
-    Mint-20-x86-64下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,把 usr/lib64 改为usr/lib, 
-把 usr/lib 下面所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr)
+Windows Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
 
-    ffmpeg-4.3 使用 SDL2, 但是我不能在Ubuntu/Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
+Ubuntu 14.04 16.04下面需要安装SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
+    所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr)
+Mint-20-x86-64下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,把 usr/lib64 改为usr/lib, 
+    把 usr/lib 下面所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr)
 
-    如果你在 Ubuntu 刚刚编译了ffplay,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
+ffmpeg-4.3 使用 SDL2, 但是我不能在Ubuntu/Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
+
+如果你在 Ubuntu 刚刚编译了ffplay,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
 
