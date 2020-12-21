@@ -1,0 +1,14 @@
+//check_pkg_config(){
+//require_pkg_config
+//test_pkg_config
+//test_cpp_condition()
+//check_deps
+//test_pkg_config(){
+//    shift 4
+//--disable-libxcb
+//outdev_list
+
+
+in file sdl2.c , all sdl2 set to sdl
+
+
