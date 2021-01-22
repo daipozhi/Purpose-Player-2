@@ -425,7 +425,7 @@ static 	int    deb_ch_d=0;
 
 
 static  char   deb_filenamebuff[10000][1000];
-static  int    deb_filenamebuffpp[10000];
+static  int    deb_filenamebuffptr[10000];
 static  char   deb_filenamebuff_ext[10000][6];
 static  char   deb_filenamebuff_size[10000][7];
 static  char   deb_filenamebuff_date[10000][20];
@@ -493,19 +493,19 @@ static  char deb_dir_buffer_wchar[3000];
 
 	// daipozhi modified 
 static 	int deb_get_dir_ini(void);
-static 	int deb_dir_opened(int pp );
+static 	int deb_dir_opened(int ptr );
 static 	int deb_get_space(char *buffer);
 static 	char deb_getfirstchar(char *buffer);
-static 	int deb_dir_add_after(int pp);
-static 	int deb_dir_remove_after(int pp);
-static 	int deb_get_path(int pp);
+static 	int deb_dir_add_after(int ptr);
+static 	int deb_dir_remove_after(int ptr);
+static 	int deb_get_path(int ptr);
 static 	int deb_get_path1(char *buffer1,char *buffer2);
 static 	int deb_get_path2(char *buffer1,char *buffer2);
 static 	int deb_cmp_dir(char *buffer1,char *buffer2);
 
 
 static 	char   deb_filenamebuff2[3000][1000];
-static  int    deb_filenamebuffpp2[3000];
+static  int    deb_filenamebuffptr2[3000];
 static  char   deb_filenamebuff2_ext[3000][6];
 static  char   deb_filenamebuff2_size[3000][7];
 static  char   deb_filenamebuff2_date[3000][20];
@@ -531,7 +531,7 @@ static  int           deb_m_info_len;
 static  char          deb_m_info_type;
 
 static int deb_size_format(int pn,char *buffer);
-static int deb_get_dir_len(int pp);
+static int deb_get_dir_len(int ptr);
 
 
 // ---- binary tree ----------------------------------------------------------
@@ -551,7 +551,7 @@ static     char  t1_node_val4[BTREE1_SIZE][7];
 static     char  t1_node_val5[BTREE1_SIZE][20];
 
 static    int   t1_stack[BTREE1_SIZE];
-static    int   t1_stack_pp;
+static    int   t1_stack_ptr;
 
 static    int   t1_parent;
 static    int   t1_parent_side;
@@ -559,35 +559,35 @@ static    int   t1_current;
 static    int   t1_child_left;
 static    int   t1_child_right;
 
-static    int   t1_node_pp[BTREE1_SIZE][3];
-static    int   t1_root_pp;
+static    int   t1_node_ptr[BTREE1_SIZE][3];
+static    int   t1_root_ptr;
 
-static    int   t1_find_pp;
-static    int   t1_find_pp2;
+static    int   t1_find_ptr;
+static    int   t1_find_ptr2;
 static    int   t1_find_side;
     
 static    int   t1_list_stack[BTREE1_LSIZE];
 static    char  t1_list_stack_type[BTREE1_LSIZE];
-static    int   t1_list_pp;
+static    int   t1_list_ptr;
 
     //int   t1_out_buff[BTREE1_SIZE];
-    //int   t1_out_pp;
+    //int   t1_out_ptr;
 
 static     char  t1_out_buff[BTREE1_SIZE][1000];
 static     char  t1_out_buff2[BTREE1_SIZE];
 static     char  t1_out_buff3[BTREE1_SIZE][6];
 static     char  t1_out_buff4[BTREE1_SIZE][7];
 static     char  t1_out_buff5[BTREE1_SIZE][20];
-static     int   t1_out_pp;
-static     int   t1_out_pp2;
+static     int   t1_out_ptr;
+static     int   t1_out_ptr2;
  
 static     char  out_mixed_buff[BTREE1_SIZE][1000];
 static     char  out_mixed_buff2[BTREE1_SIZE];
 static     char  out_mixed_buff3[BTREE1_SIZE][6];
 static     char  out_mixed_buff4[BTREE1_SIZE][7];
 static     char  out_mixed_buff5[BTREE1_SIZE][20];
-static     int   out_mixed_pp;
-static     int   out_mixed_pp2;
+static     int   out_mixed_ptr;
+static     int   out_mixed_ptr2;
 
 static     char  entry_d_name[1000];
 static     int   entry_d_type;
@@ -599,8 +599,8 @@ static    int   t1_err;
 
 static    int   t1_init_tree(void);
 static    int   t1_new_node(void);
-static    int   t1_old_node(int pp);
-static    int   t1_clear_node(int pp);
+static    int   t1_old_node(int ptr);
+static    int   t1_clear_node(int ptr);
 static    int   t1_search_node(char *pstr,char ptype);
 static    int   t1_insert_node(char *pstr,char ptype);
 static    int   t1_delete_node(char *pstr,char ptype);
@@ -609,7 +609,7 @@ static    int   t1_smallest(void);
 static int string_comp(char *ps1,char *ps2);
 static    int   t1_dsp_tree(void);
 static    int   t1_after_list(void);
-static    int   t1_out_list(char *pstr,char ptype,int pp);
+static    int   t1_out_list(char *pstr,char ptype,int ptr);
     //static    int   t1_dsp_list(void);
     //static    int   t1_save_list(char *fn);
 
@@ -636,9 +636,9 @@ static     VideoState *stream_open_is;
   #define FFT_BUFFER_SIZE  16384
   short int deb_sr_fft_deb[4][FFT_BUFFER_SIZE*9];
   int   deb_sr_fft_deb_chn;
-  int   deb_sr_fft_deb_pp;
-  int   deb_sr_fft_deb_pp2;
-  int   deb_sr_fft_deb_pp3;
+  int   deb_sr_fft_deb_ptr;
+  int   deb_sr_fft_deb_ptr2;
+  int   deb_sr_fft_deb_ptr3;
 #else
   #define FFT_BUFFER_SIZE  512
 #endif  
@@ -668,7 +668,7 @@ static long long int 	deb_sr_total_bytes;
 
 static int deb_sr_river[1002][FFT_BUFFER_SIZE/2];
 static int deb_sr_river2[501][FFT_BUFFER_SIZE/2];
-static int deb_sr_river_pp;
+static int deb_sr_river_ptr;
 static int deb_sr_river_mark[1002];
 static int deb_sr_river_last;
 static long long int deb_sr_river_adj;
@@ -765,7 +765,7 @@ static float deb_sr_river_f2[2][2][2000];
 static int  deb_sr_river_f_init;
 static int  deb_sr_river_f_init_fail;
 static int  deb_sr_river_f_cons(void);
-//static int  deb_sr_river_f_cons_test(VideoState *cur_stream,int pp);
+//static int  deb_sr_river_f_cons_test(VideoState *cur_stream,int ptr);
 static int  deb_sr_river_show(VideoState *cur_stream);
 
 static int  deb_sr_river_f_test;
@@ -773,7 +773,7 @@ static int  deb_sr_river_f_test;
 static char deb_sr_d_buff[1920][1080];
 static int  deb_sr_d_return[2];
 static int  deb_sr_d_line[2][100][2];
-static int  deb_sr_d_line_pp[2];
+static int  deb_sr_d_line_ptr[2];
 static int  deb_sr_d_line_dot[2][2];
 
 static int  deb_sr_d_init(void);
@@ -782,9 +782,9 @@ static int  deb_sr_draw_line2(int x1,int y1,int x2,int y2);
 
 static int deb_sr_draw_line3(int x1,int y1,int x2,int y2);
 static int deb_sr_draw_line4_ini(void);
-static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp);
-static int deb_sr_draw_line4_get(int pp);
-static int deb_sr_draw_line4_get2(int pp);
+static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr);
+static int deb_sr_draw_line4_get(int ptr);
+static int deb_sr_draw_line4_get2(int ptr);
 
 // --------end of sound river --------------------------------------------
 
@@ -3762,7 +3762,7 @@ static void update_sample_display(VideoState *is, short *samples, int samples_si
 	{
 	    deb_sr_show_init=1;
 	    deb_sr_sample_over2=0;
-	    deb_sr_river_pp=0;
+	    deb_sr_river_ptr=0;
 	    deb_sr_river_over=0;
 	    deb_sr_sample_over=0;
 	    //deb_sr_fft_add =0;
@@ -3770,9 +3770,9 @@ static void update_sample_display(VideoState *is, short *samples, int samples_si
 	    deb_sr_river_f_test=0;
 
 #if DPZ_DEBUG2
-	    deb_sr_fft_deb_pp =0;
-	    deb_sr_fft_deb_pp2=0;
-	    deb_sr_fft_deb_pp3=0;
+	    deb_sr_fft_deb_ptr =0;
+	    deb_sr_fft_deb_ptr2=0;
+	    deb_sr_fft_deb_ptr3=0;
 	    deb_sr_sdl_callback_cnt=0;
 	    deb_sr_fft_deb_chn=0;
 #endif
@@ -4077,20 +4077,20 @@ Uint8 *stream2;
 
 	while (len2<len1)
 	{
-	   if (deb_sr_fft_deb_pp+len3<FFT_BUFFER_SIZE*2*deb_sr_ch)  
+	   if (deb_sr_fft_deb_ptr+len3<FFT_BUFFER_SIZE*2*deb_sr_ch)  
            {
 	     if ( deb_sr_sdl_callback_cnt>=FFT_BUFFER_SIZE*2*deb_sr_ch*2 ) 
 	     {
 
         	if (!is->muted && is->audio_buf && is->audio_volume == SDL_MIX_MAXVOLUME)
 		{
-            		memcpy(stream2, (uint8_t *)(deb_sr_fft_deb[deb_sr_fft_deb_pp3]) + deb_sr_fft_deb_pp+len3, 1);
+            		memcpy(stream2, (uint8_t *)(deb_sr_fft_deb[deb_sr_fft_deb_ptr3]) + deb_sr_fft_deb_ptr+len3, 1);
 		}
         	else 
 		{
             		memset(stream2, 0, 1);
             		if (!is->muted && is->audio_buf)
-                	SDL_MixAudio(stream2, (uint8_t *)(deb_sr_fft_deb[deb_sr_fft_deb_pp3]) + deb_sr_fft_deb_pp+len3, 1, is->audio_volume);
+                	SDL_MixAudio(stream2, (uint8_t *)(deb_sr_fft_deb[deb_sr_fft_deb_ptr3]) + deb_sr_fft_deb_ptr+len3, 1, is->audio_volume);
        		}
 
 		len2=len2+1;
@@ -4107,16 +4107,16 @@ Uint8 *stream2;
 	   }
 	   else
 	   {
-		deb_sr_fft_deb_pp3++;
-		if (deb_sr_fft_deb_pp3>=4) deb_sr_fft_deb_pp3=0;
+		deb_sr_fft_deb_ptr3++;
+		if (deb_sr_fft_deb_ptr3>=4) deb_sr_fft_deb_ptr3=0;
 
-		deb_sr_fft_deb_pp=0;
+		deb_sr_fft_deb_ptr=0;
 		len3=0;
 	   }
 
 	}
 	
-	deb_sr_fft_deb_pp=deb_sr_fft_deb_pp+len3;
+	deb_sr_fft_deb_ptr=deb_sr_fft_deb_ptr+len3;
 #else
         if (!is->muted && is->audio_buf && is->audio_volume == SDL_MIX_MAXVOLUME)
             memcpy(stream, (uint8_t *)is->audio_buf + is->audio_buf_index, len1);
@@ -5515,7 +5515,7 @@ static void event_loop(VideoState *cur_stream)
 								deb_sr_river_over=0;
 								deb_sr_sample_over=0;
 								deb_sr_sample_over2=0;
-								deb_sr_river_pp=0;
+								deb_sr_river_ptr=0;
 								deb_sr_river_last=0;
 								deb_sr_river_adj=0;
 								//deb_sr_river_f_init=0;
@@ -5573,7 +5573,7 @@ static void event_loop(VideoState *cur_stream)
 								deb_sr_river_over=0;
 								deb_sr_sample_over=0;
 								deb_sr_sample_over2=0;
-								deb_sr_river_pp=0;
+								deb_sr_river_ptr=0;
 								deb_sr_river_last=0;
 								deb_sr_river_adj=0;
 								//deb_sr_river_f_init=0;
@@ -5762,7 +5762,7 @@ static void event_loop(VideoState *cur_stream)
 							deb_sr_river_over=0;
 							deb_sr_sample_over=0;
 							deb_sr_sample_over2=0;
-							deb_sr_river_pp=0;
+							deb_sr_river_ptr=0;
 							deb_sr_river_last=0;
 							deb_sr_river_adj=0;
 							//deb_sr_river_f_init=0;
@@ -5817,7 +5817,7 @@ static void event_loop(VideoState *cur_stream)
 										deb_sr_river_over=0;
 										deb_sr_sample_over=0;
 										deb_sr_sample_over2=0;
-										deb_sr_river_pp=0;
+										deb_sr_river_ptr=0;
 										deb_sr_river_last=0;
 										deb_sr_river_adj=0;
 										//deb_sr_river_f_init=0;
@@ -6036,7 +6036,7 @@ static void event_loop(VideoState *cur_stream)
 						deb_sr_river_over=0;
 						deb_sr_sample_over=0;
 						deb_sr_sample_over2=0;
-						deb_sr_river_pp=0;
+						deb_sr_river_ptr=0;
 						deb_sr_river_last=0;
 						deb_sr_river_adj=0;
 						//deb_sr_river_f_init=0;
@@ -7018,57 +7018,57 @@ static int deb_get_dir_ini(void)
 
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"</>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<C:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<D:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<E:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<F:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<G:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<H:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<I:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<J:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<K:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
 	strcpy(deb_filenamebuff[deb_filenamecnt],"<L:/>");
-	deb_filenamebuffpp[deb_filenamecnt]=2;
+	deb_filenamebuffptr[deb_filenamecnt]=2;
 	deb_filenamecnt++;
 	if (deb_filenamecnt>=3000) return(0);
 
@@ -7084,9 +7084,9 @@ static int deb_get_dir_ini(void)
 					strcat(deb_filenamebuff[deb_filenamecnt],entry_d_name);
 					
 					if (entry_d_type==1)
-						deb_filenamebuffpp[deb_filenamecnt]=2;
+						deb_filenamebuffptr[deb_filenamecnt]=2;
 					else 
-						deb_filenamebuffpp[deb_filenamecnt]=1;
+						deb_filenamebuffptr[deb_filenamecnt]=1;
 
 					deb_filenamecnt++;
 
@@ -7135,9 +7135,9 @@ static int deb_get_dir(void)
 					strcpy(deb_filenamebuff2[deb_filenamecnt2],entry_d_name);
 					
 					//if (entry_d_type==1)
-					//	deb_filenamebuffpp2[deb_filenamecnt2]=2;
+					//	deb_filenamebuffptr2[deb_filenamecnt2]=2;
 					//else 
-					//	deb_filenamebuffpp2[deb_filenamecnt2]=1;
+					//	deb_filenamebuffptr2[deb_filenamecnt2]=1;
 
 					strcpy(deb_filenamebuff2_ext[deb_filenamecnt2] ,entry_d_ext);
 					strcpy(deb_filenamebuff2_size[deb_filenamecnt2],entry_d_size);
@@ -7159,20 +7159,20 @@ static int deb_get_dir(void)
 }
 
 
-static int deb_dir_opened(int pp )
+static int deb_dir_opened(int ptr )
 {
   int i,j/*,k*/;
 
-  if (pp<0) return(0);
-  if (pp>=10000) return(0);
-  if (pp>=deb_filenamecnt) return(0);
+  if (ptr<0) return(0);
+  if (ptr>=10000) return(0);
+  if (ptr>=deb_filenamecnt) return(0);
 
-  i=deb_get_space(deb_filenamebuff[pp]);
+  i=deb_get_space(deb_filenamebuff[ptr]);
 
-  if (pp+1>=deb_filenamecnt) return(0);
+  if (ptr+1>=deb_filenamecnt) return(0);
   else
   {
-    j=deb_get_space(deb_filenamebuff[pp+1]);
+    j=deb_get_space(deb_filenamebuff[ptr+1]);
     if (j>i) return(1);
     else return(0);
   }
@@ -7231,21 +7231,21 @@ static char m101_s1[3000];
 static char m101_s2[100];
 
 
-static int deb_dir_add_after(int pp)
+static int deb_dir_add_after(int ptr)
 {
   int i,j,k/*,l*/;
   //char s1[3000];
   //char s2[100];
 
-  if (pp<0) return(0);
-  if (pp>=10000) return(0);
-  if (pp>=deb_filenamecnt) return(0);
+  if (ptr<0) return(0);
+  if (ptr>=10000) return(0);
+  if (ptr>=deb_filenamecnt) return(0);
 
   if (deb_filenamecnt2>0)
   {
     m101_s1[0]=0;
 
-    j=deb_get_space(deb_filenamebuff[pp]);
+    j=deb_get_space(deb_filenamebuff[ptr]);
     for (k=0;k<j;k++)
     {
       m101_s1[k+0]=' ';
@@ -7254,7 +7254,7 @@ static int deb_dir_add_after(int pp)
 
     strcpy(m101_s2,"  ");
 
-    for (i=deb_filenamecnt-1;i>pp;i--)
+    for (i=deb_filenamecnt-1;i>ptr;i--)
     {
 	  if (i<0) continue;
 	  if (i>=10000) continue;
@@ -7291,8 +7291,8 @@ static int deb_dir_add_after(int pp)
 	  if (i<0) continue;
 	  if (i>=10000) continue;
 
-	  if (pp+1+i<0) continue;
-	  if (pp+1+i>=10000) continue;
+	  if (ptr+1+i<0) continue;
+	  if (ptr+1+i>=10000) continue;
 
 	  if (deb_str_has_null(deb_filenamebuff[i],1000)!=1) continue;
 	  if (deb_str_has_null(m101_s1,3000)!=1) continue;
@@ -7300,24 +7300,24 @@ static int deb_dir_add_after(int pp)
 
 	  if (strlen(deb_filenamebuff[i])+strlen(m101_s1)+strlen(m101_s2)>=1000) continue;
 
-      	strcpy(deb_filenamebuff[pp+1+i],m101_s1);
-      	strcat(deb_filenamebuff[pp+1+i],m101_s2);
-      	strcat(deb_filenamebuff[pp+1+i],deb_filenamebuff2[i]);
+      	strcpy(deb_filenamebuff[ptr+1+i],m101_s1);
+      	strcat(deb_filenamebuff[ptr+1+i],m101_s2);
+      	strcat(deb_filenamebuff[ptr+1+i],deb_filenamebuff2[i]);
 
-      	strcpy(deb_filenamebuff_ext[pp+1+i],deb_filenamebuff2_ext[i]);
-      	strcpy(deb_filenamebuff_size[pp+1+i],deb_filenamebuff2_size[i]);
-      	strcpy(deb_filenamebuff_date[pp+1+i],deb_filenamebuff2_date[i]);
+      	strcpy(deb_filenamebuff_ext[ptr+1+i],deb_filenamebuff2_ext[i]);
+      	strcpy(deb_filenamebuff_size[ptr+1+i],deb_filenamebuff2_size[i]);
+      	strcpy(deb_filenamebuff_date[ptr+1+i],deb_filenamebuff2_date[i]);
 
-	deb_filenamebuff_len[pp+1+i]=0;
-	deb_filenamebuff_type[pp+1+i]=0;
+	deb_filenamebuff_len[ptr+1+i]=0;
+	deb_filenamebuff_type[ptr+1+i]=0;
     }
     
     deb_filenamecnt=deb_filenamecnt+deb_filenamecnt2;
 
-    deb_filenamebuff_len[pp] =deb_m_info_len;
-    deb_filenamebuff_type[pp]=deb_m_info_type;
+    deb_filenamebuff_len[ptr] =deb_m_info_len;
+    deb_filenamebuff_type[ptr]=deb_m_info_type;
 
-    if (pp>=deb_filenameplay)
+    if (ptr>=deb_filenameplay)
     {
     }
     else
@@ -7329,7 +7329,7 @@ static int deb_dir_add_after(int pp)
   {
     m101_s1[0]=0;
 
-    j=deb_get_space(deb_filenamebuff[pp]);
+    j=deb_get_space(deb_filenamebuff[ptr]);
     for (k=0;k<j;k++)
     {
       m101_s1[k+0]=' ';
@@ -7338,7 +7338,7 @@ static int deb_dir_add_after(int pp)
 
     strcpy(m101_s2,"  ");
 
-    for (i=deb_filenamecnt-1;i>pp;i--)
+    for (i=deb_filenamecnt-1;i>ptr;i--)
     {
 	  if (i<0) continue;
 	  if (i>=10000) continue;
@@ -7369,20 +7369,20 @@ static int deb_dir_add_after(int pp)
 	deb_filenamebuff_type[i]=0;
     }
 
-    strcpy(deb_filenamebuff[pp+1],m101_s1);
-    strcat(deb_filenamebuff[pp+1],m101_s2);
-    strcat(deb_filenamebuff[pp+1],"|Empty Fold|");
+    strcpy(deb_filenamebuff[ptr+1],m101_s1);
+    strcat(deb_filenamebuff[ptr+1],m101_s2);
+    strcat(deb_filenamebuff[ptr+1],"|Empty Fold|");
 
-    strcpy(deb_filenamebuff_ext[pp+1],"    ");
-    strcpy(deb_filenamebuff_size[pp+1],"      ");
-    strcpy(deb_filenamebuff_date[pp+1],"                   ");
+    strcpy(deb_filenamebuff_ext[ptr+1],"    ");
+    strcpy(deb_filenamebuff_size[ptr+1],"      ");
+    strcpy(deb_filenamebuff_date[ptr+1],"                   ");
     
     deb_filenamecnt=deb_filenamecnt+1;
 
-    deb_filenamebuff_len[pp] =12;
-    deb_filenamebuff_type[pp]=0;
+    deb_filenamebuff_len[ptr] =12;
+    deb_filenamebuff_type[ptr]=0;
 
-    if (pp>=deb_filenameplay)
+    if (ptr>=deb_filenameplay)
     {
     }
     else
@@ -7394,20 +7394,20 @@ static int deb_dir_add_after(int pp)
   return(0);
 }
 
-static int deb_dir_remove_after(int pp)
+static int deb_dir_remove_after(int ptr)
 {
   int i,j,k,l;
   int p1;
 
-  if (pp<0) return(0);
-  if (pp>=10000) return(0);
-  if (pp>=deb_filenamecnt) return(0);
+  if (ptr<0) return(0);
+  if (ptr>=10000) return(0);
+  if (ptr>=deb_filenamecnt) return(0);
 
-  i=deb_get_space(deb_filenamebuff[pp]);
+  i=deb_get_space(deb_filenamebuff[ptr]);
 
   k=0;
 
-  for (j=pp+1;j<deb_filenamecnt;j++)
+  for (j=ptr+1;j<deb_filenamecnt;j++)
   {
 		if (j<0) continue;
 		if (j>=10000) continue;
@@ -7424,7 +7424,7 @@ static int deb_dir_remove_after(int pp)
   if (k==0)
   {
 
-    for (j=pp+1;j<deb_filenamecnt;j++)
+    for (j=ptr+1;j<deb_filenamecnt;j++)
     {
 		if (j<0) continue;
 		if (j>=10000) continue;
@@ -7439,9 +7439,9 @@ static int deb_dir_remove_after(int pp)
       deb_filenamebuff_type[j]=0;
     }
 
-    deb_filenamecnt=pp+1;
+    deb_filenamecnt=ptr+1;
 
-    deb_filenameplay=pp;
+    deb_filenameplay=ptr;
 
   }
   else
@@ -7451,21 +7451,21 @@ static int deb_dir_remove_after(int pp)
 		if (j<0) continue;
 		if (j>=10000) continue;
 
-		if (pp+1+j-p1<0) continue;
-		if (pp+1+j-p1>=10000) continue;
+		if (ptr+1+j-p1<0) continue;
+		if (ptr+1+j-p1>=10000) continue;
 
 		if (deb_str_has_null(deb_filenamebuff[j],1000)!=1) continue;
 
 		if (strlen(deb_filenamebuff[j])>=1000) continue;
 
-      strcpy(deb_filenamebuff[pp+1+j-p1],deb_filenamebuff[j]);
+      strcpy(deb_filenamebuff[ptr+1+j-p1],deb_filenamebuff[j]);
 
-      strcpy(deb_filenamebuff_ext[pp+1+j-p1],deb_filenamebuff_ext[j]);
-      strcpy(deb_filenamebuff_size[pp+1+j-p1],deb_filenamebuff_size[j]);
-      strcpy(deb_filenamebuff_date[pp+1+j-p1],deb_filenamebuff_date[j]);
+      strcpy(deb_filenamebuff_ext[ptr+1+j-p1],deb_filenamebuff_ext[j]);
+      strcpy(deb_filenamebuff_size[ptr+1+j-p1],deb_filenamebuff_size[j]);
+      strcpy(deb_filenamebuff_date[ptr+1+j-p1],deb_filenamebuff_date[j]);
 
-      deb_filenamebuff_len[pp+1+j-p1] =deb_filenamebuff_len[j];
-      deb_filenamebuff_type[pp+1+j-p1]=deb_filenamebuff_type[j];
+      deb_filenamebuff_len[ptr+1+j-p1] =deb_filenamebuff_len[j];
+      deb_filenamebuff_type[ptr+1+j-p1]=deb_filenamebuff_type[j];
 
       deb_filenamebuff[j][0]=0;
 
@@ -7477,7 +7477,7 @@ static int deb_dir_remove_after(int pp)
       deb_filenamebuff_type[j]=0;
     }
 
-    for (j=pp+deb_filenamecnt-p1+1;j<p1;j++)
+    for (j=ptr+deb_filenamecnt-p1+1;j<p1;j++)
     {
 		if (j<0) continue;
 		if (j>=10000) continue;
@@ -7492,20 +7492,20 @@ static int deb_dir_remove_after(int pp)
 		deb_filenamebuff_type[j]=0;
     }
 
-    deb_filenamecnt=deb_filenamecnt-(p1-pp-1);
+    deb_filenamecnt=deb_filenamecnt-(p1-ptr-1);
 
-    if ((pp>=deb_filenameplay)&&(p1>=deb_filenameplay))
+    if ((ptr>=deb_filenameplay)&&(p1>=deb_filenameplay))
     {
     }
     else
     {
-      if ((pp<deb_filenameplay)&&(p1<=deb_filenameplay))
+      if ((ptr<deb_filenameplay)&&(p1<=deb_filenameplay))
       {
-        deb_filenameplay=deb_filenameplay-(p1-pp-1);
+        deb_filenameplay=deb_filenameplay-(p1-ptr-1);
       }
       else
       {
-        deb_filenameplay=pp;
+        deb_filenameplay=ptr;
       }
     }
   }
@@ -7518,7 +7518,7 @@ static char m5_buffer2[3000];
 static char m5_buffer3[3000];
 static char m5_buffer4[3000];
 
-static int deb_get_path(int pp)
+static int deb_get_path(int ptr)
 {
 	//char buffer1[3000];
 	//char buffer2[3000];
@@ -7527,17 +7527,17 @@ static int deb_get_path(int pp)
 	int  ns1,ns2;
     	int  p1;
 
-  	if (pp<0) return(0);
-  	if (pp>=10000) return(0);
-  	if (pp>=deb_filenamecnt) return(0);
+  	if (ptr<0) return(0);
+  	if (ptr>=10000) return(0);
+  	if (ptr>=deb_filenamecnt) return(0);
 
-    	p1=pp;
+    	p1=ptr;
 
     	m5_buffer4[0]=0;
 
 	deb_dir_buffer[0]=0;
 
-	ns1=deb_get_space(deb_filenamebuff[pp]);
+	ns1=deb_get_space(deb_filenamebuff[ptr]);
 
 	while (p1>=0)
 	{
@@ -8032,7 +8032,7 @@ static int deb_disp_dir(VideoState *cur_stream)
 	//char str2[3000];
 	//char str3[3000];
 	char c1,c2,c3;
-	char *strpp;
+	char *strptr;
 	int  bgcolor;
 
 	start=(-1);
@@ -8503,8 +8503,8 @@ static int deb_disp_dir(VideoState *cur_stream)
 	{
 		if (n4>=1000) continue;
 
-		strpp=disp_buff[n4];
-		deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,n4*deb_ch_h ,strpp ,deb_ch_m);
+		strptr=disp_buff[n4];
+		deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,n4*deb_ch_h ,strptr ,deb_ch_m);
 	}
 
 	n4=deb_filenameplay-deb_filenamebuff_n;
@@ -8512,8 +8512,8 @@ static int deb_disp_dir(VideoState *cur_stream)
 	{
 		if (n4+3<1000)
 		{
-		strpp=disp_buff[n4+3];
-		deb_echo_str4screenstringblack(cur_stream->width -deb_ch_w*deb_ch_m ,(n4+3)*deb_ch_h ,strpp ,deb_ch_m);
+		strptr=disp_buff[n4+3];
+		deb_echo_str4screenstringblack(cur_stream->width -deb_ch_w*deb_ch_m ,(n4+3)*deb_ch_h ,strptr ,deb_ch_m);
 		}
 	}
 
@@ -8523,20 +8523,20 @@ static int deb_disp_dir(VideoState *cur_stream)
 }
 
 
-static int deb_get_dir_len(int pp)
+static int deb_get_dir_len(int ptr)
 {
     int i,j,k;
 
-    i=deb_get_space(deb_filenamebuff[pp]);
+    i=deb_get_space(deb_filenamebuff[ptr]);
 
-    while(pp>0)
+    while(ptr>0)
     {
-	pp--;
-	j=deb_get_space(deb_filenamebuff[pp]);
+	ptr--;
+	j=deb_get_space(deb_filenamebuff[ptr]);
 	if (j<i) break;
     }
 
-    k=pp;
+    k=ptr;
 
     return(k);
 }
@@ -9114,7 +9114,7 @@ static int t1_init_tree(void)
     t1_node_mark[i]=(-1);
   }
 
-  t1_root_pp=(-1);
+  t1_root_ptr=(-1);
 
   j=BTREE1_SIZE-1;  // init stack
 
@@ -9124,7 +9124,7 @@ static int t1_init_tree(void)
     j--;
   }
 
-  t1_stack_pp=BTREE1_SIZE;
+  t1_stack_ptr=BTREE1_SIZE;
 
   return(0);
 }
@@ -9135,10 +9135,10 @@ static int t1_new_node(void)
 
   i=(-1);
 
-  if (t1_stack_pp>0)
+  if (t1_stack_ptr>0)
   {
-    t1_stack_pp--;
-    j=t1_stack[t1_stack_pp];
+    t1_stack_ptr--;
+    j=t1_stack[t1_stack_ptr];
     t1_node_mark[j]=0;
     i=j;
   }
@@ -9146,39 +9146,39 @@ static int t1_new_node(void)
   return(i);
 }
 
-static int t1_old_node(int pp)
+static int t1_old_node(int ptr)
 {
-   if (t1_stack_pp>=BTREE1_SIZE)
+   if (t1_stack_ptr>=BTREE1_SIZE)
    {
      printf("In btree1,error at tn_old_node()\n");
      return(-1);
    }
    else
    {
-     t1_stack[t1_stack_pp]=pp;
-     t1_stack_pp++;
-     t1_node_mark[pp]=(-1);
+     t1_stack[t1_stack_ptr]=ptr;
+     t1_stack_ptr++;
+     t1_node_mark[ptr]=(-1);
      return(0);
    }
 }
 
-static int t1_clear_node(int pp)
+static int t1_clear_node(int ptr)
 {
   int i,j;
   
-  t1_node_pp[pp][0]=(-1);
-  t1_node_pp[pp][1]=(-1);
-  t1_node_pp[pp][2]=(-1);
+  t1_node_ptr[ptr][0]=(-1);
+  t1_node_ptr[ptr][1]=(-1);
+  t1_node_ptr[ptr][2]=(-1);
 
   for (i=0;i<1000;i++)
   {
-    t1_node_val[pp][i]=0;
+    t1_node_val[ptr][i]=0;
   }
 
-  t1_node_val2[pp]=0;
-  t1_node_val3[pp][0]=0;
-  t1_node_val4[pp][0]=0;
-  t1_node_val5[pp][0]=0;
+  t1_node_val2[ptr]=0;
+  t1_node_val3[ptr][0]=0;
+  t1_node_val4[ptr][0]=0;
+  t1_node_val5[ptr][0]=0;
 
   return(0);
 }
@@ -9197,20 +9197,20 @@ static int t1_search_node(char *pstr,char ptype)
 
   if (strlen(pstr)>=1000) return(1);
 
-  if (t1_root_pp<0)
+  if (t1_root_ptr<0)
   {
-     t1_find_pp=(-1);
+     t1_find_ptr=(-1);
      return(1);
   }
 
-  i=t1_root_pp;
+  i=t1_root_ptr;
 
   t1_parent=(-1);
   t1_parent_side=2;
 
   t1_current=i;
-  t1_child_left =t1_node_pp[i][1];
-  t1_child_right=t1_node_pp[i][2];
+  t1_child_left =t1_node_ptr[i][1];
+  t1_child_right=t1_node_ptr[i][2];
 
   //printf("root into addr=%d,val=%d,\n",t1_current,t1_node_val[t1_current]);
 
@@ -9236,16 +9236,16 @@ static int t1_search_node(char *pstr,char ptype)
 
     if ((string_comp(m201_str3,m201_str4)==0)&&(ptype==t1_node_val2[i]))
     {
-      t1_find_pp=i;
+      t1_find_ptr=i;
       return(0);
     }
 
     if ((ptype<t1_node_val2[i])||
 	((ptype==t1_node_val2[i])&&(string_comp(m201_str3,m201_str4)>0)))
     {
-      if (t1_node_pp[i][2]<0)
+      if (t1_node_ptr[i][2]<0)
       {
-        t1_find_pp=i;
+        t1_find_ptr=i;
         t1_find_side=2;
         return(1);
       }
@@ -9254,11 +9254,11 @@ static int t1_search_node(char *pstr,char ptype)
         t1_parent=i;
         t1_parent_side=2;
 
-        i=t1_node_pp[i][2];
+        i=t1_node_ptr[i][2];
 
         t1_current=i;
-        t1_child_left =t1_node_pp[i][1];
-        t1_child_right=t1_node_pp[i][2];
+        t1_child_left =t1_node_ptr[i][1];
+        t1_child_right=t1_node_ptr[i][2];
 
         //printf("right into addr=%d,val=%d,\n",t1_current,t1_node_val[t1_current]);
 
@@ -9269,9 +9269,9 @@ static int t1_search_node(char *pstr,char ptype)
     if ((ptype>t1_node_val2[i])||
 	((ptype==t1_node_val2[i])&&(string_comp(m201_str3,m201_str4)<0)))
     {
-      if (t1_node_pp[i][1]<0)
+      if (t1_node_ptr[i][1]<0)
       {
-        t1_find_pp=i;
+        t1_find_ptr=i;
         t1_find_side=1;
         return(1);
       }
@@ -9280,11 +9280,11 @@ static int t1_search_node(char *pstr,char ptype)
         t1_parent=i;
         t1_parent_side=1;
 
-        i=t1_node_pp[i][1];
+        i=t1_node_ptr[i][1];
 
         t1_current=i;
-        t1_child_left =t1_node_pp[i][1];
-        t1_child_right=t1_node_pp[i][2];
+        t1_child_left =t1_node_ptr[i][1];
+        t1_child_right=t1_node_ptr[i][2];
 
         //printf("left into addr=%d,val=%d,\n",t1_current,t1_node_val[t1_current]);
 
@@ -9338,12 +9338,12 @@ static int t1_insert_node(char *pstr,char ptype)
 
   if (i==0)
   {
-    t1_find_pp2=t1_find_pp;
+    t1_find_ptr2=t1_find_ptr;
     return(0);
   }
   else
   {
-    if (t1_find_pp<0)
+    if (t1_find_ptr<0)
     {
       j=t1_new_node();
       if (j<0)
@@ -9353,13 +9353,13 @@ static int t1_insert_node(char *pstr,char ptype)
       }
       else
       {
-        t1_root_pp=j;
+        t1_root_ptr=j;
         t1_clear_node(j);
 
         strcpy(t1_node_val[j],pstr);
 	t1_node_val2[j]=ptype;
 
-	t1_find_pp2=j;
+	t1_find_ptr2=j;
         return(0);
       }
     }
@@ -9378,12 +9378,12 @@ static int t1_insert_node(char *pstr,char ptype)
         strcpy(t1_node_val[j],pstr);
 	t1_node_val2[j]=ptype;
 
-        t1_node_pp[j][0]=t1_find_pp;
+        t1_node_ptr[j][0]=t1_find_ptr;
 
-        if (t1_find_side==2) t1_node_pp[t1_find_pp][2]=j;
-        else t1_node_pp[t1_find_pp][1]=j;
+        if (t1_find_side==2) t1_node_ptr[t1_find_ptr][2]=j;
+        else t1_node_ptr[t1_find_ptr][1]=j;
 
-	t1_find_pp2=j;
+	t1_find_ptr2=j;
 
         return(0);
       }
@@ -9407,14 +9407,14 @@ static int t1_delete_node(char *pstr,char ptype)
 
       if (t1_parent<0)  // it is root
       {
-	t1_root_pp=(-1);
+	t1_root_ptr=(-1);
       }
       else
       {
-        if (t1_parent_side==1) t1_node_pp[t1_parent][1]=(-1);
-        if (t1_parent_side==2) t1_node_pp[t1_parent][2]=(-1);
+        if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=(-1);
+        if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=(-1);
       }
-      t1_old_node(t1_find_pp);
+      t1_old_node(t1_find_ptr);
 
       //printf("0 child end\n");
     }
@@ -9428,29 +9428,29 @@ static int t1_delete_node(char *pstr,char ptype)
       {
         if (t1_child_left>=0)
         {
-          t1_root_pp=t1_child_left;
+          t1_root_ptr=t1_child_left;
         }
 
         if (t1_child_right>=0)
         {
-          t1_root_pp=t1_child_right;
+          t1_root_ptr=t1_child_right;
         }
       }
       else
       {
         if (t1_child_left>=0)
         {
-	  if (t1_parent_side==1) t1_node_pp[t1_parent][1]=t1_child_left;
-	  if (t1_parent_side==2) t1_node_pp[t1_parent][2]=t1_child_left;
+	  if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=t1_child_left;
+	  if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=t1_child_left;
         }
 
         if (t1_child_right>=0)
         {
-	  if (t1_parent_side==1) t1_node_pp[t1_parent][1]=t1_child_right;
-	  if (t1_parent_side==2) t1_node_pp[t1_parent][2]=t1_child_right;
+	  if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=t1_child_right;
+	  if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=t1_child_right;
         }
       }
-      t1_old_node(t1_find_pp);
+      t1_old_node(t1_find_ptr);
 
       //printf("1 child end\n");
     }
@@ -9464,45 +9464,45 @@ static int t1_delete_node(char *pstr,char ptype)
 
       while (1)  // right sub tree's leftest node
       {
-	if (t1_node_pp[s1][1]>=0)
+	if (t1_node_ptr[s1][1]>=0)
         {
           sp=s1;
-          s1=t1_node_pp[s1][1];
+          s1=t1_node_ptr[s1][1];
         }
 	else break;
       }
 
-      if (t1_node_pp[s1][2]<0) // this node has no child
+      if (t1_node_ptr[s1][2]<0) // this node has no child
       {
 	if (sp<0) // this node's parent is current node
         {
           if (t1_parent<0) // current node is root;
           {
-	    t1_root_pp=s1;
+	    t1_root_ptr=s1;
           }
           else
           {
-	    if (t1_parent_side==1) t1_node_pp[t1_parent][1]=s1;
-	    if (t1_parent_side==2) t1_node_pp[t1_parent][2]=s1;
+	    if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=s1;
+	    if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=s1;
           }
-	  t1_node_pp[s1][1]=t1_child_left;
-	  //t1_node_pp[s1][2]=(-1);
+	  t1_node_ptr[s1][1]=t1_child_left;
+	  //t1_node_ptr[s1][2]=(-1);
         }
 	else
         {
-	  t1_node_pp[sp][1]=(-1);
+	  t1_node_ptr[sp][1]=(-1);
 
           if (t1_parent<0) // current node is root;
           {
-	    t1_root_pp=s1;
+	    t1_root_ptr=s1;
           }
           else
           {
-	    if (t1_parent_side==1) t1_node_pp[t1_parent][1]=s1;
-	    if (t1_parent_side==2) t1_node_pp[t1_parent][2]=s1;
+	    if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=s1;
+	    if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=s1;
           }
-	  t1_node_pp[s1][1]=t1_child_left;
-	  t1_node_pp[s1][2]=t1_child_right;
+	  t1_node_ptr[s1][1]=t1_child_left;
+	  t1_node_ptr[s1][2]=t1_child_right;
         }
       }
       else // this node has one child
@@ -9511,35 +9511,35 @@ static int t1_delete_node(char *pstr,char ptype)
         {
           if (t1_parent<0) // current node is root;
           {
-	    t1_root_pp=s1;
+	    t1_root_ptr=s1;
           }  
           else
           {
-	    if (t1_parent_side==1) t1_node_pp[t1_parent][1]=s1;
-	    if (t1_parent_side==2) t1_node_pp[t1_parent][2]=s1;
+	    if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=s1;
+	    if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=s1;
           }
-	  t1_node_pp[s1][1]=t1_child_left;
-	  //t1_node_pp[s1][2]=(-1);
+	  t1_node_ptr[s1][1]=t1_child_left;
+	  //t1_node_ptr[s1][2]=(-1);
         }
 	else
         {
-	  t1_node_pp[sp][1]=t1_node_pp[s1][2];
+	  t1_node_ptr[sp][1]=t1_node_ptr[s1][2];
 
           if (t1_parent<0) // current node is root;
           {
-	    t1_root_pp=s1;
+	    t1_root_ptr=s1;
           }
           else
           {
-	    if (t1_parent_side==1) t1_node_pp[t1_parent][1]=s1;
-	    if (t1_parent_side==2) t1_node_pp[t1_parent][2]=s1;
+	    if (t1_parent_side==1) t1_node_ptr[t1_parent][1]=s1;
+	    if (t1_parent_side==2) t1_node_ptr[t1_parent][2]=s1;
           }
-	  t1_node_pp[s1][1]=t1_child_left;
-	  t1_node_pp[s1][2]=t1_child_right;
+	  t1_node_ptr[s1][1]=t1_child_left;
+	  t1_node_ptr[s1][2]=t1_child_right;
         }
       }
 
-      t1_old_node(t1_find_pp);
+      t1_old_node(t1_find_ptr);
 
       //printf("2 child end\n");
     }
@@ -9554,24 +9554,24 @@ static int t1_smallest(void)
 {
   int i,j;
 
-  if (t1_root_pp<0)
+  if (t1_root_ptr<0)
   {
-     t1_find_pp=(-1);
+     t1_find_ptr=(-1);
      return(1);
   }
 
-  i=t1_root_pp;
+  i=t1_root_ptr;
 
   while (1)
   {
-    if (t1_node_pp[i][1]<0)
+    if (t1_node_ptr[i][1]<0)
     {
-      t1_find_pp=i;
+      t1_find_ptr=i;
       return(0);
     }
     else
     {
-      i=t1_node_pp[i][1];
+      i=t1_node_ptr[i][1];
       continue;
     }    
   }
@@ -9585,73 +9585,73 @@ static int t1_after_list(void)
   int  i,j,k;
   //char str1[300];
 
-  t1_list_pp=0;
-  t1_out_pp=0;
+  t1_list_ptr=0;
+  t1_out_ptr=0;
   t1_err=0;
   
-  i=t1_root_pp;
+  i=t1_root_ptr;
   if (i<0) return(0);
 
-  if (t1_node_pp[i][1]>=0)
+  if (t1_node_ptr[i][1]>=0)
   {
-    t1_list_stack[t1_list_pp]=t1_node_pp[i][1];
-    t1_list_stack_type[t1_list_pp]=1;
-    t1_list_pp++;
+    t1_list_stack[t1_list_ptr]=t1_node_ptr[i][1];
+    t1_list_stack_type[t1_list_ptr]=1;
+    t1_list_ptr++;
   }
 
-  t1_list_stack[t1_list_pp]=i;
-  t1_list_stack_type[t1_list_pp]=2;
-  t1_list_pp++;
+  t1_list_stack[t1_list_ptr]=i;
+  t1_list_stack_type[t1_list_ptr]=2;
+  t1_list_ptr++;
   
-  if (t1_node_pp[i][2]>=0)
+  if (t1_node_ptr[i][2]>=0)
   {
-    t1_list_stack[t1_list_pp]=t1_node_pp[i][2];
-    t1_list_stack_type[t1_list_pp]=1;
-    t1_list_pp++;
+    t1_list_stack[t1_list_ptr]=t1_node_ptr[i][2];
+    t1_list_stack_type[t1_list_ptr]=1;
+    t1_list_ptr++;
   }
 
-  while (t1_list_pp>0)
+  while (t1_list_ptr>0)
   {
-    t1_list_pp--;
-    j=t1_list_pp;
+    t1_list_ptr--;
+    j=t1_list_ptr;
 
     if (t1_list_stack_type[j]==1)
     {
       k=t1_list_stack[j];
       
-      if (t1_node_pp[k][1]>=0)
+      if (t1_node_ptr[k][1]>=0)
       {
-        t1_list_stack[t1_list_pp]=t1_node_pp[k][1];
-        t1_list_stack_type[t1_list_pp]=1;
-        t1_list_pp++;
+        t1_list_stack[t1_list_ptr]=t1_node_ptr[k][1];
+        t1_list_stack_type[t1_list_ptr]=1;
+        t1_list_ptr++;
 
-        //sprintf(str1,"add left tree %s,list_pp=%d,",node_val[node_pp[k][1]],list_pp);
-        if (t1_list_pp>=BTREE1_LSIZE)
+        //sprintf(str1,"add left tree %s,list_ptr=%d,",node_val[node_ptr[k][1]],list_ptr);
+        if (t1_list_ptr>=BTREE1_LSIZE)
         {
           printf("In btree1,error in after_list(),BTREE1_LSIZE too small.\n");
           continue;
         }
       }
 
-      t1_list_stack[t1_list_pp]=k;
-      t1_list_stack_type[t1_list_pp]=2;
-      t1_list_pp++;
+      t1_list_stack[t1_list_ptr]=k;
+      t1_list_stack_type[t1_list_ptr]=2;
+      t1_list_ptr++;
 
-      //sprintf(str1,"add mid tree %s,list_pp=%d,",node_val[k],list_pp);
-      if (t1_list_pp>=BTREE1_LSIZE)
+      //sprintf(str1,"add mid tree %s,list_ptr=%d,",node_val[k],list_ptr);
+      if (t1_list_ptr>=BTREE1_LSIZE)
       {
         printf("In btree1,error in after_list(),BTREE1_LSIZE too small.\n");
         continue;
       }
 
-      if (t1_node_pp[k][2]>=0)
+      if (t1_node_ptr[k][2]>=0)
       {
-        t1_list_stack[t1_list_pp]=t1_node_pp[k][2];
-        t1_list_stack_type[t1_list_pp]=1;
-        t1_list_pp++;
+        t1_list_stack[t1_list_ptr]=t1_node_ptr[k][2];
+        t1_list_stack_type[t1_list_ptr]=1;
+        t1_list_ptr++;
 
-        //sprintf(str1,"add right tree %s,list_pp=%d,",node_val[node_pp[k][2]],list_pp);
-        if (t1_list_pp>=BTREE1_LSIZE)
+        //sprintf(str1,"add right tree %s,list_ptr=%d,",node_val[node_ptr[k][2]],list_ptr);
+        if (t1_list_ptr>=BTREE1_LSIZE)
         {
           printf("In btree1,error in after_list(),BTREE1_LSIZE too small.\n");
           continue;
@@ -9672,24 +9672,24 @@ static int t1_after_list(void)
   return(0);
 }
 
-static int t1_out_list(char *pstr,char ptype,int pp)
+static int t1_out_list(char *pstr,char ptype,int ptr)
 {
-  if (t1_out_pp<0) return(0);
-  if (t1_out_pp>=5000) return(0);
+  if (t1_out_ptr<0) return(0);
+  if (t1_out_ptr>=5000) return(0);
 
   if (deb_str_has_null(pstr,1000)!=1) return(0);
 
   if (strlen(pstr)>=1000) return(0);
   
-  strcpy(t1_out_buff[t1_out_pp],pstr);
-  t1_out_buff2[t1_out_pp]=ptype;
-  strcpy(t1_out_buff3[t1_out_pp],t1_node_val3[pp]);
-  strcpy(t1_out_buff4[t1_out_pp],t1_node_val4[pp]);
-  strcpy(t1_out_buff5[t1_out_pp],t1_node_val5[pp]);
+  strcpy(t1_out_buff[t1_out_ptr],pstr);
+  t1_out_buff2[t1_out_ptr]=ptype;
+  strcpy(t1_out_buff3[t1_out_ptr],t1_node_val3[ptr]);
+  strcpy(t1_out_buff4[t1_out_ptr],t1_node_val4[ptr]);
+  strcpy(t1_out_buff5[t1_out_ptr],t1_node_val5[ptr]);
 
-  t1_out_pp++;
+  t1_out_ptr++;
 
-  if (t1_out_pp>=5000) t1_out_pp=5000-1;
+  if (t1_out_ptr>=5000) t1_out_ptr=5000-1;
 
   return(0);
 }
@@ -9728,8 +9728,8 @@ static int  bt_opendir(void)
 	deb_m_info_len =0;
 	deb_m_info_type=0;
 
-	out_mixed_pp =0;
-	out_mixed_pp2=(-1);
+	out_mixed_ptr =0;
+	out_mixed_ptr2=(-1);
 
 	t1_init_tree();
 
@@ -9762,10 +9762,10 @@ static int  bt_opendir(void)
 					m202_date[0]=0;
 
 				        t1_insert_node(m202_buffer2,m202_type);
-					//node_val2[find_pp2]=0;
-					strcpy(t1_node_val3[t1_find_pp2],m202_ext);
-					strcpy(t1_node_val4[t1_find_pp2],m202_size);
-					strcpy(t1_node_val5[t1_find_pp2],m202_date);
+					//node_val2[find_ptr2]=0;
+					strcpy(t1_node_val3[t1_find_ptr2],m202_ext);
+					strcpy(t1_node_val4[t1_find_ptr2],m202_size);
+					strcpy(t1_node_val5[t1_find_ptr2],m202_date);
 
 					//deb_utf8_to_gb18030(m202_buffer2,m202_buffer7,3000);
 					//j=(int)strlen(m202_buffer7);
@@ -9915,10 +9915,10 @@ static int  bt_opendir(void)
 					strcpy(m202_date,m202_buffer5);
 
 				        t1_insert_node(m202_buffer2,m202_type);
-					//t1_node_val2[t1_find_pp2]=1;
-					strcpy(t1_node_val3[t1_find_pp2],m202_ext);
-					strcpy(t1_node_val4[t1_find_pp2],m202_size);
-					strcpy(t1_node_val5[t1_find_pp2],m202_date);
+					//t1_node_val2[t1_find_ptr2]=1;
+					strcpy(t1_node_val3[t1_find_ptr2],m202_ext);
+					strcpy(t1_node_val4[t1_find_ptr2],m202_size);
+					strcpy(t1_node_val5[t1_find_ptr2],m202_date);
 
 					//deb_utf8_to_gb18030(m202_buffer2,m202_buffer7,3000);
 					//j=(int)strlen(m202_buffer7);
@@ -9947,32 +9947,32 @@ static int  bt_opendir(void)
 
 		t1_after_list();
 
-		for (i=0;i<t1_out_pp;i++)
+		for (i=0;i<t1_out_ptr;i++)
 		{
 			if (i<0) continue;
 			if (i>=5000) continue;
 
-			if (out_mixed_pp<0) continue;
-			if (out_mixed_pp>=5000) continue;
+			if (out_mixed_ptr<0) continue;
+			if (out_mixed_ptr>=5000) continue;
 
 			if (deb_str_has_null(t1_out_buff[i],1000)!=1) continue;
 
 			if (strlen(t1_out_buff[i])>=1000) continue;
 
-			strcpy(out_mixed_buff[out_mixed_pp],t1_out_buff[i]);
+			strcpy(out_mixed_buff[out_mixed_ptr],t1_out_buff[i]);
 
-			out_mixed_buff2[out_mixed_pp]=t1_out_buff2[i];
+			out_mixed_buff2[out_mixed_ptr]=t1_out_buff2[i];
 
-			strcpy(out_mixed_buff3[out_mixed_pp],t1_out_buff3[i]);
-			strcpy(out_mixed_buff4[out_mixed_pp],t1_out_buff4[i]);
-			strcpy(out_mixed_buff5[out_mixed_pp],t1_out_buff5[i]);
+			strcpy(out_mixed_buff3[out_mixed_ptr],t1_out_buff3[i]);
+			strcpy(out_mixed_buff4[out_mixed_ptr],t1_out_buff4[i]);
+			strcpy(out_mixed_buff5[out_mixed_ptr],t1_out_buff5[i]);
 
 			//sprintf(m202_buffer6,"%20s,%c,%s,%s,%s",out_buff[i],out_buff2[i],out_buff3[i],out_buff4[i],out_buff5[i]);
 			//deb_record(m202_buffer6);
 
-			out_mixed_pp++;
+			out_mixed_ptr++;
 
-			if (out_mixed_pp>=BTREE1_SIZE) return(-1);
+			if (out_mixed_ptr>=BTREE1_SIZE) return(-1);
 		}
 
 	}
@@ -10033,29 +10033,29 @@ static int deb_size_format(int pn,char *buffer)
 
 static int  bt_readdir(void)
 {
-	out_mixed_pp2++;
+	out_mixed_ptr2++;
 
-	if (out_mixed_pp2<out_mixed_pp)
+	if (out_mixed_ptr2<out_mixed_ptr)
 	{
 
-	if ((out_mixed_pp2>=0)&&(out_mixed_pp2<3000))
+	if ((out_mixed_ptr2>=0)&&(out_mixed_ptr2<3000))
 	{
 
-	if (deb_str_has_null(out_mixed_buff[out_mixed_pp2],1000)!=1)
+	if (deb_str_has_null(out_mixed_buff[out_mixed_ptr2],1000)!=1)
 	{
 	}
 	else
 	{
-	if (strlen(out_mixed_buff[out_mixed_pp2])<1000)
+	if (strlen(out_mixed_buff[out_mixed_ptr2])<1000)
 	{
 
-		strcpy(entry_d_name,out_mixed_buff[out_mixed_pp2]);
+		strcpy(entry_d_name,out_mixed_buff[out_mixed_ptr2]);
 
-		entry_d_type=out_mixed_buff2[out_mixed_pp2];
+		entry_d_type=out_mixed_buff2[out_mixed_ptr2];
 
-		strcpy(entry_d_ext ,out_mixed_buff3[out_mixed_pp2]);
-		strcpy(entry_d_size,out_mixed_buff4[out_mixed_pp2]);
-		strcpy(entry_d_date,out_mixed_buff5[out_mixed_pp2]);
+		strcpy(entry_d_ext ,out_mixed_buff3[out_mixed_ptr2]);
+		strcpy(entry_d_size,out_mixed_buff4[out_mixed_ptr2]);
+		strcpy(entry_d_date,out_mixed_buff5[out_mixed_ptr2]);
 
 		return(0);
 
@@ -10206,11 +10206,11 @@ static int deb_sr_fft_trans_all(VideoState *is,long pcm)
 	}
 
 
-	deb_sr_river_pp++;
+	deb_sr_river_ptr++;
 
-	if (deb_sr_river_pp>=1002) //ring buffer
+	if (deb_sr_river_ptr>=1002) //ring buffer
 	{
-	    deb_sr_river_pp=0;
+	    deb_sr_river_ptr=0;
 	    deb_sr_river_over=1;
 	}
 
@@ -10338,18 +10338,18 @@ static int deb_sr_fft_cx(int chn,int pcm,int mark)
     
     for (p=0;p<deb_sr_ch;p++)
     {
-	if (p==0) deb_sr_fft_deb[deb_sr_fft_deb_pp2][m*deb_sr_ch+p]=j;
-	else      deb_sr_fft_deb[deb_sr_fft_deb_pp2][m*deb_sr_ch+p]=0;
+	if (p==0) deb_sr_fft_deb[deb_sr_fft_deb_ptr2][m*deb_sr_ch+p]=j;
+	else      deb_sr_fft_deb[deb_sr_fft_deb_ptr2][m*deb_sr_ch+p]=0;
     }
   }
 
-  deb_sr_fft_deb_pp2++;
-  if (deb_sr_fft_deb_pp2>=4) deb_sr_fft_deb_pp2=0;
+  deb_sr_fft_deb_ptr2++;
+  if (deb_sr_fft_deb_ptr2>=4) deb_sr_fft_deb_ptr2=0;
 
-  if ((deb_sr_river_pp<0)||(deb_sr_river_pp>=200)) return(0);
+  if ((deb_sr_river_ptr<0)||(deb_sr_river_ptr>=200)) return(0);
 
-  deb_sr_river[deb_sr_river_pp][chn]=n;
-  deb_sr_river_mark[deb_sr_river_pp]=mark;
+  deb_sr_river[deb_sr_river_ptr][chn]=n;
+  deb_sr_river_mark[deb_sr_river_ptr]=mark;
 
 #else
 
@@ -10417,13 +10417,13 @@ static int deb_sr_fft_cx(int chn,int pcm,int mark)
   if (n<0  ) n=0;
   if (n>=70) n=69;
 
-  if ((deb_sr_river_pp<0)||(deb_sr_river_pp>=1002)) return(0);
+  if ((deb_sr_river_ptr<0)||(deb_sr_river_ptr>=1002)) return(0);
 
-  deb_sr_river[deb_sr_river_pp][chn]=n;
-  deb_sr_river_mark[deb_sr_river_pp]=mark;
+  deb_sr_river[deb_sr_river_ptr][chn]=n;
+  deb_sr_river_mark[deb_sr_river_ptr]=mark;
 
   #if DPZ_DEBUG1
-  //sprintf(m601_str1,"fft cx,river_pp=%d,chn=%d,val=%d,mark=%d,",deb_sr_river_pp,chn,n,mark);
+  //sprintf(m601_str1,"fft cx,river_ptr=%d,chn=%d,val=%d,mark=%d,",deb_sr_river_ptr,chn,n,mark);
   //deb_record(m601_str1);
   #endif
 
@@ -11099,7 +11099,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 
         i=0;
         k=0;
-	for (j=deb_sr_river_pp-1;j>=0;j--)
+	for (j=deb_sr_river_ptr-1;j>=0;j--)
         {
           if (deb_sr_river_mark[j]==l)
           {
@@ -11112,7 +11112,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 
         if ((k==0)&&(i<60)&&(deb_sr_river_over==1))
         {
-	  for (j=1002-1;j>deb_sr_river_pp;j--)
+	  for (j=1002-1;j>deb_sr_river_ptr;j--)
           {
             if (deb_sr_river_mark[j]==l)
             {
@@ -11179,7 +11179,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 
 	        if ((i<501)&&(deb_sr_river_over==1))
 	        {
-		  for (k=1002-1;k>deb_sr_river_pp;k--)
+		  for (k=1002-1;k>deb_sr_river_ptr;k--)
 	          {
 		    for (n=0;n<FFT_BUFFER_SIZE/2;n++) deb_sr_river2[i][n]=deb_sr_river[k][n];
 
@@ -11287,7 +11287,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
   return(0);
 }
 /*
-static int  deb_sr_river_f_cons_test(VideoState *cur_stream,int pp)
+static int  deb_sr_river_f_cons_test(VideoState *cur_stream,int ptr)
 {
   int  bgcolor;
   int  x1,y1;
@@ -11308,7 +11308,7 @@ static int  deb_sr_river_f_cons_test(VideoState *cur_stream,int pp)
   {
     for (j=0;j<71;j++)
     {
-      for (k=0;k<=pp;k++)
+      for (k=0;k<=ptr;k++)
       {
 	if (k>=60) continue;
 
@@ -11805,8 +11805,8 @@ static int deb_sr_draw_line4_ini(void)
 			deb_sr_d_line[i][j][1]=(-1);
 		}
 
-	deb_sr_d_line_pp[0]=0;
-	deb_sr_d_line_pp[1]=0;
+	deb_sr_d_line_ptr[0]=0;
+	deb_sr_d_line_ptr[1]=0;
 
 	deb_sr_d_line_dot[0][0]=(-1);
 	deb_sr_d_line_dot[0][1]=(-1);
@@ -11817,12 +11817,12 @@ static int deb_sr_draw_line4_ini(void)
 }
 
 
-static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
+static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
 {
   // screen top and left is x=0;y=0;
   int x3,y3,x4,y4,x5,y5;
   int i,j;
-  int pp2;
+  int ptr2;
 
   if ((x1<0)||(x1>=1920)) return(1);
   if ((x2<0)||(x2>=1920)) return(1);
@@ -11830,7 +11830,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
   if ((y1<0)||(y1>=1080)) return(1);
   if ((y2<0)||(y2>=1080)) return(1);
 
-  pp2=0;
+  ptr2=0;
 
   if (x2<x1)
   {
@@ -11850,13 +11850,13 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
   //fill_rectangle(screen,x1,y1,1,1,bgcolor,0);
   //fill_rectangle(screen,x2,y2,1,1,bgcolor,0);
 
-  if ((pp <0)||(pp >=2)) return(0);
-  if ((pp2<0)||(pp2>=100)) return(0);
+  if ((ptr <0)||(ptr >=2)) return(0);
+  if ((ptr2<0)||(ptr2>=100)) return(0);
   if ((x1<0)||(x1>=1920)) return(0);
   if ((y1<0)||(y1>=1080)) return(0);
-  deb_sr_d_line[pp][pp2][0]=x1;
-  deb_sr_d_line[pp][pp2][1]=y1;
-  pp2++;
+  deb_sr_d_line[ptr][ptr2][0]=x1;
+  deb_sr_d_line[ptr][ptr2][1]=y1;
+  ptr2++;
 
   if (x1==x2)
   {
@@ -11864,13 +11864,13 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
     {
       for (i=y1+1;i<=y2-1;i++) //fill_rectangle(screen,x1,i,1,1,bgcolor,0);//deb_sr_d_buff[x1][i]=1;
       {
-	  if ((pp <0)||(pp >=2)) return(0);
-	  if ((pp2<0)||(pp2>=100)) return(0);
+	  if ((ptr <0)||(ptr >=2)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x1<0)||(x1>=1920)) return(0);
 	  if ((i<0)||(i>=1080)) return(0);
-	  deb_sr_d_line[pp][pp2][0]=x1;
-	  deb_sr_d_line[pp][pp2][1]=i;
-	  pp2++;
+	  deb_sr_d_line[ptr][ptr2][0]=x1;
+	  deb_sr_d_line[ptr][ptr2][1]=i;
+	  ptr2++;
       }
     }
     else
@@ -11879,13 +11879,13 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
       {
         for (i=y1-1/*y2+1*/;i>=y2+1/*y1-1*/;i--) //fill_rectangle(screen,x1,i,1,1,bgcolor,0); //deb_sr_d_buff[x1][i]=1;
         {
-	  if ((pp <0)||(pp >=2)) return(0);
-	  if ((pp2<0)||(pp2>=100)) return(0);
+	  if ((ptr <0)||(ptr >=2)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x1<0)||(x1>=1920)) return(0);
 	  if ((i<0)||(i>=1080)) return(0);
-	  deb_sr_d_line[pp][pp2][0]=x1;
-	  deb_sr_d_line[pp][pp2][1]=i;
-	  pp2++;
+	  deb_sr_d_line[ptr][ptr2][0]=x1;
+	  deb_sr_d_line[ptr][ptr2][1]=i;
+	  ptr2++;
         }
       }
       else return(0);
@@ -11897,13 +11897,13 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
     {
       for (i=x1+1;i<=x2-1;i++) //fill_rectangle(screen,i,y1,1,1,bgcolor,0);//deb_sr_d_buff[i][y1]=1;
       {
-	  if ((pp <0)||(pp >=2)) return(0);
-	  if ((pp2<0)||(pp2>=100)) return(0);
+	  if ((ptr <0)||(ptr >=2)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((i<0)||(i>=1920)) return(0);
 	  if ((y1<0)||(y1>=1080)) return(0);
-	  deb_sr_d_line[pp][pp2][0]=i;
-	  deb_sr_d_line[pp][pp2][1]=y1;
-	  pp2++;
+	  deb_sr_d_line[ptr][ptr2][0]=i;
+	  deb_sr_d_line[ptr][ptr2][1]=y1;
+	  ptr2++;
       }
     }
     else
@@ -11924,23 +11924,23 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
           {
             for (j=y5+1;j<y4;j++) //fill_rectangle(screen,x5,j,1,1,bgcolor,0);//deb_sr_d_buff[x5][j]=1;
 	    {
-		if ((pp <0)||(pp >=2)) return(0);
-		if ((pp2<0)||(pp2>=100)) return(0);
+		if ((ptr <0)||(ptr >=2)) return(0);
+		if ((ptr2<0)||(ptr2>=100)) return(0);
 		if ((x5<0)||(x5>=1920)) return(0);
 		if ((j<0)||(j>=1080)) return(0);
-		deb_sr_d_line[pp][pp2][0]=x5;
-		deb_sr_d_line[pp][pp2][1]=j;
-		pp2++;
+		deb_sr_d_line[ptr][ptr2][0]=x5;
+		deb_sr_d_line[ptr][ptr2][1]=j;
+		ptr2++;
 	    }
           }
 
-	  if ((pp <0)||(pp >=2)) return(0);
-	  if ((pp2<0)||(pp2>=100)) return(0);
+	  if ((ptr <0)||(ptr >=2)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x4<0)||(x4>=1920)) return(0);
 	  if ((y4<0)||(y4>=1080)) return(0);
-	  deb_sr_d_line[pp][pp2][0]=x4;
-	  deb_sr_d_line[pp][pp2][1]=y4;
-	  pp2++;
+	  deb_sr_d_line[ptr][ptr2][0]=x4;
+	  deb_sr_d_line[ptr][ptr2][1]=y4;
+	  ptr2++;
 
           x5=x4;
 	  y5=y4;
@@ -11962,23 +11962,23 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
           {
             for (j=y5-1;j>y4;j--) //fill_rectangle(screen,x5,j,1,1,bgcolor,0);//deb_sr_d_buff[x5][j]=1;
 	    {
-		if ((pp <0)||(pp >=2)) return(0);
-		if ((pp2<0)||(pp2>=100)) return(0);
+		if ((ptr <0)||(ptr >=2)) return(0);
+		if ((ptr2<0)||(ptr2>=100)) return(0);
 		if ((x5<0)||(x5>=1920)) return(0);
 		if ((j<0)||(j>=1080)) return(0);
-		deb_sr_d_line[pp][pp2][0]=x5;
-		deb_sr_d_line[pp][pp2][1]=j;
-		pp2++;
+		deb_sr_d_line[ptr][ptr2][0]=x5;
+		deb_sr_d_line[ptr][ptr2][1]=j;
+		ptr2++;
 	    }
           }
 
-	  if ((pp <0)||(pp >=2)) return(0);
-	  if ((pp2<0)||(pp2>=100)) return(0);
+	  if ((ptr <0)||(ptr >=2)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x4<0)||(x4>=1920)) return(0);
 	  if ((y4<0)||(y4>=1080)) return(0);
-	  deb_sr_d_line[pp][pp2][0]=x4;
-	  deb_sr_d_line[pp][pp2][1]=y4;
-	  pp2++;
+	  deb_sr_d_line[ptr][ptr2][0]=x4;
+	  deb_sr_d_line[ptr][ptr2][1]=y4;
+	  ptr2++;
 
           x5=x4;
 	  y5=y4;
@@ -11987,75 +11987,75 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int pp)
     }
   }
 
-  if ((pp <0)||(pp >=2)) return(0);
-  if ((pp2<0)||(pp2>=100)) return(0);
+  if ((ptr <0)||(ptr >=2)) return(0);
+  if ((ptr2<0)||(ptr2>=100)) return(0);
   if ((x2<0)||(x2>=1920)) return(0);
   if ((y2<0)||(y2>=1080)) return(0);
-  deb_sr_d_line[pp][pp2][0]=x2;
-  deb_sr_d_line[pp][pp2][1]=y2;
-  pp2++;
+  deb_sr_d_line[ptr][ptr2][0]=x2;
+  deb_sr_d_line[ptr][ptr2][1]=y2;
+  ptr2++;
 
   return(0);
 }
 
-static int deb_sr_draw_line4_get(int pp)
+static int deb_sr_draw_line4_get(int ptr)
 {
 	int i;
 	int x1,y1;
 
-	i=deb_sr_d_line_pp[pp];
+	i=deb_sr_d_line_ptr[ptr];
 
 	while(1)
 	{
 		if (i>=100) break;
 
-		x1=deb_sr_d_line[pp][i][0];
-		y1=deb_sr_d_line[pp][i][1];
+		x1=deb_sr_d_line[ptr][i][0];
+		y1=deb_sr_d_line[ptr][i][1];
 
 		if (x1<0) return(x1);
 
-		if (x1==deb_sr_d_line_dot[pp][0])
+		if (x1==deb_sr_d_line_dot[ptr][0])
 		{
 			i++;
 			continue;
 		}
 		
-		deb_sr_d_line_dot[pp][0]=x1;
-		deb_sr_d_line_dot[pp][1]=y1;
+		deb_sr_d_line_dot[ptr][0]=x1;
+		deb_sr_d_line_dot[ptr][1]=y1;
 		i++;
-		deb_sr_d_line_pp[pp]=i;
+		deb_sr_d_line_ptr[ptr]=i;
 		return(x1);
 	}
 
 	return(-1);
 }
 
-static int deb_sr_draw_line4_get2(int pp)
+static int deb_sr_draw_line4_get2(int ptr)
 {
 	int i;
 	int x1,y1;
 
-	i=deb_sr_d_line_pp[pp];
+	i=deb_sr_d_line_ptr[ptr];
 
 	while(1)
 	{
 		if (i>=100) break;
 
-		x1=deb_sr_d_line[pp][i][0];
-		y1=deb_sr_d_line[pp][i][1];
+		x1=deb_sr_d_line[ptr][i][0];
+		y1=deb_sr_d_line[ptr][i][1];
 
 		if (y1<0) return(y1);
 
-		if (y1==deb_sr_d_line_dot[pp][1])
+		if (y1==deb_sr_d_line_dot[ptr][1])
 		{
 			i++;
 			continue;
 		}
 		
-		deb_sr_d_line_dot[pp][0]=x1;
-		deb_sr_d_line_dot[pp][1]=y1;
+		deb_sr_d_line_dot[ptr][0]=x1;
+		deb_sr_d_line_dot[ptr][1]=y1;
 		i++;
-		deb_sr_d_line_pp[pp]=i;
+		deb_sr_d_line_ptr[ptr]=i;
 		return(y1);
 	}
 
