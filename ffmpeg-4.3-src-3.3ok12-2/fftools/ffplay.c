@@ -5102,7 +5102,7 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 
 
         if (remaining_time > 0.0)
-            av_usleep((int64_t)(remaining_time * 1000000.0));
+            av_usleep((int64_t)(remaining_time * 1000000.0 * 0.3 ));
         remaining_time = REFRESH_RATE;
 
 
@@ -5136,7 +5136,8 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 
 
 if ((deb_sr_show==1)&&(deb_sr_show_start==1)&&(deb_sr_show_nodisp==0)) deb_sr_river_show(is);  // daipozhi for sound river
-
+else
+{
 
 
 				if ((deb_thr_v)&&(deb_thr_a)&&(deb_thr_a2)&&(deb_thr_r))
@@ -5149,7 +5150,7 @@ if ((deb_sr_show==1)&&(deb_sr_show_start==1)&&(deb_sr_show_nodisp==0)) deb_sr_ri
 
 					}
 				}
-
+}
 
 
 				
@@ -11003,67 +11004,77 @@ static int  deb_sr_river_show(VideoState *cur_stream)
   return(0);
 #endif
 
-  if (deb_sr_show_nodisp==1) return(0);
-  if (cur_stream->paused) return(0);
+#if DPZ_DEBUG1
+  deb_record("<<< into river show");
+#endif
+
+  if (deb_sr_show_nodisp==1)
+  {
+#if DPZ_DEBUG1
+    deb_record("no display ,return >>>");
+#endif
+    return(0);
+  }
+
+  if (cur_stream->paused)
+  {
+#if DPZ_DEBUG1
+    deb_record("paused ,return >>>");
+#endif
+    return(0);
+  }
 
   if (deb_sr_river_f_init==0)
   {
     i=deb_sr_river_f_cons();
     if (i!=0) deb_sr_river_f_init_fail=1;
-
 #if DPZ_DEBUG1
-    deb_record("show construction");
+    deb_record("show construction return >>>");
 #endif
-
     return(0);
   }
   else
   {
     if (deb_sr_river_f_init_fail==1)
     {
-
 #if DPZ_DEBUG1
-      deb_record("show init fail ,return");
+      deb_record("show init fail ,return >>>");
 #endif
-
       return(0);
     }
     else
     {
 
-	gettimeofday(&tv,&tz);
+      gettimeofday(&tv,&tz);
 	
-	deb_sr_time1=tv.tv_sec;
-	deb_sr_time2=tv.tv_usec;
-	deb_sr_time5=deb_sr_time1*1000000+deb_sr_time2;
+      deb_sr_time1=tv.tv_sec;
+      deb_sr_time2=tv.tv_usec;
+      deb_sr_time5=deb_sr_time1*1000000+deb_sr_time2;
 
-	li=deb_sr_time5-deb_sr_time3;	 // how many time have past , how many bytes played , how many left
-	lj=2*deb_sr_ch*deb_sr_rate*((float)li/(float)1000000/*-0.3*/);// in bytes
-	lk=deb_sr_river_adj+deb_sr_total_bytes-lj;  //bytes
+      li=deb_sr_time5-deb_sr_time3;	 // how many time have past , how many bytes played , how many left
+      lj=2*deb_sr_ch*deb_sr_rate*((float)li/(float)1000000/*-0.3*/);// in bytes
+      lk=deb_sr_river_adj+deb_sr_total_bytes-lj;  //bytes
 
-	if (lk<0)				   //bytes , for pause
-	{
+      if (lk<0)				   //bytes , for pause
+      {
 #if DPZ_DEBUG1
-          sprintf(m604_str1,"show lk error1  lk=%lld, adj=%lld,bytes=%lld,now=%lld,not return",lk,deb_sr_river_adj,deb_sr_total_bytes,lj);
-          deb_record(m604_str1);
+        sprintf(m604_str1,"show lk error1  lk=%lld, adj=%lld,bytes=%lld,now=%lld,not return",lk,deb_sr_river_adj,deb_sr_total_bytes,lj);
+        deb_record(m604_str1);
 #endif
-	  deb_sr_river_adj=deb_sr_river_adj-lk;
-
-          lk=0;
-	}
+        deb_sr_river_adj=deb_sr_river_adj-lk;
+        lk=0;
+      }
 
 	if (lk>2*deb_sr_ch*44100)			   //bytes , more than 1s , -0.05s
         {
 	  deb_sr_river_adj=deb_sr_river_adj-deb_sr_ch*4096;
-
 	  lk=lk-deb_sr_ch*4096;
 	}
 
 	if (lk>deb_sr_sample_size*2)               //bytes
 	{
-
 #if DPZ_DEBUG1
-          sprintf(m604_str1,"show lk error2  lk=%lld, adj=%lld,bytes=%lld,now=%lld,return",lk,deb_sr_river_adj,deb_sr_total_bytes,lj);
+          sprintf(m604_str1,"show lk error2  lk=%lld, adj=%lld,bytes=%lld,now=%lld,return >>>",lk,deb_sr_river_adj,deb_sr_total_bytes,lj);
           deb_record(m604_str1);
 #endif
 	  // error
@@ -11090,45 +11101,45 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	  {
 
 #if DPZ_DEBUG1
-            deb_record("show k>index but not over, return");
+            deb_record("show k>index but not over, return >>>");
 #endif
 	    // error
 	    return(0);
 	  }
 	}
 
-        i=0;
-        k=0;
+    i=0;
+    k=0;
 	for (j=deb_sr_river_ptr-1;j>=0;j--)
-        {
-          if (deb_sr_river_mark[j]==l)
-          {
+    {
+      if (deb_sr_river_mark[j]==l)
+      {
 	    k=1;
-            break;
-          }
-          i++;
-          if (i>=60) break;
-        }
+        break;
+      }
+      i++;
+      if (i>=60) break;
+    }
 
-        if ((k==0)&&(i<60)&&(deb_sr_river_over==1))
-        {
+    if ((k==0)&&(i<60)&&(deb_sr_river_over==1))
+    {
 	  for (j=1002-1;j>deb_sr_river_ptr;j--)
-          {
-            if (deb_sr_river_mark[j]==l)
-            {
+      {
+        if (deb_sr_river_mark[j]==l)
+        {
 	      k=1;
-              break;
-            }
-            i++;
-            if (i>=60) break;
-          }
+          break;
         }
+        i++;
+        if (i>=60) break;
+      }
+    }
 
         if (k==0)
         {
 
 #if DPZ_DEBUG1
-          sprintf(m604_str1,"show l=%d, not found at river buffer(river_mark[x]==l), return ",l);
+          sprintf(m604_str1,"show l=%d, not found at river buffer(river_mark[x]==l), return >>>",l);
           deb_record(m604_str1);
 #endif
           return(0); // not found
@@ -11137,9 +11148,8 @@ static int  deb_sr_river_show(VideoState *cur_stream)
         {
           if ((j/3)==(deb_sr_river_last/3)) //sr2
 	  {
-
 #if DPZ_DEBUG1
-            sprintf(m604_str1,"show j=%d, already displayed(river[j]),return ",j);
+            sprintf(m604_str1,"show j=%d, already displayed(river[j]),return >>>",j);
 	    deb_record(m604_str1);
 #endif
 	    return(0); // already displayed
@@ -11152,7 +11162,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	    {
 
 #if DPZ_DEBUG1
-              sprintf(m604_str1,"show m=j-1=%d, !=last_displayed ,    return ",m);
+              sprintf(m604_str1,"show m=j-1=%d, !=last_displayed ,    return >>>",m);
 	      deb_record(m604_str1);
 #endif
 	      deb_sr_river_last=(j/3)*3;  //sr2
@@ -11160,9 +11170,8 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	    }
             else
             {
-
 #if DPZ_DEBUG1
-              sprintf(m604_str1,"show j=%d,displayed ",j);
+              sprintf(m604_str1,"show j=%d,displayed >>>",j);
 	      deb_record(m604_str1);
 #endif
                 for (n=0;n<501;n++)
@@ -11198,6 +11207,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	    fill_rectangle(screen,0 ,0 , cur_stream->width , cur_stream->height -deb_ch_h*2-deb_ch_d , bgcolor,0); 
 
 #if DPZ_DEBUG1
+
             for (i=1;i<=501;i++)
             {
               for (k=1;k<=FFT_BUFFER_SIZE/2;k++)
