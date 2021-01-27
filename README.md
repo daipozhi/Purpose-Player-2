@@ -5,11 +5,11 @@ Purpose player 3.3
   this is a open source software,based on ffmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.3-src-3.3ok11" ,decompress "ffmpeg-4.3.tar.xz",
+  there is a directory "ffmpeg-4.3-src-3.3ok12-2" ,decompress "ffmpeg-4.3.tar.xz",
   it create a directory "ffmpeg-4.3" ,
-  use files in "ffmpeg-4.3-src-3.3ok11/fftools" to replace same name files in directory "ffmpeg-4.3/fftools",
-  use files in "ffmpeg-4.3-src-3.3ok11/libavdevice" to replace same name files in directory "ffmpeg-4.3/libavdevice",
-  use file "ffmpeg-4.3-src-3.3ok11/configure" to replace same name file in directory "ffmpeg-4.3",
+  use files in "ffmpeg-4.3-src-3.3ok12-2/fftools" to replace same name files in directory "ffmpeg-4.3/fftools",
+  use files in "ffmpeg-4.3-src-3.3ok12-2/libavdevice" to replace same name files in directory "ffmpeg-4.3/libavdevice",
+  use file "ffmpeg-4.3-src-3.3ok12-2/configure" to replace same name file in directory "ffmpeg-4.3",
   and compile it like ffmpeg, copy ffplay.exe to "app" directory,then you can play media file.
 
   it can display "sound river",it separate audio to 256 parts by frequency,display it like a river,
@@ -18,7 +18,7 @@ on Windows and Ubuntu,and it can display "sound river".
   it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
   How to compile:
-    in windows, you need install msys+mingw, in Ubuntu, every thing is ready,in Linux Mint you need install gcc,
+    in windows, you need install msys+mingw, in Ubuntu or Linux Mint you need install gcc,
 
     decompress yasm-1.3.0.tar.gz and run
     ./configure
@@ -48,17 +48,18 @@ on Windows and Ubuntu,and it can display "sound river".
   In Ubuntu/Mint,if you just compiled ffplay.exe, and want to run it , you need goto directory "SDL-1.2.15",
   run command "sudo make uninstall"(unload develop library).
 
-
+  On windows or Ubuntu 12.04/14.04/16.04 ,you can double click "ffplay" icon to run it ,if you are on Mint 20 or
+  Ubuntu 18.04/20.04, you need open terminal window, move to "app" dir ,input command "./ffplay" to run it .
 
 小戴媒体播放器  3.3
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7,Ubuntu/Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-4.3-src-3.3ok11,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
-    用ffmpeg-4.3-src-3.3ok11/fftools里的文件,替换掉ffmpeg-4.3/fftools里的同名文件,
-    用ffmpeg-4.3-src-3.3ok11/libavdevice里的文件,替换掉ffmpeg-4.3/libavdevice里的同名文件,
-    用ffmpeg-4.3-src-3.3ok11/configure文件,替换掉ffmpeg-4.3里的同名文件,
+这里有目录ffmpeg-4.3-src-3.3ok12-2,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
+    用ffmpeg-4.3-src-3.3ok12-2/fftools里的文件,替换掉ffmpeg-4.3/fftools里的同名文件,
+    用ffmpeg-4.3-src-3.3ok12-2/libavdevice里的文件,替换掉ffmpeg-4.3/libavdevice里的同名文件,
+    用ffmpeg-4.3-src-3.3ok12-2/configure文件,替换掉ffmpeg-4.3里的同名文件,
     按照原来一样的方法编译,然后把ffplay.exe拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成256段,象显示一条河流一样显示出来,
@@ -68,7 +69,7 @@ on Windows and Ubuntu,and it can display "sound river".
 
  
 编译方法如下：
-(如果是Windows平台，需要先安装msys+mingw,如果是Ubuntu可以直接编译,如果是Mint需要先安装gcc)
+(如果是Windows平台，需要先安装msys+mingw,如果是Ubuntu或者Mint需要先安装gcc)
  
     把 yasm-1.3.0.tar 展开
     在 yasm-1.3.0 目录下运行：
@@ -92,11 +93,14 @@ Windows Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示
 
 Ubuntu 14.04 16.04下面需要安装SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
     所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr) .
-Mint-20-x86-64,Ubuntu 18.04/20.04 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
+Mint-20-x86-64 或者 Ubuntu 18.04/20.04 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
     把 usr/lib64 改为usr/lib, 把 usr/lib 下面所有文件拷贝到/usr/lib
     (在命令行运行 sudo cp -r ./usr/* /usr) .
 
 ffmpeg-4.3 使用 SDL2, 但是我不能在Ubuntu/Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
 
 如果你在 Ubuntu 刚刚编译了ffplay,想要运行ffplay ,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
+
+在 Windows 或者 Ubuntu 12.04/14.04/16.04 上面 , 双击ffplay图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 Mint 20上面 ,
+    你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
 
