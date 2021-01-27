@@ -49,7 +49,7 @@ on Windows and Ubuntu,and it can display "sound river".
   run command "sudo make uninstall"(unload develop library).
 
   On windows or Ubuntu 12.04/14.04/16.04 ,you can double click "ffplay" icon to run it ,if you are on Mint 20 or
-  Ubuntu 18.04/20.04, you need open terminal window, move to "app" dir ,input command "./ffplay" to run it .
+  Ubuntu 18.04/20.04, you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
 
 小戴媒体播放器  3.3
 
