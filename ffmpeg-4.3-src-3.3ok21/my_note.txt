@@ -1,0 +1,4 @@
+
+in file sdl2.c , all "sdl2" change to "sdl"
+
+
