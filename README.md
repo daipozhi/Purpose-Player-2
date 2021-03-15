@@ -1,15 +1,15 @@
 # Purpose-Player
 
-Purpose player 3.3.3
+Purpose player 3.3.6
 
   this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.3-src-3.3ok21" ,decompress "ffmpeg-4.3.tar.xz",
+  there is a directory "ffmpeg-4.3-src-3.3ok26" ,decompress "ffmpeg-4.3.tar.xz",
   it create a directory "ffmpeg-4.3" ,
-  use files in "ffmpeg-4.3-src-3.3ok21/fftools" to replace same name files in directory "ffmpeg-4.3/fftools",
-  use files in "ffmpeg-4.3-src-3.3ok21/libavdevice" to replace same name files in directory "ffmpeg-4.3/libavdevice",
-  use file "ffmpeg-4.3-src-3.3ok21/configure" to replace same name file in directory "ffmpeg-4.3",
+  use files in "ffmpeg-4.3-src-3.3ok26/fftools" to replace same name files in directory "ffmpeg-4.3/fftools",
+  use files in "ffmpeg-4.3-src-3.3ok26/libavdevice" to replace same name files in directory "ffmpeg-4.3/libavdevice",
+  use file "ffmpeg-4.3-src-3.3ok26/configure" to replace same name file in directory "ffmpeg-4.3",
   and compile it like FFmpeg, copy ffplay.exe to "app" directory,then you can play media file.
 
   it can display "sound river",it separate audio to 256 parts by frequency,display it like a river,
@@ -51,15 +51,15 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
   On windows or Ubuntu 12.04/14.04/16.04 ,you can double click "ffplay" icon to run it ,if you are on Ubuntu 18.04/20.04 or
   Linux Mint 20 , you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
 
-小戴媒体播放器  3.3.3
+小戴媒体播放器  3.3.6
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-4.3-src-3.3ok21,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
-    用ffmpeg-4.3-src-3.3ok21/fftools里的文件,替换掉ffmpeg-4.3/fftools里的同名文件,
-    用ffmpeg-4.3-src-3.3ok21/libavdevice里的文件,替换掉ffmpeg-4.3/libavdevice里的同名文件,
-    用ffmpeg-4.3-src-3.3ok21/configure文件,替换掉ffmpeg-4.3里的同名文件,
+这里有目录ffmpeg-4.3-src-3.3ok26,解压ffmpeg-4.3.tar.xz,将创建ffmpeg-4.3目录, 
+    用ffmpeg-4.3-src-3.3ok26/fftools里的文件,替换掉ffmpeg-4.3/fftools里的同名文件,
+    用ffmpeg-4.3-src-3.3ok26/libavdevice里的文件,替换掉ffmpeg-4.3/libavdevice里的同名文件,
+    用ffmpeg-4.3-src-3.3ok26/configure文件,替换掉ffmpeg-4.3里的同名文件,
     按照原来一样的方法编译,然后把ffplay.exe拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成256段,象显示一条河流一样显示出来,

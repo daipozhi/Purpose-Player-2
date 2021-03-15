@@ -509,7 +509,7 @@ static 	int deb_cmp_dir(char *buffer1,char *buffer2);
 
 
 static 	char   deb_filenamebuff2[3000][1000];
-static  int    deb_filenamebuffptr2[3000];
+//static  int    deb_filenamebuffptr2[3000];
 static  char   deb_filenamebuff2_ext[3000][6];
 static  char   deb_filenamebuff2_size[3000][7];
 static  char   deb_filenamebuff2_date[3000][20];
@@ -666,7 +666,7 @@ static int  		deb_sr_time_set;
 static long long int	deb_sr_time1;
 static long long int	deb_sr_time2;
 static long long int 	deb_sr_time3;
-static long long int 	deb_sr_time4;
+//static long long int 	deb_sr_time4;
 static long long int 	deb_sr_time5;
 static long long int 	deb_sr_total_bytes;
 
@@ -741,8 +741,8 @@ static    int     deb_sr_fft_set_db(long pcm);
 static    int     deb_sr_cc2i(char c1,char c2);
 static    void    deb_sr_i2cc(int k,char *cc);
 
-static	int     deb_sr_put_pbuff(long addr,int val);
-static	int     deb_sr_get_pbuff(long addr);
+//static	int     deb_sr_put_pbuff(long addr,int val);
+//static	int     deb_sr_get_pbuff(long addr);
 
 static    float  get_dlp_real_in1(long addr);
 static    float  get_dlp_real_ou1(long addr);
@@ -780,6 +780,7 @@ static int  deb_sr_d_cache[8000][2];
 static int  deb_sr_d_cache_ptr;
 static int  deb_sr_d_line[2][8000][2];
 static int  deb_sr_d_line_ptr[2];
+static int  deb_sr_d_line_ptr2[2];
 static int  deb_sr_d_line_dot[2][2];
 
 static int  deb_sr_d_init(void);
@@ -795,6 +796,8 @@ static int deb_sr_draw_line4_get(int ptr);
 static int deb_sr_draw_line4_get2(int ptr);
 
 // --------end of sound river --------------------------------------------
+
+// --------resample ------------------------------------------------------
 
 static int deb_resam_rate;
 static int deb_resam_dir;
@@ -3707,7 +3710,9 @@ static int subtitle_thread(void *arg)
 
 
 // daipozhi for sound river
+#if DPZ_DEBUG1
 static char m711_str1[300];
+#endif
 
 
 
@@ -3721,10 +3726,10 @@ static void update_sample_display(VideoState *is, short *samples, int samples_si
 
 
     // daipozhi modified for sound river
-    struct timeval  tv;
-    struct timezone tz;
-    long long int i,j;
-    int  k,l,m,n;
+    //struct timeval  tv;
+    //struct timezone tz;
+    //long long int i,j;
+    int  l,m;
     //char str1[300];
 
 
@@ -4054,13 +4059,15 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
 
 
     // daipozhi for sound river
+#if DPZ_DEBUG2
     int len2;
     int len3;
-    int len4;
 Uint8 *stream2;
+#endif
+    //char str1[300];
+    int len4;
     int i,j,k,l,m,n,rep;
     int size,size1,ind;
-    char str1[300];
     short int *nstr;
 
     len4=len;
@@ -4221,7 +4228,7 @@ Uint8 *stream2;
 
 
 // daipozhi modified for sound river
-#if DPZ_DEBUG2    
+#if DPZ_DEBUG2
 	len2=0;    // playback high,low,middle freq sound ,to sure fft is ok
 	len3=0;
 	stream2=stream;
@@ -4327,7 +4334,9 @@ Uint8 *stream2;
 
 
 // daipozhi for sound river
+#if DPZ_DEBUG1
 static char m702_str1[300];
+#endif
 
 
 
@@ -8366,7 +8375,7 @@ static int deb_utf8_to_gb18030(char *in_buffer,char *out_buffer,int out_buffer_l
     iconv_t cd;
     char* in_buffer_tmp[]= { m501_str1,NULL };
     int in_buffer_tmp_len;   
-    char* out_buffer_tmp[]= { m501_str2,m501_str3,NULL };;
+    char* out_buffer_tmp[]= { m501_str2,m501_str3,NULL };
     int out_buffer_tmp_len;
 
     cd = iconv_open("gb18030//TRANSLIT", "utf-8");  
@@ -9961,7 +9970,7 @@ static int t1_smallest(void)
 
 }
 
-static char m03_str1[300];
+//static char m03_str1[300];
 
 static int t1_after_list(void)
 {
@@ -10083,7 +10092,7 @@ static char          m202_buffer1[3000];
 static char          m202_buffer2[3000];
 static char	     m202_buffer4[300];
 static char          m202_buffer5[3000];
-static char          m202_buffer6[3000];
+//static char          m202_buffer6[3000];
 static char          m202_buffer7[3000];
 static char          m202_type;
 static char          m202_ext[6];
@@ -10512,9 +10521,9 @@ static int deb_str_has_null(char *s1,int s1_len)
 static int deb_sr_fft_trans_all(VideoState *is,long pcm)
 {
   float  d1;
-  long   i,j,k,l,m,n,p;
-  char   c1,c2,cc[2];
-  long   m1,m2,m3,m4,m5,m6,n0,q1;
+  long   i,j/*,k*/,l,m,n,p;
+  //char   c1,c2,cc[2];
+  //long   m1,m2,m3,m4,m5,m6,n0,q1;
 
 
   pcm=44100;
@@ -10615,16 +10624,19 @@ static int deb_sr_fft_trans_all(VideoState *is,long pcm)
   return(0);
 }
 
+#if DPZ_DEBUG1
 static char m601_str1[300];
+#endif
 
 static int deb_sr_fft_cx(int chn,int pcm,int mark)
 {
   float  d1;
-  long   i,j,k,m,n,p;
-  char   cc[6];
+  long   i,m,n;
+  //char   cc[6];
+#if DPZ_DEBUG2
   float  f1,f2;
+#endif
   float  lp,lj;
-  //char   str1[300];
 
   if ((chn<0)||(chn>=FFT_BUFFER_SIZE/2)) return(0);
 
@@ -10717,7 +10729,12 @@ static int deb_sr_fft_cx(int chn,int pcm,int mark)
 */
 #else
 
-  // get 1 of 100 chn data each times
+  if (chn<233) // if freq more than 20khz don't show
+  {
+
+
+
+  // get 1 of 256 chn data each times
   for (m=0;m<FFT_BUFFER_SIZE;m++)
   {
     //f1=pcm*((float)m/(float)FFT_BUFFER_SIZE);
@@ -10758,10 +10775,10 @@ static int deb_sr_fft_cx(int chn,int pcm,int mark)
     lp=lp+lj;
   }
 
-  #if DPZ_DEBUG1
+#if DPZ_DEBUG1
   //sprintf(m601_str1,"fft cx,lp=%lld,",lp);
   //deb_record(m601_str1);
-  #endif
+#endif
 
   lp=lp/(float)FFT_BUFFER_SIZE;
   if (lp<0) lp=0;
@@ -10780,6 +10797,12 @@ static int deb_sr_fft_cx(int chn,int pcm,int mark)
 
   if (n<0  ) n=0;
   if (n>=60) n=59;
+
+
+
+
+  }
+  else n=0;
 
   if ((deb_sr_river_ptr<0)||(deb_sr_river_ptr>=399)) return(0);
 
@@ -10845,13 +10868,15 @@ static void deb_sr_i2cc(int k,char *cc)
   cc[1]=sign*cc[1];
 }
 
+#if DPZ_DEBUG1
 static char m602_str1[300];
+#endif
 
 static int deb_sr_fft_set_db(long pcm)
 {
-  int   i,k;
-  int   n1,n2,s_p1,s_p2,s_p3;
-  int   p0,p1,p2,p3;
+  int   i;
+  //int   n1,n2,s_p1,s_p2,s_p3;
+  //int   p0,p1,p2,p3;
   float f1;
 
   deb_sr_db[0]=5.0;
@@ -11207,7 +11232,7 @@ static int deb_sr_CheckPointer(float *p)
 
 // ---- river display -------------------------------------------------------------
 
-static char m603_str1[300];
+//static char m603_str1[300];
 
 static int  deb_sr_river_f_cons(void)
 {
@@ -11392,26 +11417,23 @@ static int  deb_sr_river_f_cons(void)
   return(0);
 }
 
-static char m604_str1[300];
-static char m604_str2[300];
+//static char m604_str1[300];
+//static char m604_str2[300];
 
 static int  deb_sr_river_show(VideoState *cur_stream)
 {
-  int             i,j,k,l,m,n,p,p0,p1,p2,p3,q;
+  int             i,j,k,l,m,n,p/*,q*/;
   struct timeval  tv;
   struct timezone tz;
   long long int   li,lj,lk;
   int  bgcolor;
   int  bgcolor2;
-  int  x1,y1,x2,y2;
-  //char str1[300];
+  int  bgcolor3;
+  int  bgcolor4;
+  int  bgcolor5;
   int  s_first,s_x1,s_x2,s_y1,s_y2;
-  int  s_p1,s_p2,s_p3,s_p4,s_p5,s_p6;
-  float f1,f2,f3,f4,f5;
-  int   n1,n2,n3,n4,n5;
-  int   note1,note2,note3,note4,note5,note6;
-  float ff1;
-  int   freq_x,freq_y;
+  int  s_p1,s_p2,s_p3,s_p4,s_p5,s_p6,s_p7,s_p8,s_p9,s_p10,s_p11,s_p12;
+  int  freq_x,freq_y;
 
 #if DPZ_DEBUG2
   return(0);
@@ -11644,6 +11666,35 @@ static int  deb_sr_river_show(VideoState *cur_stream)
             fill_rectangle(screen,freq_x,freq_y-deb_sr_win_top,15,1,bgcolor,0);
             deb_echo_str4screenstring_green(freq_x+20,freq_y-deb_sr_win_top-6,"10KHz",5);
 
+            //front face
+            s_p1=0;
+            s_p2=255;
+            s_p3=0;
+
+	    bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
+	    bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
+
+	    // right side face
+	    s_p4=s_p1*0.7;
+	    s_p5=s_p2*0.7;
+            s_p6=s_p3*0.7;
+
+	    bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
+
+	    //up side face
+	    s_p7=s_p1*0.49;
+	    s_p8=s_p2*0.49;
+	    s_p9=s_p3*0.49;
+
+	    bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
+
+	    // left side face
+	    s_p10=s_p1*0.273;
+	    s_p11=s_p2*0.273;
+	    s_p12=s_p3*0.273;
+
+	    bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
+
 	    // some at front , some at back , last showed at front
 	    for (i=0;i<=75-1;i++) // left half
 	    {
@@ -11653,20 +11704,16 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		if (n<0)  n=0;
 		if (n>59) n=59;
 
-		x1=deb_sr_river_f[i][k+1][n][0];
-		y1=deb_sr_river_f[i][k+1][n][1];
+		//x1=deb_sr_river_f[i][k+1][n][0];
+		//y1=deb_sr_river_f[i][k+1][n][1];
+		//x2=deb_sr_river_f[i][k+1][0][0];
+		//y2=deb_sr_river_f[i][k+1][0][1];
 
-		x2=deb_sr_river_f[i][k+1][0][0];
-		y2=deb_sr_river_f[i][k+1][0][1];
-
-                s_p1=0;
-                s_p2=255;
-                s_p3=0;
-
-		// prepare color
-		bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
-
-		bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
+                //s_p1=0;
+                //s_p2=255;
+                //s_p3=0;
+		//bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
+		//bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
 
 		// front face
 		if (n>0)
@@ -11685,7 +11732,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				      deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
 				      deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],bgcolor2,0);
 		}
-
+/*
 		deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
 				  deb_sr_river_f[i  ][k+1][0][1],
 				  deb_sr_river_f[i+1][k+1][0][0],
@@ -11694,13 +11741,22 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				  deb_sr_river_f[i  ][k+1][n][1],
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
+*/
+		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][0][0],
+				      deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
+				      deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
+				      1,bgcolor,0);
+
+		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][n][0],
+				      deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
+				      deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
+				      1,bgcolor,0);
 
 		// right side face
-		s_p4=s_p1*0.7;
-		s_p5=s_p2*0.7;
-		s_p6=s_p3*0.7;
-
-		bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
+		//s_p4=s_p1*0.7;
+		//s_p5=s_p2*0.7;
+		//s_p6=s_p3*0.7;
+		//bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
 		deb_sr_draw_line4_ini();
 
@@ -11736,16 +11792,16 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		  {
 		  fill_rectangle(screen,deb_sr_d_line_dot[0][0],
 					deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-					deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],bgcolor,0);
+					deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],bgcolor3,0);
 		  }
 		}
 
 		if (deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1]>0)
 		{
-                // note ,for smaller moniter,bgcolor2 change to bgcolor
+                // note ,for smaller moniter,bgcolor2 change to bgcolor3
 		fill_rectangle(screen,deb_sr_river_f[i+1][k  ][n][0],
 				      deb_sr_river_f[i+1][k  ][n][1]-deb_sr_win_top,1,
-				      deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1],/*bgcolor2*/bgcolor,0);
+				      deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1],/*bgcolor2*/bgcolor3,0);
 		}
 
 		deb_sr_draw_line3(deb_sr_river_f[i+1][k+1][n][0],
@@ -11760,11 +11816,10 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		}
 
 		//up side face
-		s_p4=s_p1*0.49;
-		s_p5=s_p2*0.49;
-		s_p6=s_p3*0.49;
-
-		bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
+		//s_p4=s_p1*0.49;
+		//s_p5=s_p2*0.49;
+		//s_p6=s_p3*0.49;
+		//bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
 		deb_sr_draw_line4_ini();
 
@@ -11801,19 +11856,19 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		  fill_rectangle(screen,deb_sr_d_line_dot[0][0],
 					deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 					deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-					1,bgcolor,0);
+					1,bgcolor4,0);
 		}
 
 		fill_rectangle(screen,deb_sr_river_f[i  ][k  ][n][0],
 				      deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 				      deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
 				      1,bgcolor2,0);
-
+///* repeated
 		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][n][0],
 				      deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 				      deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
 				      1,bgcolor2,0);
-
+//*/
 		deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][n][0],
 				  deb_sr_river_f[i  ][k+1][n][1],
 				  deb_sr_river_f[i  ][k  ][n][0],
@@ -11834,20 +11889,17 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		if (n<0)  n=0;
 		if (n>59) n=59;
 
-		x1=deb_sr_river_f[i][k][n][0];
-		y1=deb_sr_river_f[i][k][n][1];
+		//x1=deb_sr_river_f[i][k][n][0];
+		//y1=deb_sr_river_f[i][k][n][1];
+		//x2=deb_sr_river_f[i][k][0][0];
+		//y2=deb_sr_river_f[i][k][0][1];
 
-		x2=deb_sr_river_f[i][k][0][0];
-		y2=deb_sr_river_f[i][k][0][1];
-
-                s_p1=0;
-                s_p2=255;
-                s_p3=0;
-
-		// prepare color
-		bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
-
-		bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
+                //s_p1=0;
+                //s_p2=255;
+                //s_p3=0;
+		//prepare color
+		//bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
+		//bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
 
 		// front face
 		if (n>0)
@@ -11866,7 +11918,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				      deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
 				      deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],bgcolor2,0);
 		}
-
+/*
 		deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
 				  deb_sr_river_f[i  ][k+1][0][1],
 				  deb_sr_river_f[i+1][k+1][0][0],
@@ -11875,13 +11927,22 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				  deb_sr_river_f[i  ][k+1][n][1],
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
+*/
+		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][0][0],
+				      deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
+				      deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
+				      1,bgcolor,0);
+
+		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][n][0],
+				      deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
+				      deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
+				      1,bgcolor,0);
 
 		// left side face
-		s_p4=s_p1*0.273;
-		s_p5=s_p2*0.273;
-		s_p6=s_p3*0.273;
-
-		bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
+		//s_p4=s_p1*0.273;
+		//s_p5=s_p2*0.273;
+		//s_p6=s_p3*0.273;
+		//bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
 		deb_sr_draw_line4_ini();
 
@@ -11917,16 +11978,16 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		  {
 		  fill_rectangle(screen,deb_sr_d_line_dot[0][0],
 					deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-					deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],bgcolor,0);
+					deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],bgcolor5,0);
 		  }
 		}
 
 		if (deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1]>0)
 		{
-                // note ,for smaller moniter,bgcolor2 change to bgcolor
+                // note ,for smaller moniter,bgcolor2 change to bgcolor5
 		fill_rectangle(screen,deb_sr_river_f[i  ][k  ][n][0],
 				      deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,1,
-				      deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1],/*bgcolor2*/bgcolor,0);
+				      deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1],/*bgcolor2*/bgcolor5,0);
 		}
 
 		deb_sr_draw_line3(deb_sr_river_f[i  ][k  ][n][0],
@@ -11941,11 +12002,10 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		}
 
 		//up side face
-		s_p4=s_p1*0.49;
-		s_p5=s_p2*0.49;
-		s_p6=s_p3*0.49;
-
-		bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
+		//s_p4=s_p1*0.49;
+		//s_p5=s_p2*0.49;
+		//s_p6=s_p3*0.49;
+		//bgcolor = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
 		deb_sr_draw_line4_ini();
 
@@ -11980,19 +12040,19 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 		  fill_rectangle(screen,deb_sr_d_line_dot[0][0],
 					deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 					deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-					1,bgcolor,0);
+					1,bgcolor4,0);
 		}
 
 		fill_rectangle(screen,deb_sr_river_f[i  ][k  ][n][0],
 				      deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 				      deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
 				      1,bgcolor2,0);
-
+///*  repeated
 		fill_rectangle(screen,deb_sr_river_f[i  ][k+1][n][0],
 				      deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 				      deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
 				      1,bgcolor2,0);
-
+//*/
 		deb_sr_draw_line3(deb_sr_river_f[i+1][k  ][n][0],
 				  deb_sr_river_f[i+1][k  ][n][1],
 				  deb_sr_river_f[i+1][k+1][n][0],
@@ -12579,17 +12639,21 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 
 static int deb_sr_draw_line4_ini(void)
 {
+/*
 	int i,j;
 
 	for (i=0;i<2;i++)
-		for (j=0;j<400;j++)
+		for (j=0;j<100;j++)
 		{
 			deb_sr_d_line[i][j][0]=(-1);
 			deb_sr_d_line[i][j][1]=(-1);
 		}
-
+*/
 	deb_sr_d_line_ptr[0]=0;
 	deb_sr_d_line_ptr[1]=0;
+
+	deb_sr_d_line_ptr2[0]=0;
+	deb_sr_d_line_ptr2[1]=0;
 
 	deb_sr_d_line_dot[0][0]=(-1);
 	deb_sr_d_line_dot[0][1]=(-1);
@@ -12634,7 +12698,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
   //fill_rectangle(screen,x2,y2,1,1,bgcolor,0);
 
   if ((ptr <0)||(ptr >=2)) return(0);
-  if ((ptr2<0)||(ptr2>=400)) return(0);
+  if ((ptr2<0)||(ptr2>=100)) return(0);
   if ((x1<0)||(x1>=7680)) return(0);
   if ((y1<0)||(y1>=4320)) return(0);
   deb_sr_d_line[ptr][ptr2][0]=x1;
@@ -12648,7 +12712,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
       for (i=y1+1;i<=y2-1;i++) //fill_rectangle(screen,x1,i,1,1,bgcolor,0);//deb_sr_d_buff[x1][i]=1;
       {
 	  if ((ptr <0)||(ptr >=2)) return(0);
-	  if ((ptr2<0)||(ptr2>=400)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x1<0)||(x1>=7680)) return(0);
 	  if ((i<0)||(i>=4320)) return(0);
 	  deb_sr_d_line[ptr][ptr2][0]=x1;
@@ -12663,7 +12727,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
         for (i=y1-1/*y2+1*/;i>=y2+1/*y1-1*/;i--) //fill_rectangle(screen,x1,i,1,1,bgcolor,0); //deb_sr_d_buff[x1][i]=1;
         {
 	  if ((ptr <0)||(ptr >=2)) return(0);
-	  if ((ptr2<0)||(ptr2>=400)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x1<0)||(x1>=7680)) return(0);
 	  if ((i<0)||(i>=4320)) return(0);
 	  deb_sr_d_line[ptr][ptr2][0]=x1;
@@ -12681,7 +12745,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
       for (i=x1+1;i<=x2-1;i++) //fill_rectangle(screen,i,y1,1,1,bgcolor,0);//deb_sr_d_buff[i][y1]=1;
       {
 	  if ((ptr <0)||(ptr >=2)) return(0);
-	  if ((ptr2<0)||(ptr2>=400)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((i<0)||(i>=7680)) return(0);
 	  if ((y1<0)||(y1>=4320)) return(0);
 	  deb_sr_d_line[ptr][ptr2][0]=i;
@@ -12708,7 +12772,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
             for (j=y5+1;j<y4;j++) //fill_rectangle(screen,x5,j,1,1,bgcolor,0);//deb_sr_d_buff[x5][j]=1;
 	    {
 		if ((ptr <0)||(ptr >=2)) return(0);
-		if ((ptr2<0)||(ptr2>=400)) return(0);
+		if ((ptr2<0)||(ptr2>=100)) return(0);
 		if ((x5<0)||(x5>=7680)) return(0);
 		if ((j<0)||(j>=4320)) return(0);
 		deb_sr_d_line[ptr][ptr2][0]=x5;
@@ -12718,7 +12782,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
           }
 
 	  if ((ptr <0)||(ptr >=2)) return(0);
-	  if ((ptr2<0)||(ptr2>=400)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x4<0)||(x4>=7680)) return(0);
 	  if ((y4<0)||(y4>=4320)) return(0);
 	  deb_sr_d_line[ptr][ptr2][0]=x4;
@@ -12746,7 +12810,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
             for (j=y5-1;j>y4;j--) //fill_rectangle(screen,x5,j,1,1,bgcolor,0);//deb_sr_d_buff[x5][j]=1;
 	    {
 		if ((ptr <0)||(ptr >=2)) return(0);
-		if ((ptr2<0)||(ptr2>=400)) return(0);
+		if ((ptr2<0)||(ptr2>=100)) return(0);
 		if ((x5<0)||(x5>=7680)) return(0);
 		if ((j<0)||(j>=4320)) return(0);
 		deb_sr_d_line[ptr][ptr2][0]=x5;
@@ -12756,7 +12820,7 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
           }
 
 	  if ((ptr <0)||(ptr >=2)) return(0);
-	  if ((ptr2<0)||(ptr2>=400)) return(0);
+	  if ((ptr2<0)||(ptr2>=100)) return(0);
 	  if ((x4<0)||(x4>=7680)) return(0);
 	  if ((y4<0)||(y4>=4320)) return(0);
 	  deb_sr_d_line[ptr][ptr2][0]=x4;
@@ -12771,12 +12835,14 @@ static int deb_sr_draw_line4(int x1,int y1,int x2,int y2,int ptr)
   }
 
   if ((ptr <0)||(ptr >=2)) return(0);
-  if ((ptr2<0)||(ptr2>=400)) return(0);
+  if ((ptr2<0)||(ptr2>=100)) return(0);
   if ((x2<0)||(x2>=7680)) return(0);
   if ((y2<0)||(y2>=4320)) return(0);
   deb_sr_d_line[ptr][ptr2][0]=x2;
   deb_sr_d_line[ptr][ptr2][1]=y2;
   ptr2++;
+
+  deb_sr_d_line_ptr[ptr]=ptr2;
 
   return(0);
 }
@@ -12786,17 +12852,18 @@ static int deb_sr_draw_line4_get(int ptr)
 	int i;
 	int x1,y1;
 
-	i=deb_sr_d_line_ptr[ptr];
+	i=deb_sr_d_line_ptr2[ptr];
 
 	while(1)
 	{
-		if (i>=400) break;
+		if (i>=100) break;
+                if (i>=deb_sr_d_line_ptr[ptr]) break;
 
 		x1=deb_sr_d_line[ptr][i][0];
 		y1=deb_sr_d_line[ptr][i][1];
 
 		if (x1<0) return(x1);
-
+  
 		if (x1==deb_sr_d_line_dot[ptr][0])
 		{
 			i++;
@@ -12806,7 +12873,7 @@ static int deb_sr_draw_line4_get(int ptr)
 		deb_sr_d_line_dot[ptr][0]=x1;
 		deb_sr_d_line_dot[ptr][1]=y1;
 		i++;
-		deb_sr_d_line_ptr[ptr]=i;
+		deb_sr_d_line_ptr2[ptr]=i;
 		return(x1);
 	}
 
@@ -12818,11 +12885,12 @@ static int deb_sr_draw_line4_get2(int ptr)
 	int i;
 	int x1,y1;
 
-	i=deb_sr_d_line_ptr[ptr];
+	i=deb_sr_d_line_ptr2[ptr];
 
 	while(1)
 	{
-		if (i>=400) break;
+		if (i>=100) break;
+                if (i>=deb_sr_d_line_ptr[ptr]) break;
 
 		x1=deb_sr_d_line[ptr][i][0];
 		y1=deb_sr_d_line[ptr][i][1];
@@ -12838,7 +12906,7 @@ static int deb_sr_draw_line4_get2(int ptr)
 		deb_sr_d_line_dot[ptr][0]=x1;
 		deb_sr_d_line_dot[ptr][1]=y1;
 		i++;
-		deb_sr_d_line_ptr[ptr]=i;
+		deb_sr_d_line_ptr2[ptr]=i;
 		return(y1);
 	}
 
