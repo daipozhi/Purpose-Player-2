@@ -1,0 +1,44 @@
+
+ffmpeg-4.3-src-3.3ok12
+  adjust sound river's refresh rate
+
+ffmpeg-4.3-src-3.3ok15
+  finish "DPZ_DEBUG2" relative code 
+
+ffmpeg-4.3-src-3.3ok16
+fft-size 4096 , seg-num 100 .
+
+ffmpeg-4.3-src-3.3ok17
+1 bug ok , fft-size 512 , seg-num 256 .
+
+ffmpeg-4.3-src-3.3ok18
+ffmpeg-4.3-src-3.3ok19
+  all audio resample to 44.1khz,so sound river's speed is fixed,
+frequency's position is fixed .
+
+ffmpeg-4.3-src-3.3ok20
+  in sound river ,display where is 1KHz,where is 2KHz...
+
+ffmpeg-4.3-src-3.3ok21
+  better sound river , 1 bug ok .
+
+ffmpeg-4.3-src-3.3ok22
+  faster
+
+ffmpeg-4.3-src-3.3ok23
+  faster
+
+ffmpeg-4.3-src-3.3ok24
+  faster
+
+ffmpeg-4.3-src-3.3ok25
+  less warning when compile
+
+ffmpeg-4.3-src-3.3ok26
+  faster , 2 core CPU is ok for sound river .
+
+ffmpeg-4.3-src-3.3ok27
+  better sound river
+
+ffmpeg-4.3.2-src-3.3.9
+  for ffmpeg-4.3.2
