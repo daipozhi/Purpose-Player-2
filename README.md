@@ -74,7 +74,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
  
 编译方法如下：
 
-(如果是Windows平台，需要先安装Msys+Mingw/Msys2+MinGW64,如果是Ubuntu或者Linux Mint需要先安装gcc)
+如果是Windows平台，需要先安装Msys+Mingw/Msys2+MinGW64,如果是Ubuntu或者Linux Mint需要先安装gcc
  
     把 yasm-1.3.0.tar 展开
     在 yasm-1.3.0 目录下运行：
