@@ -390,8 +390,8 @@ typedef struct VideoState {
 
 // daipozhi modified 
 static  char      deb_ascii_bmp[128][13][6][3];
-static  char      deb_chs_bmp2[6][128][13][12][3];
-static  char      deb_chs_bmp[128][128][13][12][3];
+static  char      deb_chns_bmp2[6][128][13][12][3];
+static  char      deb_chns_bmp[128][128][13][12][3];
 
 static  int       deb_fh;
 static 	char     *deb_str;
@@ -399,7 +399,7 @@ static 	char      deb_scrn_str[2001];
 static 	char      deb_scrn_str2[8001];
 
 // daipozhi modified
-static 	int    deb_modi_ad_cnt=0;
+static 	int    deb_seek_bar_cntr=0;
 
 static 	int    deb_echo_char4seekbar(int x,int y,int ec);
 static 	int    deb_echo_str4seekbar(int y1,char *str);
@@ -408,9 +408,9 @@ static 	int    deb_echo_char4en(int x,int y,int ec);
 static 	int    deb_echo_char4en_black(int x,int y,int ec);
 static  int    deb_echo_char4en_green(int x,int y,int ec);
 
-static 	int    deb_echo_char4chs(int x,int y,int ,int);
-static 	int    deb_echo_char4chs_black(int x,int y,int ,int);
-static  int    deb_echo_char4chs_green(int x,int y,int k,int l);
+static 	int    deb_echo_char4chns(int x,int y,int ,int);
+static 	int    deb_echo_char4chns_black(int x,int y,int ,int);
+static  int    deb_echo_char4chns_green(int x,int y,int k,int l);
 
 static 	int    deb_echo_str4screenstring(int xx,int yy,char *str,int len);
 static 	int    deb_echo_str4screenstring_black(int xx,int yy,char *str,int len);
@@ -504,10 +504,10 @@ static 	int  deb_get_path1(char *buffer1,char *buffer2);
 static 	int  deb_get_path2(char *buffer1,char *buffer2);
 static 	int  deb_cmp_dir(char *buffer1,char *buffer2);
 
-static 	int deb_supported_formats(char *p_str);
+//static 	int deb_supported_formats(char *p_str);
 static 	int deb_filenameext2(char *path,char *fext);
 
-static  int deb_str_has_null(char *s1,int s1_len);
+static  int deb_str_has_null(char *s1,int s1_size);
 
 #if !defined(_WIN32) && !defined(__APPLE__)
   static  struct stat64 deb_m_info;
@@ -789,7 +789,7 @@ static int deb_resam_buff3_ptr;
 static int deb_resam_buff2_ind;
 static int deb_resam_last_ptr;
 
-// --------end of resample ------------------------------------------------
+// ------- end of resample ------------------------------------------------
 
 
 
@@ -3939,7 +3939,6 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
     int len3;
 Uint8 *stream2;
 #endif
-    //char str1[300];
     int len4;
     int i,j,k,l,m,n;
     int repe,over,start;
@@ -5311,11 +5310,11 @@ if ((deb_sr_show==1)&&(deb_sr_show_start==1)&&(deb_sr_show_nodisp==0)) deb_sr_ri
 					}
 				}
 				
-				deb_modi_ad_cnt++;   //daipozhi modified
-				if (deb_modi_ad_cnt>=200) 
+				deb_seek_bar_cntr++;   //daipozhi modified
+				if (deb_seek_bar_cntr>=200) 
 				{
 					
-					deb_modi_ad_cnt=0;
+					deb_seek_bar_cntr=0;
 					
 					if (is->audio_st && is->show_mode != SHOW_MODE_VIDEO)
 					{
@@ -5833,7 +5832,7 @@ static void event_loop(VideoState *cur_stream)
  
 	      if (xx>=((cur_stream->width/deb_ch_w+1)-12)*deb_ch_w)
 	      {
-		if ((deb_cover==1)&&(deb_cover_close==0))
+		if ((deb_cover==1)&&(deb_cover_close==0)) // status switch, video,river,file name
 		{
 		  if (deb_sr_show==1)
 		  {
@@ -5979,6 +5978,7 @@ static void event_loop(VideoState *cur_stream)
         case SDL_VIDEOEXPOSE:
             cur_stream->force_refresh = 1;
             break;
+
         case SDL_VIDEORESIZE:
 
 	    //daipozhi modified 
@@ -6594,7 +6594,6 @@ static int deb_load_font(void)
   int  n1,n2;    
   int  l1,l2,l3,l4;
   char c1,c2,c3;
-  //char str[300];
 
   // daipozhi modified
   deb_fh=open("./ascii_bmp/ascii_bmp.data",O_RDONLY,S_IREAD);
@@ -6617,7 +6616,7 @@ static int deb_load_font(void)
     deb_fh=open(m301_str,O_RDONLY,S_IREAD);
     if (deb_fh>=0)
     {
-      deb_str=(char *)deb_chs_bmp2;
+      deb_str=(char *)deb_chns_bmp2;
       read(deb_fh,deb_str,6*128*13*12*3);
       close(deb_fh);
     }
@@ -6627,15 +6626,15 @@ static int deb_load_font(void)
         for (l3=0;l3<13;l3++)
           for (l4=0;l4<12;l4++)
           {
-            c1=deb_chs_bmp2[l1][l2][l3][l4][0];
-            c2=deb_chs_bmp2[l1][l2][l3][l4][1];
-            c3=deb_chs_bmp2[l1][l2][l3][l4][2];
+            c1=deb_chns_bmp2[l1][l2][l3][l4][0];
+            c2=deb_chns_bmp2[l1][l2][l3][l4][1];
+            c3=deb_chns_bmp2[l1][l2][l3][l4][2];
 
             if ((n1+l1<0)||(n1+l1>=128)) continue;    //*****notice
 
-            deb_chs_bmp[n1+l1][l2][l3][l4][0]=c1;
-            deb_chs_bmp[n1+l1][l2][l3][l4][1]=c2;
-            deb_chs_bmp[n1+l1][l2][l3][l4][2]=c3;
+            deb_chns_bmp[n1+l1][l2][l3][l4][0]=c1;
+            deb_chns_bmp[n1+l1][l2][l3][l4][1]=c2;
+            deb_chns_bmp[n1+l1][l2][l3][l4][2]=c3;
           }
 
     n1=n1+6;
@@ -6851,7 +6850,7 @@ static int deb_echo_char4en_green(int x,int y,int ec)
   return(0);
 }
 
-static int deb_echo_char4chs(int x,int y,int uc1,int uc2)
+static int deb_echo_char4chns(int x,int y,int uc1,int uc2)
 {
   int l1,l2;
   int i1,i2,i3;
@@ -6868,9 +6867,9 @@ static int deb_echo_char4chs(int x,int y,int uc1,int uc2)
   {
     for (l2=0;l2<12;l2++)
     {
-      i1=deb_chs_bmp[k][l][l1][l2][0];
-      i2=deb_chs_bmp[k][l][l1][l2][1];
-      i3=deb_chs_bmp[k][l][l1][l2][2];
+      i1=deb_chns_bmp[k][l][l1][l2][0];
+      i2=deb_chns_bmp[k][l][l1][l2][1];
+      i3=deb_chns_bmp[k][l][l1][l2][2];
 
       bgcolor = SDL_MapRGB(screen->format, i1, i2, i3);
 
@@ -6884,7 +6883,7 @@ static int deb_echo_char4chs(int x,int y,int uc1,int uc2)
   return(0);
 }
 
-static int deb_echo_char4chs_black(int x,int y,int uc1,int uc2)
+static int deb_echo_char4chns_black(int x,int y,int uc1,int uc2)
 {
   int l1,l2;
   int i1,i2,i3;
@@ -6902,9 +6901,9 @@ static int deb_echo_char4chs_black(int x,int y,int uc1,int uc2)
   {
     for (l2=0;l2<12;l2++)
     {
-      ui1=deb_chs_bmp[k][l][l1][l2][0];
-      ui2=deb_chs_bmp[k][l][l1][l2][1];
-      ui3=deb_chs_bmp[k][l][l1][l2][2];
+      ui1=deb_chns_bmp[k][l][l1][l2][0];
+      ui2=deb_chns_bmp[k][l][l1][l2][1];
+      ui3=deb_chns_bmp[k][l][l1][l2][2];
 
       i1=255-ui1;
       i2=255-ui2;
@@ -6922,7 +6921,7 @@ static int deb_echo_char4chs_black(int x,int y,int uc1,int uc2)
   return(0);
 }
 
-static int deb_echo_char4chs_green(int x,int y,int uc1,int uc2)
+static int deb_echo_char4chns_green(int x,int y,int uc1,int uc2)
 {
   int l1,l2;
   int i1,i2,i3;
@@ -6939,9 +6938,9 @@ static int deb_echo_char4chs_green(int x,int y,int uc1,int uc2)
   {
     for (l2=0;l2<12;l2++)
     {
-      i1=deb_chs_bmp[k][l][l1][l2][0];
-      i2=deb_chs_bmp[k][l][l1][l2][1];
-      i3=deb_chs_bmp[k][l][l1][l2][2];
+      i1=deb_chns_bmp[k][l][l1][l2][0];
+      i2=deb_chns_bmp[k][l][l1][l2][1];
+      i3=deb_chns_bmp[k][l][l1][l2][2];
 
       bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
 
@@ -6983,7 +6982,7 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int len)
       uc1=str[j+0];
       uc2=str[j+1];
 
-      deb_echo_char4chs(x,y,uc1,uc2);
+      deb_echo_char4chns(x,y,uc1,uc2);
 
       x=x+12;
       j=j+2;
@@ -7023,7 +7022,7 @@ static int deb_echo_str4screenstring_black(int xx,int yy,char *str,int len)
       uc1=str[j+0];
       uc2=str[j+1];
 
-      deb_echo_char4chs_black(x,y,uc1,uc2);
+      deb_echo_char4chns_black(x,y,uc1,uc2);
 
       x=x+12;
       j=j+2;
@@ -7063,7 +7062,7 @@ static int deb_echo_str4screenstring_green(int xx,int yy,char *str,int len)
       uc1=str[j+0];
       uc2=str[j+1];
 
-      deb_echo_char4chs_green(x,y,uc1,uc2);
+      deb_echo_char4chns_green(x,y,uc1,uc2);
 
       x=x+12;
       j=j+2;
@@ -7151,9 +7150,7 @@ static int deb_get_dir_ini(void)
 static int deb_get_dir(void)
 {
   //int           i/*,j,k,l*/;
-
   bt_opendir();
-
   return(0);
 }
 
@@ -7653,8 +7650,6 @@ static int deb_get_path1(char *buffer1,char *buffer2)
     }
   }
 
-  //strcat(buffer4,"\\");
-
   strcpy(buffer2,"/");
   strcat(buffer2,m102_buffer4);
 
@@ -7731,7 +7726,6 @@ static int deb_get_path2(char *buffer1,char *buffer2)
     }
   }
 
-  //strcat(buffer4,"\\");
   strcpy(buffer2,m103_buffer4);
 
   return(0);
@@ -7820,7 +7814,7 @@ static int deb_filenameext2(char *path,char *fext)
 
   return(0);
 }
-
+/*
 static int deb_supported_formats(char *p_str)
 {
   deb_lower_string(p_str);
@@ -7856,7 +7850,7 @@ static int deb_supported_formats(char *p_str)
   
   return(0);
 }
-
+*/
 static int deb_cmp_dir(char *buffer1,char *buffer2)
 { 
   int  i,j,k;
@@ -7881,7 +7875,8 @@ static int deb_cmp_dir(char *buffer1,char *buffer2)
       str2[0]=c2;
       str2[1]=0;
     
-      if (((strcmp(str1,"/")==0)||(strcmp(str1,"\\")==0))&&((strcmp(str2,"/")==0)||(strcmp(str2,"\\")==0))) continue;
+      if (  ((strcmp(str1,"/")==0)||(strcmp(str1,"\\")==0)) && 
+            ((strcmp(str2,"/")==0)||(strcmp(str2,"\\")==0))  ) continue;
       else return(1);
     }
 
@@ -9665,9 +9660,7 @@ static int  bt_opendir(void)
   struct dirent *entry;
 
   int  	i,j;
-  //char        buffer2[3000];
   char 	buffer3[20];
-  //char 	buffer4[300];
 
   //deb_record_init();
 
@@ -9965,11 +9958,10 @@ static int  str_lower_string(char *p_instr,char *p_outstr)
 	return(0);
 }
 
-static int deb_str_has_null(char *s1,int s1_len)
+static int deb_str_has_null(char *s1,int s1_size)
 {
 	int i;
-	for (i=0;i<s1_len;i++)
-		if (s1[i]==0) return(1);
+	for (i=0;i<s1_size;i++) if (s1[i]==0) return(1);
 	return(0);
 }
 
@@ -10336,7 +10328,7 @@ static int deb_sr_fft_set_db(long pcm)
   deb_sr_db[0]=10.0;
   f1=10.0;
   
-  for (i=1;i<60;i++)  // a sound's watt ,nW=nV*nV/nR
+  for (i=1;i<60;i++)
   {
     f1=f1*1.12;
     deb_sr_db[i]=f1;

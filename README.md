@@ -1,16 +1,18 @@
-# Purpose-Player
+# Purpose-Player-2
 
-Purpose player 3.4-35
+Purpose player 2  3.4-36
 
   this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.4-src-3.4-35" ,decompress "ffmpeg-4.4.tar.xz",
+  there is a directory "ffmpeg-4.4-src-3.4-36" ,decompress "ffmpeg-4.4.tar.xz",
   it create a directory "ffmpeg-4.4" ,
-  use files in "ffmpeg-4.4-src-3.4-35/fftools" to replace same name files in directory "ffmpeg-4.4/fftools",
-  use files in "ffmpeg-4.4-src-3.4-35/libavdevice" to replace same name files in directory "ffmpeg-4.4/libavdevice",
-  use file "ffmpeg-4.4-src-3.4-35/configure" to replace same name file in directory "ffmpeg-4.4",
-  and compile it like FFmpeg, copy ffplay.exe to "app" directory,then you can play media file.
+  use files in "ffmpeg-4.4-src-3.4-36/fftools" to replace same name files in directory "ffmpeg-4.4/fftools",
+  use files in "ffmpeg-4.4-src-3.4-36/libavdevice" to replace same name files in directory "ffmpeg-4.4/libavdevice",
+  use file "ffmpeg-4.4-src-3.4-36/configure" to replace same name file in directory "ffmpeg-4.4",
+  and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
+  ( if you are in Linux or Msys , copy ffplay(.exe) to app directory , if you are in Msys2(MinGW64) ,
+  please copy ffplay.exe to app2 directory )
 
   it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
   (use mouse click button "River On"),in the bottom is 20khz audio,in the top is 20hz audio,river moves from left to right.
@@ -19,7 +21,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
   How to compile:
 
-    in windows, you need install msys+mingw, in Ubuntu or Linux Mint you need install gcc,
+    in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
 
     decompress yasm-1.3.0.tar.gz and run
     ./configure
@@ -35,7 +37,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
     sudo make install
-    copy ffplay.exe to app directory
+    copy ffplay.exe to app(2) directory
 
   you can run ffplay.exe in Windows and Ubuntu 12.04 ,
   if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
@@ -52,16 +54,17 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
   On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay" icon to run it ,if you are on Ubuntu 18.04/20.04 or
   Linux Mint 20 , you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
 
-小戴媒体播放器  3.4-35
+小戴媒体播放器2  3.4-36
 
  
-是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7,Ubuntu/Linux Mint),可以显示声音河流 .
+是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-4.4-src-3.4-35,解压ffmpeg-4.4.tar.xz,将创建ffmpeg-4.4目录, 
-    用ffmpeg-4.4-src-3.4-35/fftools里的文件,替换掉ffmpeg-4.4/fftools里的同名文件,
-    用ffmpeg-4.4-src-3.4-35/libavdevice里的文件,替换掉ffmpeg-4.4/libavdevice里的同名文件,
-    用ffmpeg-4.4-src-3.4-35/configure文件,替换掉ffmpeg-4.4里的同名文件,
-    按照原来一样的方法编译,然后把ffplay.exe拷贝到app目录.
+这里有目录ffmpeg-4.4-src-3.4-36,解压ffmpeg-4.4.tar.xz,将创建ffmpeg-4.4目录, 
+    用ffmpeg-4.4-src-3.4-36/fftools里的文件,替换掉ffmpeg-4.4/fftools里的同名文件,
+    用ffmpeg-4.4-src-3.4-36/libavdevice里的文件,替换掉ffmpeg-4.4/libavdevice里的同名文件,
+    用ffmpeg-4.4-src-3.4-36/configure文件,替换掉ffmpeg-4.4里的同名文件,
+    按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
+    (如果是Msys/Linux平台,把ffplay(.exe)拷贝到app目录,如果是Msys2平台,把ffplay.exe拷贝到app2目录)
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
     (点击窗口右下角的"River On"),最下面的是20KHz,最上面的是20Hz,河流从左向右流动,
@@ -71,7 +74,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
  
 编译方法如下：
 
-(如果是Windows平台，需要先安装msys+mingw,如果是Ubuntu或者Linux Mint需要先安装gcc)
+(如果是Windows平台，需要先安装Msys+Mingw/Msys2+MinGW64,如果是Ubuntu或者Linux Mint需要先安装gcc)
  
     把 yasm-1.3.0.tar 展开
     在 yasm-1.3.0 目录下运行：
@@ -89,7 +92,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
     sudo make install
-    把ffplay拷贝到App目录.
+    把ffplay拷贝到app(2)目录.
  
 Windows/Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
 

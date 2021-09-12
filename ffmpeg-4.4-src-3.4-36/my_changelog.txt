@@ -152,6 +152,13 @@ ffmpeg-4.4-src-3.4-34
 ffmpeg-4.4-src-3.4-35
   1 bug ok , window title
 
+ffmpeg-4.4-src-3.4-36
+  remove function deb_supported_formats()
+  better looking source code
+  tested on platform MSYS2+MinGW64 and its ok
+  added 'app2' directory for MSYS2
+
+
 
 
 
