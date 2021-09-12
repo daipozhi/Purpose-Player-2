@@ -21,7 +21,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
   How to compile:
 
-    in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
+  in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
 
     decompress yasm-1.3.0.tar.gz and run
     ./configure
@@ -37,7 +37,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
     sudo make install
-    copy ffplay.exe to app(2) directory
+    copy ffplay(.exe) to app(2) directory
 
   you can run ffplay.exe in Windows and Ubuntu 12.04 ,
   if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
@@ -92,7 +92,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
     sudo make install
-    把ffplay拷贝到app(2)目录.
+    把ffplay(.exe)拷贝到app(2)目录.
  
 Windows/Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
 
