@@ -51,8 +51,9 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
   In Ubuntu/Linux Mint,if you just compiled ffplay.exe, and want to run it , you need goto directory "SDL-1.2.15",
   run command "sudo make uninstall"(unload develop library).
 
-  On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay" icon to run it ,if you are on Ubuntu 18.04/20.04 or
-  Linux Mint 20 , you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
+  On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
+  Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
+  "./ffplay" to run it .
 
 小戴媒体播放器2  3.4-36
 
@@ -106,7 +107,7 @@ ffmpeg-4.4 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以�
 
 如果你在 Ubuntu 刚刚编译了ffplay,想要运行ffplay ,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
 
-在 Windows 或者 Ubuntu 12.04/14.04/16.04 (32bit)上面 , 双击ffplay图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 Linux Mint 20上面 ,
-    你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
+在 Windows 或者 Ubuntu 12.04/14.04/16.04 (32bit)上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 
+    Linux Mint 20上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
 
 
