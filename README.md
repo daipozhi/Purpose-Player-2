@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  3.4-36
+Purpose player 2  3.4.1
 
   this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.4-src-3.4-36" ,decompress "ffmpeg-4.4.tar.xz",
-  it create a directory "ffmpeg-4.4" ,
-  use files in "ffmpeg-4.4-src-3.4-36/fftools" to replace same name files in directory "ffmpeg-4.4/fftools",
-  use files in "ffmpeg-4.4-src-3.4-36/libavdevice" to replace same name files in directory "ffmpeg-4.4/libavdevice",
-  use file "ffmpeg-4.4-src-3.4-36/configure" to replace same name file in directory "ffmpeg-4.4",
+  there is a directory "ffmpeg-4.4.1-src-3.4.1" ,decompress "ffmpeg-4.4.1.tar.xz",
+  it create a directory "ffmpeg-4.4.1" ,
+  use files in "ffmpeg-4.4.1-src-3.4.1/fftools" to replace same name files in directory "ffmpeg-4.4.1/fftools",
+  use files in "ffmpeg-4.4.1-src-3.4.1/libavdevice" to replace same name files in directory "ffmpeg-4.4.1/libavdevice",
+  use file "ffmpeg-4.4.1-src-3.4.1/configure" to replace same name file in directory "ffmpeg-4.4.1",
   and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
   ( if you are in Linux or Msys , copy ffplay(.exe) to app directory , if you are in Msys2(MinGW64) ,
   please copy ffplay.exe to app2 directory )
@@ -33,7 +33,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     make
     sudo make install
 
-    then goto directory "ffmpeg-4.4" and run 
+    then goto directory "ffmpeg-4.4.1" and run 
     ./configure
     make
     sudo make install
@@ -46,7 +46,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
   "./usr/lib64" to "./usr/lib" ,
   copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
 
-  ffmpeg-4.4 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
+  ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
   In Ubuntu/Linux Mint,if you just compiled ffplay.exe, and want to run it , you need goto directory "SDL-1.2.15",
   run command "sudo make uninstall"(unload develop library).
@@ -55,15 +55,15 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
   Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
   "./ffplay" to run it .
 
-小戴媒体播放器2  3.4-36
+小戴媒体播放器2  3.4.1
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-4.4-src-3.4-36,解压ffmpeg-4.4.tar.xz,将创建ffmpeg-4.4目录, 
-    用ffmpeg-4.4-src-3.4-36/fftools里的文件,替换掉ffmpeg-4.4/fftools里的同名文件,
-    用ffmpeg-4.4-src-3.4-36/libavdevice里的文件,替换掉ffmpeg-4.4/libavdevice里的同名文件,
-    用ffmpeg-4.4-src-3.4-36/configure文件,替换掉ffmpeg-4.4里的同名文件,
+这里有目录ffmpeg-4.4.1-src-3.4.1,解压ffmpeg-4.4.1.tar.xz,将创建ffmpeg-4.4.1目录, 
+    用ffmpeg-4.4.1-src-3.4.1/fftools里的文件,替换掉ffmpeg-4.4.1/fftools里的同名文件,
+    用ffmpeg-4.4.1-src-3.4.1/libavdevice里的文件,替换掉ffmpeg-4.4.1/libavdevice里的同名文件,
+    用ffmpeg-4.4.1-src-3.4.1/configure文件,替换掉ffmpeg-4.4.1里的同名文件,
     按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
     (如果是Msys/Linux平台,把ffplay(.exe)拷贝到app目录,如果是Msys2平台,把ffplay.exe拷贝到app2目录)
  
@@ -89,7 +89,7 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     make
     sudo make install
  
-    在 ffmpeg-4.4 目录下运行：
+    在 ffmpeg-4.4.1 目录下运行：
     ./configure
     make
     sudo make install
@@ -103,7 +103,7 @@ Ubuntu 18.04/20.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行
     把 usr/lib64 改为usr/lib, 把 usr/lib 下面所有文件拷贝到/usr/lib
     (在命令行运行 sudo cp -r ./usr/* /usr) .
 
-ffmpeg-4.4 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
+ffmpeg-4.4.1 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
 
 如果你在 Ubuntu 刚刚编译了ffplay,想要运行ffplay ,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
 
