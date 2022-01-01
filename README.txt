@@ -48,7 +48,22 @@ SDL.dll to app directory.
 SDL.dll to app directory.
   you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
 
-  if you are in Windows,you need set Mingw/MinGW64 runtime library path correctly.
+  if you are on Msys/MinGW ,you need install below files(copy to app directory)
+
+  libbz2-2.dll        
+  libiconv-2.dll
+  libgcc_s_dw2-1.dll  
+  liblzma-5.dll   
+  zlib1.dll
+
+  if you are on Msys2/MinGW64 ,you need install below files(copy to app directory)
+
+  libgcc_s_seh-1.dll
+  libwinpthread-1.dll
+  libiconv-2.dll
+  libbz2-1.dll	    
+  liblzma-5.dll
+  zlib1.dll
 
   ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
@@ -108,7 +123,22 @@ Ubuntu 18.04/20.04 »òÕß Linux Mint-20-x86-64 ÏÂÃæĞèÒª°²×°64bit SDLÔËĞĞÊ±¿â,½âÑ¹S
 ÔÚ64bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32-x64.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼¡£
 Äã¿ÉÒÔÔÚ http://www.libsdl.org/download-2.0.php ÏÂÔØÕâĞ©ÎÄ¼ş £¬»òÕßÔÚµ±Ç°Ò³ÃæÏÂÔØ¡£
 
-ÔÚ Windows ÉÏ£¬ĞèÒªÕıÈ·ÉèÖÃ Mingw/MinGW64 µÄÔËĞĞÊ±¿âÄ¿Â¼¡£
+Èç¹ûÄãÓÃµÄÊÇ Msys/MinGW ,ÄãĞèÒª°²×°ÒÔÏÂÎÄ¼ş(¿½±´µ½ app Ä¿Â¼)
+
+libbz2-2.dll        
+libiconv-2.dll
+libgcc_s_dw2-1.dll  
+liblzma-5.dll   
+zlib1.dll
+
+Èç¹ûÄãÓÃµÄÊÇ Msys2/MinGW64 ,ÄãĞèÒª°²×°ÒÔÏÂÎÄ¼ş(¿½±´µ½ app Ä¿Â¼)
+
+libgcc_s_seh-1.dll
+libwinpthread-1.dll
+libiconv-2.dll
+libbz2-1.dll	    
+liblzma-5.dll
+zlib1.dll
 
 ffmpeg-4.4.1 Ê¹ÓÃ SDL2, µ«ÊÇÎÒ²»ÄÜÔÚUbuntu/Linux Mint°²×° SDL2 , ËùÒÔÎÒĞŞ¸ÄÁËÔ´´úÂë ,ffplay ÈÔÈ»Ê¹ÓÃ SDL1 .
 
@@ -116,6 +146,8 @@ ffmpeg-4.4.1 Ê¹ÓÃ SDL2, µ«ÊÇÎÒ²»ÄÜÔÚUbuntu/Linux Mint°²×° SDL2 , ËùÒÔÎÒĞŞ¸ÄÁËÔ´´
 
 ÔÚ Windows »òÕß Ubuntu 12.04/14.04/16.04 (32bit)ÉÏÃæ , Ë«»÷ffplay(.exe)Í¼±ê¾Í¿ÉÒÔÔËĞĞ ,ÔÚ Ubuntu 18.04/20.04 »òÕß 
     Linux Mint 20ÉÏÃæ ,ÄãĞèÒª´ò¿ªTerminal´°¿Ú ,ÒÆ¶¯µ½appÄ¿Â¼ ,ÊäÈëÃüÁî"./ffplay" È¥ÔËĞĞ .
+
+
 
 
 
