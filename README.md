@@ -48,7 +48,22 @@ SDL.dll to app directory.
 SDL.dll to app directory.
   you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
 
-  if you are in Windows,you need set MinGW/MinGW64 runtime library path correctly.
+  if you are on Msys/MinGW ,you need install below files(copy to app directory)
+
+  libbz2-2.dll
+  libiconv-2.dll
+  libgcc_s_dw2-1.dll
+  liblzma-5.dll
+  zlib1.dll
+
+  if you are on Msys2/MinGW64 ,you need install below files(copy to app directory)
+
+  libgcc_s_seh-1.dll	
+  libwinpthread-1.dll
+  libiconv-2.dll	
+  libbz2-1.dll
+  liblzma-5.dll	
+  zlib1.dll
 
   ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
@@ -108,7 +123,22 @@ Ubuntu 18.04/20.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行
 在64bit Windows上，需要解压SDL-1.2.15-win32-x64.zip,把 SDL.dll 拷贝到app目录。
 你可以在 http://www.libsdl.org/download-2.0.php 下载这些文件 ，或者在当前页面下载。
 
-在 Windows 上，需要正确设置Mingw/MinGW64 的运行时库目录。
+如果你用的是 Msys/MinGW ,你需要安装以下文件(拷贝到 app 目录)
+
+libbz2-2.dll
+libiconv-2.dll
+libgcc_s_dw2-1.dll
+liblzma-5.dll
+zlib1.dll
+
+如果你用的是 Msys2/MinGW64 ,你需要安装以下文件(拷贝到 app 目录)
+
+libgcc_s_seh-1.dll	
+libwinpthread-1.dll
+libiconv-2.dll	
+libbz2-1.dll
+liblzma-5.dll	
+zlib1.dll
 
 ffmpeg-4.4.1 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
 
