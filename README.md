@@ -116,16 +116,21 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
     ./configure
     make
 
-    把ffplay(.exe)拷贝到app目录.
+把ffplay(.exe)拷贝到app目录.
  
-    在 Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
-    Ubuntu 14.04 16.04 (32bit) 下面需要安装32bit SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
+在 Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
+
+Ubuntu 14.04 16.04 (32bit) 下面需要安装32bit SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
 所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr) .
-    Ubuntu 18.04/20.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
+
+Ubuntu 18.04/20.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
 把 usr/lib64 改为usr/lib, 把 usr/lib 下面所有文件拷贝到/usr/lib (在命令行运行 sudo cp -r ./usr/* /usr) .
-    在32bit Windows上，需要解压SDL-1.2.15-win32.zip,把 SDL.dll 拷贝到app目录，
-    在64bit Windows上，需要解压SDL-1.2.15-win32-x64.zip,把 SDL.dll 拷贝到app目录。
-    你可以在 http://www.libsdl.org/download-2.0.php 下载这些文件 ，或者在当前页面下载。
+
+在32bit Windows上，需要解压SDL-1.2.15-win32.zip,把 SDL.dll 拷贝到app目录，
+
+在64bit Windows上，需要解压SDL-1.2.15-win32-x64.zip,把 SDL.dll 拷贝到app目录。
+
+你可以在 http://www.libsdl.org/download-2.0.php 下载这些文件 ，或者在当前页面下载。
 
 如果你用的是 Msys/MinGW ,你需要安装以下文件(拷贝到 app 目录)
 
