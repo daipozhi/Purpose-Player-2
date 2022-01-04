@@ -35,18 +35,23 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
 
-    copy ffplay(.exe) to app directory
+copy ffplay(.exe) to app directory
 
-    you can run ffplay in Ubuntu 12.04 ,
-    if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
+you can run ffplay in Ubuntu 12.04 ,
+
+if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
 copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
-    if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
+
+if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
 rename "./usr/lib64" to "./usr/lib" , copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
-    if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
+
+if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
 SDL.dll to app directory.
-    if you are in 64bit Windows,decompress SDL-1.2.15-win32-x64.zip,copy 
+
+if you are in 64bit Windows,decompress SDL-1.2.15-win32-x64.zip,copy 
 SDL.dll to app directory.
-    you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
+
+you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
 
   if you are on Msys/MinGW ,you need install below files(copy to app directory)
 
@@ -65,12 +70,12 @@ SDL.dll to app directory.
   liblzma-5.dll	
   zlib1.dll
 
-    ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
+ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
-    In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
+In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
 run command "sudo make uninstall"(unload development library).
 
-    On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
+On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
 Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
 "./ffplay" to run it .
 
