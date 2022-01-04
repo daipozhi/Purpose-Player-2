@@ -811,7 +811,7 @@ static int fs_screen_height;
 
 //daipozhi for sound river
 static int default_width  = 1224;
-static int default_height = 843;
+static int default_height = 725;
 
 
 
@@ -2274,7 +2274,7 @@ static int video_open(VideoState *is, int force_set_video_mode, Frame *vp)
         h = screen_height;
     } else {
         w = 1224;	//daipozhi modified 
-        h = 843;	//daipozhi modified 
+        h = 725;	//daipozhi modified 
     }
 
     //daipozhi modified
@@ -5989,7 +5989,7 @@ static void event_loop(VideoState *cur_stream)
 
 	    //daipozhi modified 
 	    if (event.resize.w<1224) event.resize.w=1224;
-	    if (event.resize.h<843 ) event.resize.h=843;
+	    if (event.resize.h<725 ) event.resize.h=725;
 		
 	    tmp_n1 = deb_ch_w*2*(event.resize.w /(deb_ch_w*2)) ;
 	    tmp_n2 = deb_ch_h*1*(event.resize.h /(deb_ch_h*1))+7 ;
@@ -10716,8 +10716,8 @@ static int  deb_sr_river_f_cons(void)
   deb_sr_river_f_init     =1;
   deb_sr_river_f_init_fail=0;
 
-  if ((screen->w<1200)||(screen->w>7680)) return(1);
-  if ((screen->h<800 )||(screen->h>4320)) return(1);
+  if ((screen->w<1204)||(screen->w>7680)) return(1);
+  if ((screen->h<705 )||(screen->h>4320)) return(1);
 
   i=screen->w;
   d1=i/(150+1+1);
@@ -10727,15 +10727,15 @@ static int  deb_sr_river_f_cons(void)
 
   //d3=d2*0.8;
   //d3=d2*0.6;
-  d3=(float)d2*0.35;
+  d3=(float)d2*0.55;
 
   x1=d1*76;                // miedian      vanishing point 
   y1=10;
 
   x2=d1;                   // start line
-  y2=y1+d2*81+d2*118;
+  y2=y1+d2*122+d2*118;
 
-  deb_sr_win_top=y1+d2*81-100+5;
+  deb_sr_win_top=y1+d2*122-100+5;
 
   deb_sr_d_init();
 
@@ -10987,7 +10987,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
     return(0);
   }
 
-  lk=lk+2*deb_sr_ch*44100*(float)0.3;     // bytes    delay 0.3s
+  lk=lk+2*deb_sr_ch*44100*(float)0.2;     // bytes    delay 0.2s
 
   k=lk/2;		          		// samples
 
