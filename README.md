@@ -1,25 +1,27 @@
 # Purpose-Player-2
 
-Purpose player 2  3.4.1-9
+Purpose player 2  3.4.1-10
 
-  this is a open source software,based on FFmpeg,play audio and video
+this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.4.1-src-3.4.1-9" ,decompress "ffmpeg-4.4.1.tar.xz",
-  it create a directory "ffmpeg-4.4.1" ,
-  use files in "ffmpeg-4.4.1-src-3.4.1-9/fftools" to replace same name files in directory "ffmpeg-4.4.1/fftools",
-  use files in "ffmpeg-4.4.1-src-3.4.1-9/libavdevice" to replace same name files in directory "ffmpeg-4.4.1/libavdevice",
-  use file "ffmpeg-4.4.1-src-3.4.1-9/configure" to replace same name file in directory "ffmpeg-4.4.1",
-  and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
+there is a directory "ffmpeg-4.4.1-src-3.4.1-10" ,decompress "ffmpeg-4.4.1.tar.xz",
+it create a directory "ffmpeg-4.4.1" ,
+use files in "ffmpeg-4.4.1-src-3.4.1-10/fftools" to replace same name files in directory "ffmpeg-4.4.1/fftools",
+use files in "ffmpeg-4.4.1-src-3.4.1-10/libavdevice" to replace same name files in directory "ffmpeg-4.4.1/libavdevice",
+use file "ffmpeg-4.4.1-src-3.4.1-10/configure" to replace same name file in directory "ffmpeg-4.4.1",
+and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
-  it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
-  (use mouse click button "River On"),in the bottom is 20khz audio,in the top is 20hz audio,river moves from left to right.
+it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
+(use mouse click button "River On"),in the bottom is 20khz audio,in the top is 20hz audio,river moves from left to right.
 
-  it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
+it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-  How to compile:
+you can goto http://ffmpeg.org/download.html#release_4.4 to download ffmpeg-4.4.1.tar.xz, or you can download in this web page.
 
-  in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
+How to compile:
+
+in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
 
     decompress yasm-1.3.0.tar.gz and run
     ./configure
@@ -80,21 +82,22 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
 "./ffplay" to run it .
 
 
-小戴媒体播放器2  3.4.1-9
+小戴媒体播放器2  3.4.1-10
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-4.4.1-src-3.4.1-9,解压ffmpeg-4.4.1.tar.xz,将创建ffmpeg-4.4.1目录, 
-    用ffmpeg-4.4.1-src-3.4.1-9/fftools里的文件,替换掉ffmpeg-4.4.1/fftools里的同名文件,
-    用ffmpeg-4.4.1-src-3.4.1-9/libavdevice里的文件,替换掉ffmpeg-4.4.1/libavdevice里的同名文件,
-    用ffmpeg-4.4.1-src-3.4.1-9/configure文件,替换掉ffmpeg-4.4.1里的同名文件,
-    按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
+这里有目录ffmpeg-4.4.1-src-3.4.1-10,解压ffmpeg-4.4.1.tar.xz,将创建ffmpeg-4.4.1目录, 
+用ffmpeg-4.4.1-src-3.4.1-10/fftools里的文件,替换掉ffmpeg-4.4.1/fftools里的同名文件,
+用ffmpeg-4.4.1-src-3.4.1-10/libavdevice里的文件,替换掉ffmpeg-4.4.1/libavdevice里的同名文件,
+用ffmpeg-4.4.1-src-3.4.1-10/configure文件,替换掉ffmpeg-4.4.1里的同名文件,
+按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
-    (点击窗口右下角的"River On"),最下面的是20KHz,最上面的是20Hz,河流从左向右流动,
+(点击窗口右下角的"River On"),最下面的是20KHz,最上面的是20Hz,河流从左向右流动,
 
 能显示2.0声道的媒体文件,能显示5.1声道电影文件(只提取左声道一个声道的声音),
 
+你可以在 http://ffmpeg.org/download.html#release_4.4 下载 ffmpeg-4.4.1.tar.xz ，或者在当前页面下载。
  
 编译方法如下：
 

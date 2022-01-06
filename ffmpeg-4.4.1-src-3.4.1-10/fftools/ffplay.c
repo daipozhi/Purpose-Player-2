@@ -11151,23 +11151,23 @@ static int  deb_sr_river_show(VideoState *cur_stream)
   bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
 
   // right side face
-  s_p4=s_p1*0.7;
-  s_p5=s_p2*0.7;
-  s_p6=s_p3*0.7;
+  s_p4=s_p1*0.6;
+  s_p5=s_p2*0.6;
+  s_p6=s_p3*0.6;
 
   bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
   //up side face
-  s_p7=s_p1*0.49;
-  s_p8=s_p2*0.49;
-  s_p9=s_p3*0.49;
+  s_p7=s_p1*0.42;
+  s_p8=s_p2*0.42;
+  s_p9=s_p3*0.42;
 
   bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
 
   // left side face
-  s_p10=s_p1*0.273;
-  s_p11=s_p2*0.273;
-  s_p12=s_p3*0.273;
+  s_p10=s_p1*0.216;
+  s_p11=s_p2*0.216;
+  s_p12=s_p3*0.216;
 
   bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
 

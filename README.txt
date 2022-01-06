@@ -1,25 +1,27 @@
 # Purpose-Player-2
 
-Purpose player 2  3.4.1-9
+Purpose player 2  3.4.1-10
 
-  this is a open source software,based on FFmpeg,play audio and video
+this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-  there is a directory "ffmpeg-4.4.1-src-3.4.1-9" ,decompress "ffmpeg-4.4.1.tar.xz",
-  it create a directory "ffmpeg-4.4.1" ,
-  use files in "ffmpeg-4.4.1-src-3.4.1-9/fftools" to replace same name files in directory "ffmpeg-4.4.1/fftools",
-  use files in "ffmpeg-4.4.1-src-3.4.1-9/libavdevice" to replace same name files in directory "ffmpeg-4.4.1/libavdevice",
-  use file "ffmpeg-4.4.1-src-3.4.1-9/configure" to replace same name file in directory "ffmpeg-4.4.1",
-  and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
+there is a directory "ffmpeg-4.4.1-src-3.4.1-10" ,decompress "ffmpeg-4.4.1.tar.xz",
+it create a directory "ffmpeg-4.4.1" ,
+use files in "ffmpeg-4.4.1-src-3.4.1-10/fftools" to replace same name files in directory "ffmpeg-4.4.1/fftools",
+use files in "ffmpeg-4.4.1-src-3.4.1-10/libavdevice" to replace same name files in directory "ffmpeg-4.4.1/libavdevice",
+use file "ffmpeg-4.4.1-src-3.4.1-10/configure" to replace same name file in directory "ffmpeg-4.4.1",
+and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
-  it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
-  (use mouse click button "River On"),in the bottom is 20khz audio,in the top is 20hz audio,river moves from left to right.
+it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
+(use mouse click button "River On"),in the bottom is 20khz audio,in the top is 20hz audio,river moves from left to right.
 
-  it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
+it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-  How to compile:
+you can goto http://ffmpeg.org/download.html#release_4.4 to download ffmpeg-4.4.1.tar.xz, or you can download in this web page.
 
-  in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
+How to compile:
+
+in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint you need install gcc,
 
     decompress yasm-1.3.0.tar.gz and run
     ./configure
@@ -35,20 +37,25 @@ on Windows and Ubuntu/Linux Mint,and it can display "sound river".
     ./configure
     make
 
-    copy ffplay(.exe) to app directory
+copy ffplay(.exe) to app directory
 
-    you can run ffplay in Ubuntu 12.04 ,
-    if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
+you can run ffplay in Ubuntu 12.04 ,
+
+if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
 copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
-    if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
-rename "./usr/lib64" to "./usr/lib" , copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
-    if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
-SDL.dll to app directory.
-    if you are in 64bit Windows,decompress SDL-1.2.15-win32-x64.zip,copy 
-SDL.dll to app directory.
-    you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
 
-  if you are on Msys/MinGW ,you need install below files(copy to app directory)
+if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
+rename "./usr/lib64" to "./usr/lib" , copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
+
+if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
+SDL.dll to app directory.
+
+if you are in 64bit Windows,decompress SDL-1.2.15-win32-x64.zip,copy 
+SDL.dll to app directory.
+
+you can goto http://www.libsdl.org/download-2.0.php to download these files, or you can download in this web page.
+
+if you are on Msys/MinGW ,you need install below files(copy to app directory)
 
   libbz2-2.dll        
   libiconv-2.dll
@@ -56,7 +63,7 @@ SDL.dll to app directory.
   liblzma-5.dll   
   zlib1.dll
 
-  if you are on Msys2/MinGW64 ,you need install below files(copy to app directory)
+if you are on Msys2/MinGW64 ,you need install below files(copy to app directory)
 
   libgcc_s_seh-1.dll
   libwinpthread-1.dll
@@ -65,31 +72,32 @@ SDL.dll to app directory.
   liblzma-5.dll
   zlib1.dll
 
-  ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
+ffmpeg-4.4.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
-  In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
-  run command "sudo make uninstall"(unload development library).
+In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
+run command "sudo make uninstall"(unload development library).
 
-  On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
-  Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
-  "./ffplay" to run it .
+On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
+Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
+"./ffplay" to run it .
 
 
-Ğ¡´÷Ã½Ìå²¥·ÅÆ÷2  3.4.1-9
+Ğ¡´÷Ã½Ìå²¥·ÅÆ÷2  3.4.1-10
  
 ÊÇÒ»¸ö¿ªÔ´Èí¼ş,È«Ã½Ìå,°üÀ¨ÊÓÆµ,ÒôÆµ,¿çÆ½Ì¨(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),¿ÉÒÔÏÔÊ¾ÉùÒôºÓÁ÷ .
  
-ÕâÀïÓĞÄ¿Â¼ffmpeg-4.4.1-src-3.4.1-9,½âÑ¹ffmpeg-4.4.1.tar.xz,½«´´½¨ffmpeg-4.4.1Ä¿Â¼, 
-    ÓÃffmpeg-4.4.1-src-3.4.1-9/fftoolsÀïµÄÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1/fftoolsÀïµÄÍ¬ÃûÎÄ¼ş,
-    ÓÃffmpeg-4.4.1-src-3.4.1-9/libavdeviceÀïµÄÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1/libavdeviceÀïµÄÍ¬ÃûÎÄ¼ş,
-    ÓÃffmpeg-4.4.1-src-3.4.1-9/configureÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1ÀïµÄÍ¬ÃûÎÄ¼ş,
-    °´ÕÕÔ­À´Ò»ÑùµÄ·½·¨±àÒë,È»ºó°Ñffplay(.exe)¿½±´µ½appÄ¿Â¼.
+ÕâÀïÓĞÄ¿Â¼ffmpeg-4.4.1-src-3.4.1-10,½âÑ¹ffmpeg-4.4.1.tar.xz,½«´´½¨ffmpeg-4.4.1Ä¿Â¼, 
+ÓÃffmpeg-4.4.1-src-3.4.1-10/fftoolsÀïµÄÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1/fftoolsÀïµÄÍ¬ÃûÎÄ¼ş,
+ÓÃffmpeg-4.4.1-src-3.4.1-10/libavdeviceÀïµÄÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1/libavdeviceÀïµÄÍ¬ÃûÎÄ¼ş,
+ÓÃffmpeg-4.4.1-src-3.4.1-10/configureÎÄ¼ş,Ìæ»»µôffmpeg-4.4.1ÀïµÄÍ¬ÃûÎÄ¼ş,
+°´ÕÕÔ­À´Ò»ÑùµÄ·½·¨±àÒë,È»ºó°Ñffplay(.exe)¿½±´µ½appÄ¿Â¼.
  
 ¿ÉÒÔÏÔÊ¾ÉùÒôºÓÁ÷,°ÑÉùÒô°´ÕÕÆµÂÊ·Ö³É117¶Î,ÏóÏÔÊ¾Ò»ÌõºÓÁ÷Ò»ÑùÏÔÊ¾³öÀ´,
-    (µã»÷´°¿ÚÓÒÏÂ½ÇµÄ"River On"),×îÏÂÃæµÄÊÇ20KHz,×îÉÏÃæµÄÊÇ20Hz,ºÓÁ÷´Ó×óÏòÓÒÁ÷¶¯,
+(µã»÷´°¿ÚÓÒÏÂ½ÇµÄ"River On"),×îÏÂÃæµÄÊÇ20KHz,×îÉÏÃæµÄÊÇ20Hz,ºÓÁ÷´Ó×óÏòÓÒÁ÷¶¯,
 
 ÄÜÏÔÊ¾2.0ÉùµÀµÄÃ½ÌåÎÄ¼ş,ÄÜÏÔÊ¾5.1ÉùµÀµçÓ°ÎÄ¼ş(Ö»ÌáÈ¡×óÉùµÀÒ»¸öÉùµÀµÄÉùÒô),
 
+Äã¿ÉÒÔÔÚ http://ffmpeg.org/download.html#release_4.4 ÏÂÔØ ffmpeg-4.4.1.tar.xz £¬»òÕßÔÚµ±Ç°Ò³ÃæÏÂÔØ¡£
  
 ±àÒë·½·¨ÈçÏÂ£º
 
@@ -111,17 +119,22 @@ SDL.dll to app directory.
     ./configure
     make
 
-    °Ñffplay(.exe)¿½±´µ½appÄ¿Â¼.
+°Ñffplay(.exe)¿½±´µ½appÄ¿Â¼.
  
-    ÔÚ Ubuntu 12.04 ¿ÉÒÔÖ±½ÓÔËĞĞ,»òÕßÓÃÃüÁîĞĞÔËĞĞ(ÓĞ¸ü¶àÌáÊ¾£¬ÏÔÊ¾Ã½ÌåĞÅÏ¢).
-    Ubuntu 14.04 16.04 (32bit) ÏÂÃæĞèÒª°²×°32bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.i386.rpm ,°Ñ usr/lib ÏÂÃæ
+ÔÚ Ubuntu 12.04 ¿ÉÒÔÖ±½ÓÔËĞĞ,»òÕßÓÃÃüÁîĞĞÔËĞĞ(ÓĞ¸ü¶àÌáÊ¾£¬ÏÔÊ¾Ã½ÌåĞÅÏ¢).
+
+Ubuntu 14.04 16.04 (32bit) ÏÂÃæĞèÒª°²×°32bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.i386.rpm ,°Ñ usr/lib ÏÂÃæ
 ËùÓĞÎÄ¼ş¿½±´µ½/usr/lib(ÔÚÃüÁîĞĞÔËĞĞ sudo cp -r ./usr/* /usr) .
-    Ubuntu 18.04/20.04 »òÕß Linux Mint-20-x86-64 ÏÂÃæĞèÒª°²×°64bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.x86_64.rpm ,
+
+Ubuntu 18.04/20.04 »òÕß Linux Mint-20-x86-64 ÏÂÃæĞèÒª°²×°64bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.x86_64.rpm ,
 °Ñ usr/lib64 ¸ÄÎªusr/lib, °Ñ usr/lib ÏÂÃæËùÓĞÎÄ¼ş¿½±´µ½/usr/lib
-    (ÔÚÃüÁîĞĞÔËĞĞ sudo cp -r ./usr/* /usr) .
-    ÔÚ32bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼£¬
-    ÔÚ64bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32-x64.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼¡£
-    Äã¿ÉÒÔÔÚ http://www.libsdl.org/download-2.0.php ÏÂÔØÕâĞ©ÎÄ¼ş £¬»òÕßÔÚµ±Ç°Ò³ÃæÏÂÔØ¡£
+(ÔÚÃüÁîĞĞÔËĞĞ sudo cp -r ./usr/* /usr) .
+
+ÔÚ32bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼£¬
+
+ÔÚ64bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32-x64.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼¡£
+
+Äã¿ÉÒÔÔÚ http://www.libsdl.org/download-2.0.php ÏÂÔØÕâĞ©ÎÄ¼ş £¬»òÕßÔÚµ±Ç°Ò³ÃæÏÂÔØ¡£
 
 Èç¹ûÄãÓÃµÄÊÇ Msys/MinGW ,ÄãĞèÒª°²×°ÒÔÏÂÎÄ¼ş(¿½±´µ½ app Ä¿Â¼)
 
@@ -145,7 +158,9 @@ ffmpeg-4.4.1 Ê¹ÓÃ SDL2, µ«ÊÇÎÒ²»ÄÜÔÚUbuntu/Linux Mint°²×° SDL2 , ËùÒÔÎÒĞŞ¸ÄÁËÔ´´
 Èç¹ûÄãÔÚ Ubuntu/Linux Mint ¸Õ¸Õ±àÒëÁËffplay,ÏëÒªÔËĞĞffplay ,ĞèÒªÔÚ SDL-1.2.15 Ä¿Â¼ÏÂÔËĞĞsudo make uninstall.(°Ñ¿ª·¢¿âĞ¶ÔØ)
 
 ÔÚ Windows »òÕß Ubuntu 12.04/14.04/16.04 (32bit)ÉÏÃæ , Ë«»÷ffplay(.exe)Í¼±ê¾Í¿ÉÒÔÔËĞĞ ,ÔÚ Ubuntu 18.04/20.04 »òÕß 
-    Linux Mint 20ÉÏÃæ ,ÄãĞèÒª´ò¿ªTerminal´°¿Ú ,ÒÆ¶¯µ½appÄ¿Â¼ ,ÊäÈëÃüÁî"./ffplay" È¥ÔËĞĞ .
+Linux Mint 20ÉÏÃæ ,ÄãĞèÒª´ò¿ªTerminal´°¿Ú ,ÒÆ¶¯µ½appÄ¿Â¼ ,ÊäÈëÃüÁî"./ffplay" È¥ÔËĞĞ .
+
+
 
 
 
