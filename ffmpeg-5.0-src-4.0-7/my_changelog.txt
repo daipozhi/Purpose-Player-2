@@ -190,7 +190,14 @@ ffmpeg-4.4.1-src-3.4.1-10
 ffmpeg-5.0-src-4.0-4
   for ffmpeg-5.0
 
+ffmpeg-5.0-src-4.0-5
+  better looking source code
 
+ffmpeg-5.0-src-4.0-6
+  better looking source code
+
+ffmpeg-5.0-src-4.0-7
+  1 bug ok (when seek at end of stream or begin of stream,ffplay will be dumped)
 
 
 
