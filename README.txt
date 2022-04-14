@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.0-7
+Purpose player 2  4.0.1
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-there is a directory "ffmpeg-5.0-src-4.0-7" ,decompress "ffmpeg-5.0.tar.xz",
-it create a directory "ffmpeg-5.0" ,
-use files in "ffmpeg-5.0-src-4.0-7/fftools" to replace same name files in directory "ffmpeg-5.0/fftools",
-use files in "ffmpeg-5.0-src-4.0-7/libavdevice" to replace same name files in directory "ffmpeg-5.0/libavdevice",
-use file "ffmpeg-5.0-src-4.0-7/configure" to replace same name file in directory "ffmpeg-5.0",
+there is a directory "ffmpeg-5.0.1-src-4.0.1" ,decompress "ffmpeg-5.0.1.tar.xz",
+it create a directory "ffmpeg-5.0.1" ,
+use files in "ffmpeg-5.0.1-src-4.0.1/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
+use files in "ffmpeg-5.0.1-src-4.0.1/libavdevice" to replace same name files in directory "ffmpeg-5.0.1/libavdevice",
+use file "ffmpeg-5.0.1-src-4.0.1/configure" to replace same name file in directory "ffmpeg-5.0.1",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -17,7 +17,7 @@ it can display "sound river",it separate audio to 117 parts by frequency,display
 
 it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-you can goto http://ffmpeg.org/download.html#release_5.0 to download ffmpeg-5.0.tar.xz, or you can download in this web page.
+you can goto http://ffmpeg.org/download.html#release_5.0 to download ffmpeg-5.0.1.tar.xz, or you can download in this web page.
 
 How to compile:
 
@@ -33,7 +33,7 @@ in windows, you need install Msys+Mingw/Msys2+MinGW64, in Ubuntu or Linux Mint y
     make
     sudo make install
 
-    then goto directory "ffmpeg-5.0" and run 
+    then goto directory "ffmpeg-5.0.1" and run 
     ./configure
     make
 
@@ -72,7 +72,7 @@ you can goto http://www.libsdl.org/download-2.0.php to download these files, or 
   liblzma-5.dll
   zlib1.dll
 
-ffmpeg-5.0 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
+ffmpeg-5.0.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I modified source code ,ffplay still use SDL1 .
 
 In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
 run command "sudo make uninstall"(unload development library).
@@ -82,14 +82,14 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
 "./ffplay" to run it .
 
 
-小戴媒体播放器2  4.0-7
+小戴媒体播放器2  4.0.1
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-5.0-src-4.0-7,解压ffmpeg-5.0.tar.xz,将创建ffmpeg-5.0目录, 
-用ffmpeg-5.0-src-4.0-7/fftools里的文件,替换掉ffmpeg-5.0/fftools里的同名文件,
-用ffmpeg-5.0-src-4.0-7/libavdevice里的文件,替换掉ffmpeg-5.0/libavdevice里的同名文件,
-用ffmpeg-5.0-src-4.0-7/configure文件,替换掉ffmpeg-5.0里的同名文件,
+这里有目录ffmpeg-5.0.1-src-4.0.1,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
+用ffmpeg-5.0.1-src-4.0.1/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
+用ffmpeg-5.0.1-src-4.0.1/libavdevice里的文件,替换掉ffmpeg-5.0.1/libavdevice里的同名文件,
+用ffmpeg-5.0.1-src-4.0.1/configure文件,替换掉ffmpeg-5.0.1里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -97,7 +97,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
 
 能显示2.0声道的媒体文件,能显示5.1声道电影文件(只提取左声道一个声道的声音),
 
-你可以在 http://ffmpeg.org/download.html#release_5.0 下载 ffmpeg-5.0.tar.xz ，或者在当前页面下载。
+你可以在 http://ffmpeg.org/download.html#release_5.0 下载 ffmpeg-5.0.1.tar.xz ，或者在当前页面下载。
  
 编译方法如下：
 
@@ -115,7 +115,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
     make
     sudo make install
  
-    在 ffmpeg-5.0 目录下运行：
+    在 ffmpeg-5.0.1 目录下运行：
     ./configure
     make
 
@@ -152,14 +152,12 @@ libbz2-1.dll
 liblzma-5.dll
 zlib1.dll
 
-ffmpeg-5.0 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
+ffmpeg-5.0.1 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所以我修改了源代码 ,ffplay 仍然使用 SDL1 .
 
 如果你在 Ubuntu/Linux Mint 刚刚编译了ffplay,想要运行ffplay ,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
 
 在 Windows 或者 Ubuntu 12.04/14.04/16.04 (32bit)上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 
     Linux Mint 20上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
-
-
 
 
 
