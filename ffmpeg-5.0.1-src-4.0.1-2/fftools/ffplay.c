@@ -9477,8 +9477,11 @@ static int t1_search_node(char *pstr,char ptype)
   while (1)
   {
 
-    str_lower_string(t1_node_val[i],m201_str1);
-    str_lower_string(pstr,m201_str2);
+    //str_lower_string(t1_node_val[i],m201_str1);
+    //str_lower_string(pstr,m201_str2);
+    
+    strcpy(m201_str1,t1_node_val[i]);
+    strcpy(m201_str2,pstr);
 
     for (j=0;j<3000;j++)
     {

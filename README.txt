@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.0.1
+Purpose player 2  4.0.1-2
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu/Linux Mint,and it can display "sound river".
 
-there is a directory "ffmpeg-5.0.1-src-4.0.1" ,decompress "ffmpeg-5.0.1.tar.xz",
+there is a directory "ffmpeg-5.0.1-src-4.0.1-2" ,decompress "ffmpeg-5.0.1.tar.xz",
 it create a directory "ffmpeg-5.0.1" ,
-use files in "ffmpeg-5.0.1-src-4.0.1/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
-use files in "ffmpeg-5.0.1-src-4.0.1/libavdevice" to replace same name files in directory "ffmpeg-5.0.1/libavdevice",
-use file "ffmpeg-5.0.1-src-4.0.1/configure" to replace same name file in directory "ffmpeg-5.0.1",
+use files in "ffmpeg-5.0.1-src-4.0.1-2/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
+use files in "ffmpeg-5.0.1-src-4.0.1-2/libavdevice" to replace same name files in directory "ffmpeg-5.0.1/libavdevice",
+use file "ffmpeg-5.0.1-src-4.0.1-2/configure" to replace same name file in directory "ffmpeg-5.0.1",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -82,14 +82,14 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
 "./ffplay" to run it .
 
 
-小戴媒体播放器2  4.0.1
+小戴媒体播放器2  4.0.1-2
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu/Linux Mint),可以显示声音河流 .
  
-这里有目录ffmpeg-5.0.1-src-4.0.1,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
-用ffmpeg-5.0.1-src-4.0.1/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
-用ffmpeg-5.0.1-src-4.0.1/libavdevice里的文件,替换掉ffmpeg-5.0.1/libavdevice里的同名文件,
-用ffmpeg-5.0.1-src-4.0.1/configure文件,替换掉ffmpeg-5.0.1里的同名文件,
+这里有目录ffmpeg-5.0.1-src-4.0.1-2,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
+用ffmpeg-5.0.1-src-4.0.1-2/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
+用ffmpeg-5.0.1-src-4.0.1-2/libavdevice里的文件,替换掉ffmpeg-5.0.1/libavdevice里的同名文件,
+用ffmpeg-5.0.1-src-4.0.1-2/configure文件,替换掉ffmpeg-5.0.1里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
