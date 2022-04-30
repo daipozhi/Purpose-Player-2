@@ -44,7 +44,7 @@ you can run ffplay in Ubuntu 12.04 ,
 if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
 copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
 
-if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
+if you use Ubuntu 18.04/20.04/22.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
 rename "./usr/lib64" to "./usr/lib" , copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
 
 if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
@@ -77,7 +77,7 @@ ffmpeg-5.0.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I m
 In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
 run command "sudo make uninstall"(unload development library).
 
-On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
+On windows or Ubuntu 12.04/14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
 Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
 "./ffplay" to run it .
 
@@ -123,10 +123,10 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
  
 在 Ubuntu 12.04 可以直接运行,或者用命令行运行(有更多提示，显示媒体信息).
 
-Ubuntu 14.04 16.04 (32bit) 下面需要安装32bit SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
+Ubuntu 14.04/16.04(32bit) 下面需要安装32bit SDL运行时库,解压SDL-1.2.15-1.i386.rpm ,把 usr/lib 下面
 所有文件拷贝到/usr/lib(在命令行运行 sudo cp -r ./usr/* /usr) .
 
-Ubuntu 18.04/20.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
+Ubuntu 18.04/20.04/22.04 或者 Linux Mint-20-x86-64 下面需要安装64bit SDL运行时库,解压SDL-1.2.15-1.x86_64.rpm ,
 把 usr/lib64 改为usr/lib, 把 usr/lib 下面所有文件拷贝到/usr/lib (在命令行运行 sudo cp -r ./usr/* /usr) .
 
 在32bit Windows上，需要解压SDL-1.2.15-win32.zip,把 SDL.dll 拷贝到app目录，
@@ -156,7 +156,7 @@ ffmpeg-5.0.1 使用 SDL2, 但是我不能在Ubuntu/Linux Mint安装 SDL2 , 所�
 
 如果你在 Ubuntu/Linux Mint 刚刚编译了ffplay,想要运行ffplay ,需要在 SDL-1.2.15 目录下运行sudo make uninstall.(把开发库卸载)
 
-在 Windows 或者 Ubuntu 12.04/14.04/16.04 (32bit)上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 
+在 Windows 或者 Ubuntu 12.04/14.04/16.04(32bit)/22.04上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04 或者 
     Linux Mint 20上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
 
 

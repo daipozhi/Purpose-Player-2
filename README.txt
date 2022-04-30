@@ -41,10 +41,10 @@ copy ffplay(.exe) to app directory
 
 you can run ffplay in Ubuntu 12.04 ,
 
-if your Ubuntu is 14.04/16.04 (32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
+if your Ubuntu is 14.04/16.04(32bit),you need install 32bit SDL,decompress SDL-1.2.15-1.i386.rpm ,
 copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
 
-if you use Ubuntu 18.04/20.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
+if you use Ubuntu 18.04/20.04/22.04 or Linux Mint-20-x86-64 ,you need install 64bit SDL,decompress SDL-1.2.15-1.x86_64.rpm,
 rename "./usr/lib64" to "./usr/lib" , copy all file in ./usr/lib to /usr/lib . (sudo cp -r ./usr/* /usr)
 
 if you are in 32bit Windows,decompress SDL-1.2.15-win32.zip,copy 
@@ -77,7 +77,7 @@ ffmpeg-5.0.1 use SDL2, but I can't install SDL2 on Ubuntu or Linux Mint , so I m
 In Ubuntu/Linux Mint,if you just compiled ffplay, and want to run it , you need goto directory "SDL-1.2.15",
 run command "sudo make uninstall"(unload development library).
 
-On windows or Ubuntu 12.04/14.04/16.04 (32bit),you can double click "ffplay(.exe)" icon to run it ,if you are on 
+On windows or Ubuntu 12.04/14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
 Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "app" directory ,input command 
 "./ffplay" to run it .
 
@@ -123,10 +123,10 @@ Ubuntu 18.04/20.04 or Linux Mint 20 , you need open terminal window, move to "ap
  
 ÔÚ Ubuntu 12.04 ¿ÉÒÔÖ±½ÓÔËĞĞ,»òÕßÓÃÃüÁîĞĞÔËĞĞ(ÓĞ¸ü¶àÌáÊ¾£¬ÏÔÊ¾Ã½ÌåĞÅÏ¢).
 
-Ubuntu 14.04 16.04 (32bit) ÏÂÃæĞèÒª°²×°32bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.i386.rpm ,°Ñ usr/lib ÏÂÃæ
+Ubuntu 14.04/16.04(32bit) ÏÂÃæĞèÒª°²×°32bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.i386.rpm ,°Ñ usr/lib ÏÂÃæ
 ËùÓĞÎÄ¼ş¿½±´µ½/usr/lib(ÔÚÃüÁîĞĞÔËĞĞ sudo cp -r ./usr/* /usr) .
 
-Ubuntu 18.04/20.04 »òÕß Linux Mint-20-x86-64 ÏÂÃæĞèÒª°²×°64bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.x86_64.rpm ,
+Ubuntu 18.04/20.04/22.04 »òÕß Linux Mint-20-x86-64 ÏÂÃæĞèÒª°²×°64bit SDLÔËĞĞÊ±¿â,½âÑ¹SDL-1.2.15-1.x86_64.rpm ,
 °Ñ usr/lib64 ¸ÄÎªusr/lib, °Ñ usr/lib ÏÂÃæËùÓĞÎÄ¼ş¿½±´µ½/usr/lib (ÔÚÃüÁîĞĞÔËĞĞ sudo cp -r ./usr/* /usr) .
 
 ÔÚ32bit WindowsÉÏ£¬ĞèÒª½âÑ¹SDL-1.2.15-win32.zip,°Ñ SDL.dll ¿½±´µ½appÄ¿Â¼£¬
@@ -156,8 +156,10 @@ ffmpeg-5.0.1 Ê¹ÓÃ SDL2, µ«ÊÇÎÒ²»ÄÜÔÚUbuntu/Linux Mint°²×° SDL2 , ËùÒÔÎÒĞŞ¸ÄÁËÔ´´
 
 Èç¹ûÄãÔÚ Ubuntu/Linux Mint ¸Õ¸Õ±àÒëÁËffplay,ÏëÒªÔËĞĞffplay ,ĞèÒªÔÚ SDL-1.2.15 Ä¿Â¼ÏÂÔËĞĞsudo make uninstall.(°Ñ¿ª·¢¿âĞ¶ÔØ)
 
-ÔÚ Windows »òÕß Ubuntu 12.04/14.04/16.04 (32bit)ÉÏÃæ , Ë«»÷ffplay(.exe)Í¼±ê¾Í¿ÉÒÔÔËĞĞ ,ÔÚ Ubuntu 18.04/20.04 »òÕß 
+ÔÚ Windows »òÕß Ubuntu 12.04/14.04/16.04(32bit)/22.04ÉÏÃæ , Ë«»÷ffplay(.exe)Í¼±ê¾Í¿ÉÒÔÔËĞĞ ,ÔÚ Ubuntu 18.04/20.04 »òÕß 
     Linux Mint 20ÉÏÃæ ,ÄãĞèÒª´ò¿ªTerminal´°¿Ú ,ÒÆ¶¯µ½appÄ¿Â¼ ,ÊäÈëÃüÁî"./ffplay" È¥ÔËĞĞ .
+
+
 
 
 
