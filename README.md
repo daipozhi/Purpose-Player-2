@@ -117,11 +117,13 @@ this version use SDL2,support window resize,support mouse wheel,support volume c
 
 把 yasm-1.3.0.tar 展开
 在 yasm-1.3.0 目录下运行：
+
     ./configure
     make -j
     sudo make install
  
 在 ffmpeg-5.0.1 目录下运行：
+
     ./configure
     make -j
 
