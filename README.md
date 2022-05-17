@@ -49,11 +49,13 @@ and install libsdl2-dev again:
     sudo apt-get install libsdl2-dev
 
 decompress yasm-1.3.0.tar.gz and run
+
     ./configure
     make -j
     sudo make install
 
 then goto directory "ffmpeg-5.0.1" and run 
+
     ./configure
     make -j
 
