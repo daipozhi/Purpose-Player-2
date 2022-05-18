@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.0.1-17
+Purpose player 2  4.0.1-18
 
 
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-5.0.1-src-4.0.1-17" ,decompress "ffmpeg-5.0.1.tar.xz",
+there is a directory "ffmpeg-5.0.1-src-4.0.1-18" ,decompress "ffmpeg-5.0.1.tar.xz",
 it create a directory "ffmpeg-5.0.1" ,
-use files in "ffmpeg-5.0.1-src-4.0.1-17/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
+use files in "ffmpeg-5.0.1-src-4.0.1-18/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -49,11 +49,13 @@ and install libsdl2-dev again:
     sudo apt-get install libsdl2-dev
 
 decompress yasm-1.3.0.tar.gz and run
+
     ./configure
     make -j
     sudo make install
 
 then goto directory "ffmpeg-5.0.1" and run 
+
     ./configure
     make -j
 
@@ -67,14 +69,14 @@ this version use SDL2,support window resize,support mouse wheel,support volume c
 
 
 
-小戴媒体播放器2  4.0.1-17
+小戴媒体播放器2  4.0.1-18
 
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(WindowsXP/Vista/7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-5.0.1-src-4.0.1-17,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
-用ffmpeg-5.0.1-src-4.0.1-17/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
+这里有目录ffmpeg-5.0.1-src-4.0.1-18,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
+用ffmpeg-5.0.1-src-4.0.1-18/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -115,11 +117,13 @@ this version use SDL2,support window resize,support mouse wheel,support volume c
 
 把 yasm-1.3.0.tar 展开
 在 yasm-1.3.0 目录下运行：
+
     ./configure
     make -j
     sudo make install
  
 在 ffmpeg-5.0.1 目录下运行：
+
     ./configure
     make -j
 
