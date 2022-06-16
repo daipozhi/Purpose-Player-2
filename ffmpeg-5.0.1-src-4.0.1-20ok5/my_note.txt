@@ -14,9 +14,4 @@ bad media files
 
 
 
-todo:
-
-*disp_bar() too slow
-*reduce compiler warning message
-utf8 character display
 
