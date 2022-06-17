@@ -5203,6 +5203,8 @@ static void event_loop(VideoState *cur_stream)
 	        if (deb_st_play==1)
 	        {
 
+		  if (deb_eo_stream==1) break;
+
                   x = event.button.x-5;
 
 
