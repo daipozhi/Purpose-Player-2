@@ -66,6 +66,7 @@ On windows or Ubuntu 14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)
 Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
 
   version 4.0.1-17 and later use SDL2,support window resize,support mouse wheel,support volume changing.
+  
   version 4.0.1-20 and later can display utf8 characters.
 
 
@@ -134,5 +135,6 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
 
   新版本使用SDL2,可以改变窗口大小,支持鼠标滚轮,支持音量调节.
+  
   新版本可以显示utf8字符.
 
