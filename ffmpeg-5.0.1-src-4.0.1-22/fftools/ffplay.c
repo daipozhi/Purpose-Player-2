@@ -42,6 +42,7 @@
 
 
 
+
 #include "config.h"
 #include <inttypes.h>
 #include <math.h>
@@ -394,17 +395,7 @@ static 	int    deb_seek_bar_cntr=0;
 static 	int    deb_echo_char4seekbar(int x,int y,int ec);
 static 	int    deb_echo_str4seekbar(int y1,char *str,int str_len);
 
-//static 	int    deb_echo_char4en(int x,int y,int ec);
-//static 	int    deb_echo_char4en_black(int x,int y,int ec);
-//static  int    deb_echo_char4en_green(int x,int y,int ec);
-
-//static 	int    deb_echo_char4chns(int x,int y,int ,int);
-//static 	int    deb_echo_char4chns_black(int x,int y,int ,int);
-//static  int    deb_echo_char4chns_green(int x,int y,int k,int l);
-
 static 	int    deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st);
-//static  int    deb_echo_str4screenstring_black(int xx,int yy,char *str,int len);
-//static  int    deb_echo_str4screenstring_green(int xx,int yy,char *str,int len);
 
 static 	int    deb_ch_h=14;
 static 	int    deb_ch_w=7;
@@ -6096,53 +6087,7 @@ static int deb_load_font(void)
   u_str = (unsigned char*)u_b6s;  read(deb_fh, u_str,  8192 * 2);
 
   close(deb_fh);
-/*
-#if defined(_WIN32) && GB18030
-  deb_fh=open("./utf8_bmp/tableline.txt",O_RDONLY,S_IRUSR);
-  if (deb_fh<0)
-  {
-    printf("Open file './utf8_bmp/tableline.txt' error\n");
-    return(1);
-  }
 
-  read(deb_fh,deb_tableline,50);
-  
-  close(deb_fh);
-
-  u_tc[0][0]=deb_tableline[0];
-  u_tc[0][1]=deb_tableline[1];
-  u_tc[0][2]=0;
-  u_tc[1][0]=deb_tableline[2];
-  u_tc[1][1]=deb_tableline[3];
-  u_tc[1][2]=0;
-  u_tc[2][0]=deb_tableline[4];
-  u_tc[2][1]=deb_tableline[5];
-  u_tc[2][2]=0;
-  u_tc[3][0]=deb_tableline[ 6];
-  u_tc[3][1]=deb_tableline[ 7];
-  u_tc[3][2]=0;
-  u_tc[4][0]=deb_tableline[ 8];
-  u_tc[4][1]=deb_tableline[ 9];
-  u_tc[4][2]=0;
-  u_tc[5][0]=deb_tableline[10];
-  u_tc[5][1]=deb_tableline[11];
-  u_tc[5][2]=0;
-  u_tc[6][0]=deb_tableline[12];
-  u_tc[6][1]=deb_tableline[13];
-  u_tc[6][2]=0;
-  u_tc[7][0]=deb_tableline[14];
-  u_tc[7][1]=deb_tableline[15];
-  u_tc[7][2]=0;
-  u_tc[8][0]=deb_tableline[16];
-  u_tc[8][1]=deb_tableline[17];
-  u_tc[8][2]=0;
-  u_tc[9][0]=deb_tableline[18];
-  u_tc[9][1]=deb_tableline[19];
-  u_tc[9][2]=0;
-  u_tc[10][0]=deb_tableline[20];
-  u_tc[10][1]=deb_tableline[21];
-  u_tc[10][2]=0;
-#else*/
   deb_fh=open("./utf8_bmp/tableline.utf8.txt",O_RDONLY,S_IRUSR);
   if (deb_fh<0)
   {
@@ -6198,7 +6143,6 @@ static int deb_load_font(void)
   u_tc[10][1]=deb_tableline[31];
   u_tc[10][2]=deb_tableline[32];
   u_tc[10][3]=0;
-//#endif
 
   return(0);
 }
@@ -6274,6 +6218,7 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
   unsigned char		c1,c2,c3,c4;
   int  			i1;
   int           len;
+  int		 updown=0;
 
   if (deb_str_has_null(str,size)!=1) return(0);
 
@@ -6295,10 +6240,15 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
     
     if (c1<128)
     {
-      u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
+      if (c1=='^')
+      {
+        c1='V'; updown=1; u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
+      }
+      else
+      {
+        u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
+      }
       if ((u_cptr<0)||(u_cptr>=128)) err=1;
-      
-      //printf("%d,",c1);
     }
     else if ((c1>=194)&&(c1<=223))
     {
@@ -6372,9 +6322,18 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
               SDL_SetRenderDrawColor(renderer, i1, i1, i1, i1);
               //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
 
-              fill_rectangle(
+              if (updown!=0)
+              {
+                fill_rectangle(
+                     x+m, y+14-n-1,
+                     1, 1);
+              }
+              else
+              {
+                fill_rectangle(
                      x+m, y+n,
                      1, 1);
+              }
             }
             else if (st==1) //black
             {
@@ -6397,6 +6356,7 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
           }
         }
     
+        updown=0;
         x=x+k;
         j=j+u_nb;
         continue;
