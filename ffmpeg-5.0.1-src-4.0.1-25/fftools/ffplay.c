@@ -345,12 +345,6 @@ typedef struct VideoState {
 #include <sys/time.h>
 #include <time.h>
 
-
-// daipozhi modified 
-//static  char      deb_ascii_bmp[128][13][6][3];
-//static  char      deb_chns_bmp2[6][128][13][12][3];
-//static  char      deb_chns_bmp[128][128][13][12][3];
-
 static unsigned char u_b1p[  128][14][14]; //utf8 char bmp
 static unsigned char u_b2p[ 1920][14][14];
 static unsigned char u_b3p[ 2048][14][14];
@@ -392,10 +386,10 @@ static 	char      deb_scrn_str2[8001];
 // daipozhi modified
 static 	int    deb_seek_bar_cntr=0;
 
-static 	int    deb_echo_char4seekbar(int x,int y,int ec);
-static 	int    deb_echo_str4seekbar(int y1,char *str,int str_len);
+static 	int    deb_echo_char4seekbar(int x,int y,int ec,int vid);
+static 	int    deb_echo_str4seekbar(int y1,char *str,int str_size,int vid);
 
-static 	int    deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st);
+static 	int    deb_echo_str4screenstring(int xx,int yy,char *str,int str_size,int st,int tx);
 
 static 	int    deb_ch_h=14;
 static 	int    deb_ch_w=7;
@@ -428,12 +422,10 @@ static 	int    deb_disp_dir(VideoState *is);
 static 	int    deb_disp_bar(VideoState *is);
 static  int    deb_utf8_to_gb18030(char *inbuffer,char *outbuffer,int outbufferlen);
 static  int    deb_gb18030_to_utf8(char *inbuffer,char *outbuffer,int outbufferlen);
-//static 	int    deb_disp_scrn(VideoState *is);
 static 	int    deb_filenameext(char *path,int path_size,char *fext,int fext_size);
 static 	int    deb_filename_dir(char *path,char *name);
 
 static 	int deb_video_open_again(VideoState *is, int force_set_video_mode);
-//static 	int deb_ini_var(void);
 static 	int deb_ini_is(VideoState *is);
 
 static 	int deb_st_play=0;
@@ -457,7 +449,7 @@ static 	int deb_load_font(void);
 
 static 	int  deb_record_init(void);
 static 	int  deb_record_close(void);
-static FILE *deb_record_fp;
+static 	FILE *deb_record_fp;
 static 	int  deb_record(char *p_str1);
 
 
@@ -465,22 +457,31 @@ static 	char deb_tableline[3000];
 
 static          int  screen_w;
 static          int  screen_h;
-//static  SDL_Texture *scrn_texture=NULL;
 static    SDL_Rect    m_rect;
 static    int         m_ref;
-//static    int         m_ref_bar=0;
+static    int         m_ref_v;
 static    int         m_vol=0;
+
+
+
+static SDL_Rect  deb_tx_rect;
+static uint32_t *deb_tx_pixels;
+static int       deb_tx_pitch;
+static int       deb_tx_locked=0;
+static int       deb_set_dot(int x1, int y1, int a, int r, int g, int b);
+static int       deb_resize;
+static int       fill_rect_green(int x,int y,int w,int h,unsigned char c);
+static int       clr_rect_green(void);
+
 
 
 static  int  deb_cover=0;
 static  int  deb_cover_close=0;
-//static  int  deb_border=0;
 static  int  deb_frame_num=0;
 static  int  deb_stream_err=0;
 static  int  deb_opts_stt=0;
 
 static  char deb_dir_buffer[FN_SIZE];
-//static  char deb_dir_buffer_wchar[FN_SIZE];
 
 // daipozhi modified 
 static 	int  deb_get_dir_ini(void);
@@ -554,7 +555,6 @@ static     char  t1_out_buff3[BTREE1_SIZE][6];
 static     char  t1_out_buff4[BTREE1_SIZE][7];
 static     char  t1_out_buff5[BTREE1_SIZE][21];
 static     int   t1_out_ptr;
-//static     int   t1_out_ptr2;
 
 static    int   t1_err;
 
@@ -566,8 +566,7 @@ static    int   t1_search_node(char *pstr,char ptype);
 static    int   t1_insert_node(char *pstr,char ptype);
 static    int   t1_delete_node(char *pstr,char ptype);
 static    int   t1_smallest(void);
-//static    int   t1_istrcmp(int i,long long int pn1,long long int pn2,long long int pn3,long long int pn4);
-static int string_comp(char *ps1,char *ps2);
+static    int   string_comp(char *ps1,char *ps2);
 //static    int   t1_dsp_tree(void);
 static    int   t1_after_list(void);
 static    int   t1_out_list(char *pstr,char ptype,int ptr);
@@ -618,7 +617,6 @@ static int  		deb_sr_time_set;
 static long long int	deb_sr_time1;
 static long long int	deb_sr_time2;
 static long long int 	deb_sr_time3;
-//static long long int 	  deb_sr_time4;
 static long long int 	deb_sr_time5;
 static long long int 	deb_sr_total_bytes;
 
@@ -702,7 +700,7 @@ static    int     deb_sr_fft_trans_all(VideoState *is,long pcm);
 static    int     deb_sr_fft_cx(int chn,int pcm,int mark);
 static    int     deb_sr_fft_set_db(long pcm);
 
-//static        int     char2int(char *string,int p1,int p2);
+//static    int     char2int(char *string,int p1,int p2);
 static    int     deb_sr_cc2i(char c1,char c2);
 static    void    deb_sr_i2cc(int k,char *cc);
 
@@ -725,8 +723,6 @@ static    int    put_dlp_imag_ou2(long addr,float val);
 static float   deb_sr_db[60];
 
 static int  deb_sr_river_f[151][118][60][2];
-//static int   deb_sr_river_f[2][2][2000];
-//static float deb_sr_river_f2[2][2][2000];
 
 static int  deb_sr_river_f_init;
 static int  deb_sr_river_f_init_fail;
@@ -864,6 +860,9 @@ static int is_full_screen;
 static int64_t audio_callback_time;
 
 #define FF_QUIT_EVENT    (SDL_USEREVENT + 2)
+
+
+
 
 static SDL_Window *window;
 static SDL_Renderer *renderer;
@@ -1402,7 +1401,16 @@ static int realloc_texture(SDL_Texture **texture, Uint32 new_format, int new_wid
         if (init_texture) {
             if (SDL_LockTexture(*texture, NULL, &pixels, &pitch) < 0)
                 return -1;
-            memset(pixels, 0, pitch * new_height);
+                
+                
+                
+                
+            //daipozhi modified
+            memset(pixels, 255, pitch * new_height);
+            
+            
+            
+            
             SDL_UnlockTexture(*texture);
         }
         av_log(NULL, AV_LOG_VERBOSE, "Created %dx%d texture with %s.\n", new_width, new_height, SDL_GetPixelFormatName(new_format));
@@ -1557,15 +1565,6 @@ static void video_image_display(VideoState *is)
 
     vp = frame_queue_peek_last(&is->pictq);
 
-
-
-
-    //daipozhi
-    //printf("deb_border=%d,deb_cover=%d,deb_cover_close=%d,\n",deb_border,deb_cover,deb_cover_close);
-
-
-
-
     if (is->subtitle_st) {
         if (frame_queue_nb_remaining(&is->subpq) > 0) {
             sp = frame_queue_peek(&is->subpq);
@@ -1658,17 +1657,14 @@ static void video_image_display(VideoState *is)
 
 
 
-    //daipozhi modified
-    //if (deb_border==0)  
-    //{
-      //deb_border=1;
+      //daipozhi modified    
       fill_border(is->xleft, is->ytop, is->width, is->height, 
                   m_rect.x, m_rect.y, m_rect.w, m_rect.h );
-    //}
 
     //daipozhi modified    
     deb_cover=1;
     m_ref=1;
+    m_ref_v=1;
 
 
 
@@ -4586,15 +4582,6 @@ static void toggle_audio_display(VideoState *is)
     }
 }
 
-
-
-
-//daipozhi modified
-char m301_tmp_str1[3000];
-
-
-
-
 static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 
 
@@ -4604,14 +4591,19 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
     struct timeval  tv;
     //struct timezone tz;
     
-    m_ref=0;
-
 
 
 
     double remaining_time = 0.0;
     SDL_PumpEvents();
     while (!SDL_PeepEvents(event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT)) {
+
+
+
+
+        //daipozhi modified
+        m_ref=0;
+        m_ref_v=0;
 
 
 
@@ -4691,18 +4683,12 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 						if ((deb_thr_a)&&(deb_thr_a2)&&(deb_thr_r))  // audio without image
 						{
 							/*if ((deb_st_play==1)&&(is->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
-							{
-							  deb_border=0;
-							  video_image_display(is);
-							}
+							      video_image_display(is);
 							else*/ if ((deb_sr_show==1)&&(deb_sr_show_start==1)&&(deb_sr_show_nodisp==0))
 							  deb_sr_river_show_pause(is);
 							else
 							{
 							  deb_disp_dir(is);
-							  //deb_disp_bar(is);
-							  //SDL_RenderPresent(renderer);
-							  //m_ref=0;
 							}
 							//its purpose is deb_disp_bar()
 						}
@@ -4718,9 +4704,6 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 							else
 							{
 							    deb_disp_dir(is);
-							    //deb_disp_bar(is);
-							    //SDL_RenderPresent(renderer);
-							    //m_ref=0;
 							}
 							//its purpose is deb_disp_bar()
 						}
@@ -4732,11 +4715,17 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 		if (m_ref==1)
 		{
 		  deb_disp_bar(is); // in sdl2 ,you need prepare full screen data
+		  if (deb_tx_locked==1)
+		  {
+		    SDL_UnlockTexture(is->vis_texture);
+		    SDL_RenderCopy(renderer, is->vis_texture, NULL, NULL);
+		    deb_tx_locked=0;
+		  }
 		  SDL_RenderPresent(renderer);
 		}
 
-		m_ref    =0;
-		//m_ref_bar=0;
+		m_ref=0;
+		m_ref_v=0;
 
         SDL_PumpEvents();
     }
@@ -4769,15 +4758,6 @@ static void seek_chapter(VideoState *is, int incr)
                                  AV_TIME_BASE_Q), 0, 0);
 }
 
-
-
-
-// daipozhi modified
-//static char m302_tmp_str1[3000];
-
-
-
-
 /* handle an event sent by the GUI */
 static void event_loop(VideoState *cur_stream)
 {
@@ -4793,7 +4773,6 @@ static void event_loop(VideoState *cur_stream)
     int  s_dir_opened;
     //int  tmp_n1;
     //int  tmp_n2;
-    //VideoState *is;
 
 
 
@@ -4964,7 +4943,12 @@ static void event_loop(VideoState *cur_stream)
 		deb_cover_close=1;
 		deb_disp_dir(cur_stream);
 		deb_disp_bar(cur_stream);
-		//deb_disp_scrn(cur_stream);
+		if (deb_tx_locked==1)
+		{
+		  SDL_UnlockTexture(cur_stream->vis_texture);
+		  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		  deb_tx_locked=0;
+		}
 		SDL_RenderPresent(renderer);
 		m_ref=0;
 		break;
@@ -4977,7 +4961,12 @@ static void event_loop(VideoState *cur_stream)
 		  deb_sr_show_start=0;
 		  deb_disp_dir(cur_stream);
 		  deb_disp_bar(cur_stream);
-		  //deb_disp_scrn(cur_stream);
+		  if (deb_tx_locked==1)
+		  {
+		    SDL_UnlockTexture(cur_stream->vis_texture);
+		    SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		    deb_tx_locked=0;
+		  }
 		  SDL_RenderPresent(renderer);
 		  m_ref=0;
 		  break;
@@ -5036,14 +5025,11 @@ static void event_loop(VideoState *cur_stream)
 		    deb_cover=0;
 		    deb_cover_close=0;
 		    deb_frame_num=0;
-		    //deb_border=0;
 
                     init_opts();
                     deb_opts_stt=1;
 		    deb_ini_is(cur_stream);
 		    deb_video_open_again(cur_stream,0);
-
-		    //deb_disp_scrn(cur_stream);
 
 		    deb_filenameplay=deb_filenamebuff_n+n2;
 
@@ -5074,7 +5060,7 @@ static void event_loop(VideoState *cur_stream)
                     
 		    stream_open(deb_dir_buffer, file_iformat,2);
 
-		    deb_disp_dir(cur_stream);
+		    //deb_disp_dir(cur_stream);
 		    //deb_disp_bar(cur_stream);
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
@@ -5100,6 +5086,12 @@ static void event_loop(VideoState *cur_stream)
         	        deb_dir_add_after(deb_filenamebuff_n+n2);
 			deb_disp_dir(cur_stream);
 		        deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		        SDL_RenderPresent(renderer);
 		        m_ref=0;
 		      }
@@ -5109,6 +5101,12 @@ static void event_loop(VideoState *cur_stream)
                       deb_dir_remove_after(deb_filenamebuff_n+n2);
 		      deb_disp_dir(cur_stream);
 		      deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		      SDL_RenderPresent(renderer);
 		      m_ref=0;
                     }
@@ -5127,6 +5125,12 @@ static void event_loop(VideoState *cur_stream)
 		    deb_filenamebuff_n--;
 		    deb_disp_dir(cur_stream);
 		    deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
 		    break;
@@ -5142,6 +5146,12 @@ static void event_loop(VideoState *cur_stream)
 		      deb_filenamebuff_n++;
 		      deb_disp_dir(cur_stream);
 		      deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		      SDL_RenderPresent(renderer);
 		      m_ref=0;
 		      break;
@@ -5159,6 +5169,12 @@ static void event_loop(VideoState *cur_stream)
 
 		      deb_disp_dir(cur_stream);
 		      deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		      SDL_RenderPresent(renderer);
 		      m_ref=0;
 		      break;
@@ -5175,6 +5191,12 @@ static void event_loop(VideoState *cur_stream)
 
 		      deb_disp_dir(cur_stream);
 		      deb_disp_bar(cur_stream);
+			if (deb_tx_locked==1)
+			{
+			  SDL_UnlockTexture(cur_stream->vis_texture);
+			  SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+			}
 		      SDL_RenderPresent(renderer);
 		      m_ref=0;
 		      break;
@@ -5238,6 +5260,7 @@ static void event_loop(VideoState *cur_stream)
 		if (deb_st_play==1) cur_stream->audio_volume=m_vol;
 		
 		m_ref=0;
+		m_ref_v=0;
 
 		if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		    video_image_display(cur_stream);
@@ -5249,8 +5272,15 @@ static void event_loop(VideoState *cur_stream)
 		if (m_ref==1)
 		{
 		  deb_disp_bar(cur_stream);
+		  if (deb_tx_locked==1)
+		  {
+		    SDL_UnlockTexture(cur_stream->vis_texture);
+		    SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		    deb_tx_locked=0;
+		  }
 		  SDL_RenderPresent(renderer);
 		  m_ref=0;
+		  m_ref_v=0;
 		}
 		
 		break;
@@ -5267,6 +5297,7 @@ static void event_loop(VideoState *cur_stream)
 		  toggle_pause(cur_stream);
 
 		  m_ref=0;
+		  m_ref_v=0;
 
 		  if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		    video_image_display(cur_stream);
@@ -5278,8 +5309,15 @@ static void event_loop(VideoState *cur_stream)
 		  if (m_ref==1)
 		  {
 		    deb_disp_bar(cur_stream);
+		    if (deb_tx_locked==1)
+		    {
+		      SDL_UnlockTexture(cur_stream->vis_texture);
+		      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		      deb_tx_locked=0;
+		    }
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
+		    m_ref_v=0;
 		  }
 
 		  break;
@@ -5313,8 +5351,14 @@ static void event_loop(VideoState *cur_stream)
 		  {
 		    deb_cover_close=1;
 
-		    deb_disp_bar(cur_stream);
 		    deb_disp_dir(cur_stream);
+		    deb_disp_bar(cur_stream);
+		    if (deb_tx_locked==1)
+		    {
+		      SDL_UnlockTexture(cur_stream->vis_texture);
+		      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		      deb_tx_locked=0;
+		    }
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
 		    break;
@@ -5327,8 +5371,14 @@ static void event_loop(VideoState *cur_stream)
 		    deb_sr_show_start=0;
 		    deb_sr_show_nodisp=1;
 
-		    deb_disp_bar(cur_stream);
 		    deb_disp_dir(cur_stream);
+		    deb_disp_bar(cur_stream);
+		    if (deb_tx_locked==1)
+		    {
+		      SDL_UnlockTexture(cur_stream->vis_texture);
+		      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		      deb_tx_locked=0;
+		    }
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
 		    break;
@@ -5338,7 +5388,6 @@ static void event_loop(VideoState *cur_stream)
 		    if ((deb_cover==1)&&(deb_cover_close==1))
 		    {
 		      deb_cover_close=0;
-		      //deb_border=0;
 		      cur_stream->force_refresh = 1;
 		      break;
 		    }
@@ -5424,30 +5473,27 @@ static void event_loop(VideoState *cur_stream)
                     //daipozhi modified
                     printf("window size changed,\n");
                     
-		    screen_w=event.window.data1;
-		    screen_h=event.window.data2;
-                    
-                    cur_stream->force_refresh = 1;
+
+		     //daipozhi modified
+                    screen_w=screen_width  = cur_stream->width  = event.window.data1;
+                    screen_h=screen_height = cur_stream->height = event.window.data2;
+
+                    //if (cur_stream->vis_texture) {
+                    //    SDL_DestroyTexture(cur_stream->vis_texture);
+                    //    cur_stream->vis_texture = NULL;
+                    //}
+
+
 
 	            //daipozhi modified
 	            deb_ch_d= event.window.data2 - deb_ch_h *( event.window.data2 / deb_ch_h ) ;
 
 	            deb_sr_river_f_init=0; //daipozhi modified for sound river
-
-
-
-
-                    screen_width  = cur_stream->width  = event.window.data1;
-                    screen_height = cur_stream->height = event.window.data2;
-                    if (cur_stream->vis_texture) {
-                        SDL_DestroyTexture(cur_stream->vis_texture);
-                        cur_stream->vis_texture = NULL;
-                    }
                     
                     
-                    
-                    
+             
 		     m_ref=0;
+		     m_ref_v=0;
 
 		     if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		       video_image_display(cur_stream);
@@ -5459,9 +5505,19 @@ static void event_loop(VideoState *cur_stream)
 		     if (m_ref==1)
 		     {
 		       deb_disp_bar(cur_stream);
+		       if (deb_tx_locked==1)
+		       {
+		         SDL_UnlockTexture(cur_stream->vis_texture);
+		         SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		         deb_tx_locked=0;
+		       }
 		       SDL_RenderPresent(renderer);
 		       m_ref=0;
+		       m_ref_v=0;
 		     }
+
+
+
 
                     //daipozhi modified
                     break;
@@ -5476,8 +5532,6 @@ static void event_loop(VideoState *cur_stream)
                 
                     //daipozhi modified
                     printf("window exposed,\n");
-
-		    //deb_border=0;
 
 
 
@@ -5499,6 +5553,7 @@ static void event_loop(VideoState *cur_stream)
 #endif
             do_exit(cur_stream);
             break;
+            
         case FF_QUIT_EVENT:
 
             //daipozhi modified
@@ -5509,8 +5564,14 @@ static void event_loop(VideoState *cur_stream)
             {
               deb_st_play=0;
 
-              deb_disp_bar(cur_stream);
 	      deb_disp_dir(cur_stream);
+              deb_disp_bar(cur_stream);
+	      if (deb_tx_locked==1)
+	      {
+	        SDL_UnlockTexture(cur_stream->vis_texture);
+	        SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		deb_tx_locked=0;
+	      }
 	      SDL_RenderPresent(renderer);
 	      m_ref=0;
 
@@ -5526,7 +5587,6 @@ static void event_loop(VideoState *cur_stream)
 	    deb_cover=0;
 	    deb_cover_close=0;
 	    deb_frame_num=0;
-	    //deb_border=0;
 
             init_opts();
             deb_opts_stt=1;
@@ -5535,8 +5595,14 @@ static void event_loop(VideoState *cur_stream)
 
 	    deb_filenameplay++;
 
-            deb_disp_bar(cur_stream);
 	    deb_disp_dir(cur_stream);
+            deb_disp_bar(cur_stream);
+	    if (deb_tx_locked==1)
+	    {
+	      SDL_UnlockTexture(cur_stream->vis_texture);
+	      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+	      deb_tx_locked=0;
+	    }
 	    SDL_RenderPresent(renderer);
 	    m_ref=0;
 
@@ -5564,8 +5630,6 @@ static void event_loop(VideoState *cur_stream)
 	      deb_get_path(deb_filenameplay);
 
 	      deb_video_open_again(cur_stream,0);
-
-	      //deb_disp_scrn(cur_stream);
 
 	      deb_thr_v=0;
 	      deb_thr_s=0;
@@ -5622,6 +5686,12 @@ static void event_loop(VideoState *cur_stream)
 		  
 		    deb_disp_dir(cur_stream);
                    deb_disp_bar(cur_stream);
+		    if (deb_tx_locked==1)
+		    {
+		      SDL_UnlockTexture(cur_stream->vis_texture);
+		      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		      deb_tx_locked=0;
+		    }
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
 		  
@@ -5640,6 +5710,12 @@ static void event_loop(VideoState *cur_stream)
 		    
 		    deb_disp_dir(cur_stream);
                    deb_disp_bar(cur_stream);
+		    if (deb_tx_locked==1)
+		    {
+		      SDL_UnlockTexture(cur_stream->vis_texture);
+		      SDL_RenderCopy(renderer, cur_stream->vis_texture, NULL, NULL);
+		      deb_tx_locked=0;
+		    }
 		    SDL_RenderPresent(renderer);
 		    m_ref=0;
 		    
@@ -6029,8 +6105,14 @@ int main(void/*int argc, char **argv*/)
 
     deb_get_dir_ini();  //daipozhi modified  
 
-    deb_disp_bar(is);
     deb_disp_dir(is);
+    deb_disp_bar(is);
+    if (deb_tx_locked==1)
+    {
+      SDL_UnlockTexture(is->vis_texture);
+      SDL_RenderCopy(renderer, is->vis_texture, NULL, NULL);
+      deb_tx_locked=0;
+    }
     SDL_RenderPresent(renderer);
     m_ref=0;
 
@@ -6147,70 +6229,135 @@ static int deb_load_font(void)
   return(0);
 }
 
-static int deb_echo_char4seekbar(int x,int y,int ec)
+static int deb_echo_char4seekbar(int x,int y,int ec,int vid)
 {
   int l1/*,l2*/;
-  //int i1,i2,i3;
-  //int bgcolor;
 
   if (ec=='-')
   {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    //bgcolor = SDL_MapRGB(screen->format, 0, 0, 0);
-
-    fill_rectangle(
-                   x, 
-                   y+7,
-                   1, 
-                   1
-                   );
-  }
-
-  if (ec=='+')
-  {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    //bgcolor = SDL_MapRGB(screen->format, 0, 0, 0);
-
     for (l1=0;l1<14;l1++)
     {
-      fill_rectangle(
+      if (vid)
+      {
+        if (l1==7)
+        {
+          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          fill_rectangle(
                      x, 
                      y+l1,
                      1, 
                      1
                      );
+        }
+        else
+        {
+          SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+          fill_rectangle(
+                     x, 
+                     y+l1,
+                     1, 
+                     1
+                     );
+        }
+      }
+      else
+      {
+        if (l1==7) deb_set_dot(x,y+l1,0,0,0,0);
+        else       deb_set_dot(x,y+l1,255,255,255,255);
+      }
+    }
+  }
+  else if (ec=='+')
+  {
+    for (l1=0;l1<14;l1++)
+    {
+      if (vid)
+      {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        //bgcolor = SDL_MapRGB(screen->format, 0, 0, 0);
+
+        fill_rectangle(
+                     x, 
+                     y+l1,
+                     1, 
+                     1
+                     );
+      }
+      else
+      {
+        deb_set_dot(x,y+l1,0,0,0,0);
+      }
+    }
+  }
+  else
+  {
+    for (l1=0;l1<14;l1++)
+    {
+      if (vid)
+      {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        //bgcolor = SDL_MapRGB(screen->format, 255, 255, 255);
+
+        fill_rectangle(
+                     x, 
+                     y+l1,
+                     1, 
+                     1
+                     );
+      }
+      else
+      {
+        deb_set_dot(x,y+l1,255,255,255,255);
+      }
     }
   }
 
   return(0);
 }
 
-static int deb_echo_str4seekbar(int yy,char *str,int str_len)
+static int deb_echo_str4seekbar(int yy,char *str,int str_size,int vid)
 {
   int i,j,k;
   int x,y;
 
+  if ((deb_tx_locked!=1)&&(vid!=1)) return(0);
+
   x=0;
   y=yy;
   
-  if (deb_str_has_null(str,str_len)!=1) return(0);
+  if (deb_str_has_null(str,str_size)!=1) return(0);
   
   i=(int)strlen(str);
   if (i<=0) return(0);
-  //if (i>str_len) i=str_len;
+  //if (i>str_size) i=str_size;
 
   for (j=0;j<i;j++)
   {
     k=str[j];
     if ((k<32)||(k>=128)) continue;
-    deb_echo_char4seekbar(x,y,k);
+    deb_echo_char4seekbar(x,y,k,vid);
     x=x+1;
   }
 
   return(0);
 }
 
-static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
+static int deb_set_dot(int x1, int y1, int a, int r, int g, int b)
+{
+	int       k;
+        uint32_t *pixels;
+
+        if ((x1<0)||(x1>=stream_open_is->width)) return(0);
+        if ((y1<0)||(y1>=stream_open_is->height)) return(0);
+
+	k = y1*stream_open_is->width + x1;
+        pixels=deb_tx_pixels+k;
+        *pixels = (a << 24) +(r << 16) + (g << 8) + b;
+        
+	return(0);
+}
+
+static int deb_echo_str4screenstring(int xx,int yy,char *str,int str_size,int st,int vid)
 {
   int			i,j,k,l,m,n;
   int			x,y;
@@ -6220,7 +6367,9 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
   int           len;
   int		 updown=0;
 
-  if (deb_str_has_null(str,size)!=1) return(0);
+  if (deb_str_has_null(str,str_size)!=1) return(0);
+
+  if ((deb_tx_locked!=1)&&(vid!=1)) return(0);
 
   len=strlen(str);
   x=xx;
@@ -6319,39 +6468,60 @@ static int deb_echo_str4screenstring(int xx,int yy,char *str,int size,int st)
         
             if (st==0)  // normal
             {
-              SDL_SetRenderDrawColor(renderer, i1, i1, i1, i1);
-              //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
-
               if (updown!=0)
               {
-                fill_rectangle(
+                if (vid)
+                {
+                  SDL_SetRenderDrawColor(renderer, i1, i1, i1, i1);
+                  //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
+
+                  fill_rectangle(
                      x+m, y+14-n-1,
                      1, 1);
+                }
+                else
+                {
+                  deb_set_dot(x+m,y+14-n-1,i1,i1,i1,i1);
+                }
               }
               else
               {
-                fill_rectangle(
+                if (vid)
+                {
+                  SDL_SetRenderDrawColor(renderer, i1, i1, i1, i1);
+                  //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
+
+                  fill_rectangle(
                      x+m, y+n,
                      1, 1);
+                }
+                else
+                {
+                  deb_set_dot(x+m,y+n,i1,i1,i1,i1);
+                }
               }
             }
             else if (st==1) //black
             {
-              SDL_SetRenderDrawColor(renderer, 255-i1, 255-i1, 255-i1, 255-i1);
+              //SDL_SetRenderDrawColor(renderer, 255-i1, 255-i1, 255-i1, 255-i1);
               //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
 
-              fill_rectangle(
-                     x+m, y+n,
-                     1, 1);
+              //fill_rectangle(
+              //       x+m, y+n,
+              //       1, 1);
+
+              deb_set_dot(x+m,y+n,255-i1,255-i1,255-i1,255-i1);
             }
             else  // green
             {
-              SDL_SetRenderDrawColor(renderer, 0, 255-i1, 0, 0);
+              //SDL_SetRenderDrawColor(renderer, 0, 255-i1, 0, 0);
               //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
 
-              fill_rectangle(
-                     x+m, y+n,
-                     1, 1);
+              //fill_rectangle(
+              //       x+m, y+n,
+              //       1, 1);
+                     
+              deb_set_dot(x+m,y+n,0,0,255-i1,0);
             }
           }
         }
@@ -6492,7 +6662,7 @@ int  m81_size[1500];
 
 static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int fldlen)
 {
-  int				i,j,k,l,m,n,o,p;
+  int				i,j,k,l,m,n,o,p,q;
   int				x,y;
   int 				err,err2;
   unsigned char		c1,c2,c3,c4;
@@ -6644,15 +6814,27 @@ static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int 
   n=0;
   p=0;
   mi=0;
+  
+  q=u_strlen(instr,instr_size);
+  if (q>fldlen) mi=1;
 
   for (m=0;m<sptr;m++)
   {
-    if (m81_len[m]+n>fldlen)
+    if (mi==1)
     {
-      mi=1;
-      break;
+      if (m81_len[m]+n>=fldlen)
+      {
+        break;
+      }
     }
-
+    else
+    {
+      if (m81_len[m]+n>fldlen)
+      {
+        break;
+      }
+    }
+    
     if (m81_size[m]+p>=outstr_size-1)
     {
       break;
@@ -6919,7 +7101,7 @@ static int u_test_disp_win(void)
 
     for (i=0;i<32;i++)
     {
-      deb_echo_str4screenstring(0,14*i,u_test_buf[i],300,0);
+      deb_echo_str4screenstring(0,14*i,u_test_buf[i],300,0,1);
     }
 
     SDL_RenderPresent(renderer);
@@ -6954,7 +7136,6 @@ static int u_test_disp_ter(void)
 static int deb_get_dir_ini(void)
 {
   int           i;
-  //char          buffer2[1000];
 
   for (i=0;i<MAX_FILE_NUM;i++) deb_filenamebuff[i][0]=0;
 
@@ -7023,7 +7204,7 @@ static int deb_get_dir_ini(void)
 
 static int deb_dir_opened(int ptr )
 {
-  int i,j/*,k*/;
+  int i,j;
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
@@ -7098,9 +7279,7 @@ static char m101_s2[100];
 
 static int deb_dir_add_after(int ptr)
 {
-  int i,j,k/*,l*/;
-  //char s1[3000];
-  //char s2[100];
+  int i,j,k;
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
@@ -7385,10 +7564,6 @@ static char m5_buffer4[3000];
 
 static int deb_get_path(int ptr)
 {
-  //char buffer1[3000];
-  //char buffer2[3000];
-  //char buffer3[3000];
-  //char buffer4[3000];
   int  ns1,ns2;
   int  p1;
 
@@ -7460,8 +7635,6 @@ static char m102_buffer4[3000];
 static int deb_get_path1(char *buffer1,char *buffer2)
 {
   int  i,j,k;
-  //char buffer3[3000];
-  //char buffer4[3000];
 
   strcpy(m102_buffer3,buffer1);
   strcpy(m102_buffer4,"");
@@ -7536,8 +7709,6 @@ static char m103_buffer4[3000];
 static int deb_get_path2(char *buffer1,char *buffer2)
 {
   int  i,j,k;
-  //char buffer3[3000];
-  //char buffer4[3000];
 
   strcpy(m103_buffer3,buffer1);
   strcpy(m102_buffer4,"");
@@ -7606,13 +7777,9 @@ static int deb_get_path2(char *buffer1,char *buffer2)
 }
 
 
-//static char m104_str1[3000];
-
 static int deb_filenameext(char *name,int name_size,char *fext,int fext_size)
 {
-  //char str1[3000];
   int  i,j,k,l;
-  //struct stat info;
 
   if (deb_str_has_null(name,name_size)!=1)
   {
@@ -7792,9 +7959,6 @@ static char m105_str1[3000];
 
 static int deb_filename_dir(char *path,char *name)
 {
-  //char str1[3000];
-  //struct stat info;
-
   strcpy(m105_str1,path);
   av_strlcat(m105_str1,"/" ,3000);
   av_strlcat(m105_str1,name,3000);
@@ -7950,16 +8114,10 @@ static int deb_disp_dir(VideoState *cur_stream)
   int i,j,k,l;
   int  h,w;
   int  mi;
-  //char disp_buff[1000][2000];
-  //char str1[3000];
-  //char str2[3000];
-  //char str3[3000];
-  //char str4[3000];
   int leftspace,dirlen,dirtype,filelen,start;
   int  n1,n2,n3,n4,n5;
   char c1,c2,c3;
   char *strptr;
-  //int  color;
 
   if ((screen_w<640)||(screen_w>7680)) return(1);
   if ((screen_h<480)||(screen_h>4320)) return(1);
@@ -7977,6 +8135,31 @@ static int deb_disp_dir(VideoState *cur_stream)
 
   deb_ch_m = w;
       
+
+
+  deb_tx_locked=0;
+
+  if (realloc_texture(&cur_stream->vis_texture, SDL_PIXELFORMAT_ARGB8888, cur_stream->width, cur_stream->height, SDL_BLENDMODE_NONE, 1) < 0)
+            return(0);
+
+  cur_stream->ytop    = 0;
+  cur_stream->xleft   = 0;
+
+  deb_tx_rect.x = 0;
+  deb_tx_rect.y = 0;
+  deb_tx_rect.w = cur_stream->width; 
+  deb_tx_rect.h = cur_stream->height;
+
+  if (!SDL_LockTexture(cur_stream->vis_texture, &deb_tx_rect, (void **)&deb_tx_pixels, &deb_tx_pitch)) 
+  {
+                deb_tx_pitch >>= 2;
+  }
+  else return(0);
+
+  deb_tx_locked=1;
+
+
+
   for (n1=0;n1<w;n1++) 
   {
     if (n1>=2000-2) continue;
@@ -8202,17 +8385,17 @@ static int deb_disp_dir(VideoState *cur_stream)
 
   }
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   //bgcolor = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);//daipozhi modified
 
-  fill_rectangle( 0, 0, cur_stream->width, deb_ch_h*h); // daipozhi modified 
+  //fill_rectangle( 0, 0, cur_stream->width, deb_ch_h*h); // daipozhi modified 
 
   for (n4=0;n4<h;n4++)
   {
     if (n4>=350) continue;
 
     strptr=disp_buff[n4];
-    deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,n4*deb_ch_h ,strptr ,6000,0);
+    deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,n4*deb_ch_h ,strptr ,6000,0,0);
   }
 
   n4=deb_filenameplay-deb_filenamebuff_n;
@@ -8221,11 +8404,10 @@ static int deb_disp_dir(VideoState *cur_stream)
     if (n4+1<350)
     {
       strptr=disp_buff[n4+1];
-      deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,(n4+1)*deb_ch_h ,strptr ,6000,1);
+      deb_echo_str4screenstring(cur_stream->width -deb_ch_w*deb_ch_m ,(n4+1)*deb_ch_h ,strptr ,6000,1,0);
     }
   }
 
-  //SDL_RenderPresent(renderer);
   m_ref=1;
 
   //printf("SDL_MIX_MAXVOLUME=%d,audio_volume=%d,\n",SDL_MIX_MAXVOLUME,cur_stream->audio_volume);
@@ -8256,7 +8438,6 @@ static int deb_disp_bar(VideoState *cur_stream2)
 {
   int   i,j,k;
   int   n1,n2,n3;
-  //int   bgcolor2;
 
   float f1,f2;
   int   uns, uhh, umm, uss;
@@ -8273,10 +8454,13 @@ static int deb_disp_bar(VideoState *cur_stream2)
         (  (cur_stream2->show_mode == SHOW_MODE_VIDEO)  &&  ((deb_thr_r!=1)||(deb_thr_a!=1)||(deb_thr_a2!=1)||(deb_thr_v!=1)||(!cur_stream2->video_st))  ) ||
         (  (seek_by_bytes || cur_stream2->ic->duration<=0)   )   )
   {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    if (m_ref_v)
+    {
+      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //bgcolor2 = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);//daipozhi modified
 
-    fill_rectangle(0, cur_stream2->height-deb_ch_h*2 -deb_ch_d , cur_stream2->width, deb_ch_h*2 +deb_ch_d ); // daipozhi modified 
+      fill_rectangle(0, cur_stream2->height-deb_ch_h*2 -deb_ch_d , cur_stream2->width, deb_ch_h*2 +deb_ch_d ); // daipozhi modified 
+    }
 
     uns = 0;
     uhh = 0;
@@ -8364,10 +8548,16 @@ static int deb_disp_bar(VideoState *cur_stream2)
 
     deb_scrn_str2[i]=0;
 
-    deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0);
-    deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1);
-
-    //SDL_RenderPresent(renderer);
+    if (m_ref_v)
+    {
+      deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,1);
+      deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,1);
+    }
+    else
+    {
+      deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,0);
+      deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,0);
+    }
   }
   else
   {
@@ -8376,20 +8566,14 @@ static int deb_disp_bar(VideoState *cur_stream2)
 
     deb_thr_frame_d=deb_thr_frame_id-deb_thr_frame_id_old;
     deb_thr_frame_id_old=deb_thr_frame_id;
-/*
-    if (cur_stream2->video_st)
+
+    if (m_ref_v)
     {
-      if (deb_cover_close==0)
-      {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-        SDL_RenderClear(renderer);
-      }
-    }
-*/
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //bgcolor2 = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);//daipozhi modified
 
-    fill_rectangle(0, cur_stream2->height-deb_ch_h*2 -deb_ch_d , cur_stream2->width, deb_ch_h*2 +deb_ch_d ); // daipozhi modified 
+      fill_rectangle(0, cur_stream2->height-deb_ch_h*2 -deb_ch_d , cur_stream2->width, deb_ch_h*2 +deb_ch_d ); // daipozhi modified 
+    }
 
 
     if (deb_st_play==1)
@@ -8746,33 +8930,23 @@ static int deb_disp_bar(VideoState *cur_stream2)
       deb_scrn_str2[i]=0;
     }
 
-    deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0);
-    deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1);
+    if (m_ref_v)
+    {
+      deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,1);
+      deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,1);
+    }
+    else
+    {
+      deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,0);
+      deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,0);
+    }
 
     //printf("seekbar.len+1=%d,\n",len+1);
-    //SDL_RenderPresent(renderer);
   }
 
   return(0);
 }
-/*
-static int deb_disp_scrn(VideoState *is)
-{
-  VideoState *cur_stream2=is;
-  int 	bgcolor;
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-  //bgcolor = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);//daipozhi modified
-
-  fill_rectangle(
-                 0, 0,				//daipozhi modified
-                 cur_stream2->width -deb_ch_w*deb_ch_m , 
-	         cur_stream2->height-deb_ch_h*2-deb_ch_d  //daipozhi modified
-                 );
-
-  return(0);
-}
-*/
 static char deb_lower(char c1)
 {
   if ((c1>='A')&&(c1<='Z')) return(c1-'A'+'a');
@@ -8872,7 +9046,7 @@ static int deb_record_init(void)
   deb_record_fp=fopen("deb_record.txt","w");
   if (deb_record_fp==NULL) return(1);
 
-//  fclose(deb_record_fp);
+  fclose(deb_record_fp);
 
   return(0);
 }
@@ -8886,13 +9060,13 @@ static int deb_record_close(void)
 
 static int deb_record(char *p_str1)
 {
-//  deb_record_fp=fopen("deb_record.txt","a");
-//  if (deb_record_fp==NULL) return(1);
+  deb_record_fp=fopen("deb_record.txt","a");
+  if (deb_record_fp==NULL) return(1);
 
   fputs(p_str1,deb_record_fp);
   fputs("\n",deb_record_fp);
 
-//  fclose(deb_record_fp);
+  fclose(deb_record_fp);
 
   return(0);
 }
@@ -9375,12 +9549,9 @@ static int t1_smallest(void)
 
 }
 
-//static char m03_str1[300];
-
 static int t1_after_list(void)
 {
   int  i,j,k;
-  //char str1[300];
 
   t1_list_ptr=0;
   t1_out_ptr=0;
@@ -9516,8 +9687,6 @@ static int  deb_get_dir(void)
 
   int  	i,j;
   char 	buffer3[20];
-
-  //deb_record_init();
 
   deb_m_info_len =0;
   deb_m_info_type=0;
@@ -10876,48 +11045,73 @@ static int  deb_sr_river_show(VideoState *cur_stream)
     }
   }
 
+
+
+  deb_tx_locked=0;
+
+  if (realloc_texture(&cur_stream->vis_texture, SDL_PIXELFORMAT_ARGB8888, cur_stream->width, cur_stream->height, SDL_BLENDMODE_NONE, 1) < 0)
+            return(0);
+
+  cur_stream->ytop    = 0;
+  cur_stream->xleft   = 0;
+
+  deb_tx_rect.x = 0;
+  deb_tx_rect.y = 0;
+  deb_tx_rect.w = cur_stream->width; 
+  deb_tx_rect.h = cur_stream->height;
+
+  if (!SDL_LockTexture(cur_stream->vis_texture, &deb_tx_rect, (void **)&deb_tx_pixels, &deb_tx_pitch)) 
+  {
+                deb_tx_pitch >>= 2;
+  }
+  else return(0);
+
+  deb_tx_locked=1;
+
+
+
   // show start
   deb_sr_river_last=(j/6)*6;  //sr2
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   //bgcolor = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 
-  fill_rectangle(0 ,0 , cur_stream->width , cur_stream->height -deb_ch_h*2-deb_ch_d ); 
+  clr_rect_green();
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][2][0][0]+10;
   freq_y=deb_sr_river_f[149][2][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"300Hz",5+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"300Hz",5+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][6][0][0]+10;
   freq_y=deb_sr_river_f[149][6][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"1KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"1KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][12][0][0]+10;
   freq_y=deb_sr_river_f[149][12][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"2KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"2KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][29][0][0]+10;
   freq_y=deb_sr_river_f[149][29][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"5KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"5KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][59][0][0]+10;
   freq_y=deb_sr_river_f[149][59][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"10KHz",5+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"10KHz",5+1,2,0);
 
   //front face
   s_p1=0;
@@ -10962,23 +11156,23 @@ static int  deb_sr_river_show(VideoState *cur_stream)
       {
 	if (deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
           //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 			 deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],s_p2);
 
-          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1]);
-	  fill_rectangle(deb_sr_river_f[i+1][k+1][n][0],
+			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1],0);
+	  fill_rect_green(deb_sr_river_f[i+1][k+1][n][0],
 			 deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],0);
 	}
 /*
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
@@ -10990,18 +11184,18 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
 */
-        SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
         //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
         
-	fill_rectangle(deb_sr_river_f[i  ][k+1][0][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][0][0],
 		       deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-		       1);
+		       1,s_p2);
 
-	fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		       deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
-		       1);
+		       1,s_p2);
 
 	// right side face
 
@@ -11037,24 +11231,24 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 
 	  if (deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]>0)
 	  {
-            SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
+            //SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
             //bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
-	    fill_rectangle(deb_sr_d_line_dot[0][0],
+	    fill_rect_green(deb_sr_d_line_dot[0][0],
 			   deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]);
+			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],s_p5);
 	  }
 	}
 
 	if (deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
           //bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
           
           // note ,for smaller moniter,bgcolor2 change to bgcolor3
-	  fill_rectangle(deb_sr_river_f[i+1][k  ][n][0],
+	  fill_rect_green(deb_sr_river_f[i+1][k  ][n][0],
 			 deb_sr_river_f[i+1][k  ][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1]);
+			 deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1],s_p5);
 	}
 
 	deb_sr_draw_line3(deb_sr_river_f[i+1][k+1][n][0],
@@ -11102,27 +11296,27 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	}
 
 
-        SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
         //bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
         
-	fill_rectangle(deb_sr_d_line_dot[0][0],
+	fill_rect_green(deb_sr_d_line_dot[0][0],
 		       deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 		       deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-		       1);
+		       1,s_p8);
       }
 
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
       //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
       
-      fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 		     deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
-		     1);
+		     1,0);
 // / * repeated
-      fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		     deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
-		     1);
+		     1,0);
 // * /
       deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][n][0],
 			deb_sr_river_f[i  ][k+1][n][1],
@@ -11149,23 +11343,23 @@ static int  deb_sr_river_show(VideoState *cur_stream)
       {
 	if (deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
           //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 			 deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],s_p2);
 
-          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1]);
-	  fill_rectangle(deb_sr_river_f[i+1][k+1][n][0],
+			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1],0);
+	  fill_rect_green(deb_sr_river_f[i+1][k+1][n][0],
 			 deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],0);
 	}
 /*
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
@@ -11177,18 +11371,18 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
 */
-        SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
         //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	fill_rectangle(deb_sr_river_f[i  ][k+1][0][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][0][0],
 		       deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-		       1);
+		       1,s_p2);
 
-	fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		       deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
-		       1);
+		       1,s_p2);
 
 	// left side face
 
@@ -11224,24 +11418,24 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 
 	  if (deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]>0)
 	  {
-            SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
+            //SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
             //bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
 
-	    fill_rectangle(deb_sr_d_line_dot[0][0],
+	    fill_rect_green(deb_sr_d_line_dot[0][0],
 			   deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]);
+			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],s_p11);
 	  }
 	}
 
 	if (deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
           //bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
 
           // note ,for smaller moniter,bgcolor2 change to bgcolor5
-	  fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 			 deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1]);
+			 deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1],s_p11);
 	}
 
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k  ][n][0],
@@ -11287,27 +11481,27 @@ static int  deb_sr_river_show(VideoState *cur_stream)
 	  continue;
 	}
 
-        SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
         //bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
         
-	fill_rectangle(deb_sr_d_line_dot[0][0],
+	fill_rect_green(deb_sr_d_line_dot[0][0],
 		       deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 		       deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-		       1);
+		       1,s_p8);
       }
 
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
       //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-      fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 		     deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
-		     1);
+		     1,0);
 // / *  repeated
-      fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		     deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
-		     1);
+		     1,0);
 // * /
       deb_sr_draw_line3(deb_sr_river_f[i+1][k  ][n][0],
 			deb_sr_river_f[i+1][k  ][n][1],
@@ -11321,7 +11515,6 @@ static int  deb_sr_river_show(VideoState *cur_stream)
     }
   }
 
-  //SDL_RenderPresent(renderer);
   m_ref=1;
 
   return(0);
@@ -11747,7 +11940,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
   int i,j;
   //int  bgcolor;
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   //bgcolor = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 
   if ((x1<0)||(x1>=7680)) return(1);
@@ -11773,11 +11966,11 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 
   if ((x1<0)||(x1>=7680)) return(1);
   if ((y1<0)||(y1>=4320)) return(1);
-  fill_rectangle(x1,y1-deb_sr_win_top,1,1);
+  fill_rect_green(x1,y1-deb_sr_win_top,1,1,0);
 
   if ((x2<0)||(x2>=7680)) return(1);
   if ((y2<0)||(y2>=4320)) return(1);
-  fill_rectangle(x2,y2-deb_sr_win_top,1,1);
+  fill_rect_green(x2,y2-deb_sr_win_top,1,1,0);
 
   if (x1==x2)
   {
@@ -11787,7 +11980,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
       {
 	if ((x1<0)||(x1>=7680)) return(1);
 	if ((i<0)||(i>=4320)) return(1);
-	fill_rectangle(x1,i-deb_sr_win_top,1,1);//deb_sr_d_buff[x1][i]=1;
+	fill_rect_green(x1,i-deb_sr_win_top,1,1,0);//deb_sr_d_buff[x1][i]=1;
       }
     }
     else if (y2<y1)
@@ -11796,7 +11989,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
       {
 	if ((x1<0)||(x1>=7680)) return(1);
 	if ((i<0)||(i>=4320)) return(1);
-	fill_rectangle(x1,i-deb_sr_win_top,1,1); //deb_sr_d_buff[x1][i]=1;
+	fill_rect_green(x1,i-deb_sr_win_top,1,1,0); //deb_sr_d_buff[x1][i]=1;
       }
     }
   }
@@ -11808,7 +12001,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
       {
 	if ((i<0)||(i>=7680)) return(1);
 	if ((y1<0)||(y1>=4320)) return(1);
-	fill_rectangle(i,y1-deb_sr_win_top,1,1);//deb_sr_d_buff[i][y1]=1;
+	fill_rect_green(i,y1-deb_sr_win_top,1,1,0);//deb_sr_d_buff[i][y1]=1;
       }
     }
     else if (y2>y1)
@@ -11823,7 +12016,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 
 	if ((x4<0)||(x4>=7680)) return(1);
 	if ((y4<0)||(y4>=4320)) return(1);
-        fill_rectangle(x4,y4-deb_sr_win_top,1,1);//deb_sr_d_buff[x4][y4]=1;
+        fill_rect_green(x4,y4-deb_sr_win_top,1,1,0);//deb_sr_d_buff[x4][y4]=1;
 
         if (y4>y5+1)
         {
@@ -11831,7 +12024,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 	  {
 	    if ((x5<0)||(x5>=7680)) return(1);
 	    if ((j<0)||(j>=4320)) return(1);
-	    fill_rectangle(x5,j-deb_sr_win_top,1,1);//deb_sr_d_buff[x5][j]=1;
+	    fill_rect_green(x5,j-deb_sr_win_top,1,1,0);//deb_sr_d_buff[x5][j]=1;
 	  }
         }
 
@@ -11851,7 +12044,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 
 	if ((x4<0)||(x4>=7680)) return(1);
 	if ((y4<0)||(y4>=4320)) return(1);
-        fill_rectangle(x4,y4-deb_sr_win_top,1,1);//deb_sr_d_buff[x4][y4]=1;
+        fill_rect_green(x4,y4-deb_sr_win_top,1,1,0);//deb_sr_d_buff[x4][y4]=1;
 
         if (y4<y5-1)
         {
@@ -11859,7 +12052,7 @@ static int deb_sr_draw_line3(int x1,int y1,int x2,int y2)
 	  {
 	    if ((x5<0)||(x5>=7680)) return(1);
 	    if ((j<0)||(j>=4320)) return(1);
-	    fill_rectangle(x5,j-deb_sr_win_top,1,1);//deb_sr_d_buff[x5][j]=1;
+	    fill_rect_green(x5,j-deb_sr_win_top,1,1,0);//deb_sr_d_buff[x5][j]=1;
 	  }
         }
 
@@ -12190,46 +12383,71 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
     return(0);
   }
 
+
+
+  deb_tx_locked=0;
+
+  if (realloc_texture(&cur_stream->vis_texture, SDL_PIXELFORMAT_ARGB8888, cur_stream->width, cur_stream->height, SDL_BLENDMODE_NONE, 1) < 0)
+            return(0);
+
+  cur_stream->ytop    = 0;
+  cur_stream->xleft   = 0;
+
+  deb_tx_rect.x = 0;
+  deb_tx_rect.y = 0;
+  deb_tx_rect.w = cur_stream->width; 
+  deb_tx_rect.h = cur_stream->height;
+
+  if (!SDL_LockTexture(cur_stream->vis_texture, &deb_tx_rect, (void **)&deb_tx_pixels, &deb_tx_pitch)) 
+  {
+                deb_tx_pitch >>= 2;
+  }
+  else return(0);
+
+  deb_tx_locked=1;
+
+
+
   // show start
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   //bgcolor = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 
-  fill_rectangle(0 ,0 , cur_stream->width , cur_stream->height -deb_ch_h*2-deb_ch_d ); 
-
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  clr_rect_green();
+  
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][2][0][0]+10;
   freq_y=deb_sr_river_f[149][2][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"300Hz",5+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"300Hz",5+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][6][0][0]+10;
   freq_y=deb_sr_river_f[149][6][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"1KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"1KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][12][0][0]+10;
   freq_y=deb_sr_river_f[149][12][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"2KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"2KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][29][0][0]+10;
   freq_y=deb_sr_river_f[149][29][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"5KHz",4+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"5KHz",4+1,2,0);
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+  //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   freq_x=deb_sr_river_f[149][59][0][0]+10;
   freq_y=deb_sr_river_f[149][59][0][1];
-  fill_rectangle(freq_x,freq_y-deb_sr_win_top,15,1);
-  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"10KHz",5+1,2);
+  fill_rect_green(freq_x,freq_y-deb_sr_win_top,15,1,255);
+  deb_echo_str4screenstring(freq_x+20,freq_y-deb_sr_win_top-6,"10KHz",5+1,2,0);
 
   //front face
   s_p1=0;
@@ -12274,23 +12492,23 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
       {
 	if (deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
           //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 			 deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],s_p2);
 
-          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1]);
-	  fill_rectangle(deb_sr_river_f[i+1][k+1][n][0],
+			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1],0);
+	  fill_rect_green(deb_sr_river_f[i+1][k+1][n][0],
 			 deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],0);
 	}
 /*
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
@@ -12302,18 +12520,18 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
 */
-        SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
         //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
         
-	fill_rectangle(deb_sr_river_f[i  ][k+1][0][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][0][0],
 		       deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-		       1);
+		       1,s_p2);
 
-	fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		       deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
-		       1);
+		       1,s_p2);
 
 	// right side face
 
@@ -12349,24 +12567,24 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 
 	  if (deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]>0)
 	  {
-            SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
+            //SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
             //bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
 
-	    fill_rectangle(deb_sr_d_line_dot[0][0],
+	    fill_rect_green(deb_sr_d_line_dot[0][0],
 			   deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]);
+			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],s_p5);
 	  }
 	}
 
 	if (deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p4, s_p5, s_p6, 0);
           //bgcolor3 = SDL_MapRGB(screen->format,s_p4,s_p5,s_p6);
           
           // note ,for smaller moniter,bgcolor2 change to bgcolor3
-	  fill_rectangle(deb_sr_river_f[i+1][k  ][n][0],
+	  fill_rect_green(deb_sr_river_f[i+1][k  ][n][0],
 			 deb_sr_river_f[i+1][k  ][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1]);
+			 deb_sr_river_f[i+1][k  ][0][1]-deb_sr_river_f[i+1][k  ][n][1],s_p5);
 	}
 
 	deb_sr_draw_line3(deb_sr_river_f[i+1][k+1][n][0],
@@ -12414,27 +12632,27 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 	}
 
 
-        SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
         //bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
         
-	fill_rectangle(deb_sr_d_line_dot[0][0],
+	fill_rect_green(deb_sr_d_line_dot[0][0],
 		       deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 		       deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-		       1);
+		       1,s_p8);
       }
 
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
       //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
       
-      fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 		     deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
-		     1);
+		     1,0);
 // / * repeated
-      fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		     deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
-		     1);
+		     1,0);
 // * /
       deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][n][0],
 			deb_sr_river_f[i  ][k+1][n][1],
@@ -12461,23 +12679,23 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
       {
 	if (deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
           //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 			 deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],s_p2);
 
-          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-	  fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 			 deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1]);
-	  fill_rectangle(deb_sr_river_f[i+1][k+1][n][0],
+			 deb_sr_river_f[i  ][k+1][0][1]-deb_sr_river_f[i  ][k+1][n][1],0);
+	  fill_rect_green(deb_sr_river_f[i+1][k+1][n][0],
 			 deb_sr_river_f[i+1][k+1][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1]);
+			 deb_sr_river_f[i+1][k+1][0][1]-deb_sr_river_f[i+1][k+1][n][1],0);
 	}
 /*
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k+1][0][0],
@@ -12489,18 +12707,18 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 				  deb_sr_river_f[i+1][k+1][n][0],
 				  deb_sr_river_f[i+1][k+1][n][1]);
 */
-        SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p1, s_p2, s_p3, 0);
         //bgcolor = SDL_MapRGB(screen->format,s_p1,s_p2,s_p3);
           
-	fill_rectangle(deb_sr_river_f[i  ][k+1][0][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][0][0],
 		       deb_sr_river_f[i  ][k+1][0][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][0][0]-deb_sr_river_f[i  ][k+1][0][0], 
-		       1);
+		       1,s_p2);
 
-	fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+	fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		       deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		       deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0], 
-		       1);
+		       1,s_p2);
 
 	// left side face
 
@@ -12536,24 +12754,24 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 
 	  if (deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]>0)
 	  {
-            SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
+            //SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
             //bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
 
-	    fill_rectangle(deb_sr_d_line_dot[0][0],
+	    fill_rect_green(deb_sr_d_line_dot[0][0],
 			   deb_sr_d_line_dot[0][1]-deb_sr_win_top,1,
-			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1]);
+			   deb_sr_d_line_dot[1][1]-deb_sr_d_line_dot[0][1],s_p11);
 	  }
 	}
 
 	if (deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1]>0)
 	{
-          SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
+          //SDL_SetRenderDrawColor(renderer, s_p10, s_p11, s_p12, 0);
           //bgcolor5 = SDL_MapRGB(screen->format,s_p10,s_p11,s_p12);
 
           // note ,for smaller moniter,bgcolor2 change to bgcolor5
-	  fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+	  fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 			 deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,1,
-			 deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1]);
+			 deb_sr_river_f[i  ][k  ][0][1]-deb_sr_river_f[i  ][k  ][n][1],s_p11);
 	}
 
 	deb_sr_draw_line3(deb_sr_river_f[i  ][k  ][n][0],
@@ -12599,27 +12817,27 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
 	  continue;
 	}
 
-        SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
+        //SDL_SetRenderDrawColor(renderer, s_p7, s_p8, s_p9, 0);
         //bgcolor4 = SDL_MapRGB(screen->format,s_p7,s_p8,s_p9);
         
-	fill_rectangle(deb_sr_d_line_dot[0][0],
+	fill_rect_green(deb_sr_d_line_dot[0][0],
 		       deb_sr_d_line_dot[0][1]-deb_sr_win_top,
 		       deb_sr_d_line_dot[1][0]-deb_sr_d_line_dot[0][0],
-		       1);
+		       1,s_p8);
       }
 
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+      //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
       //bgcolor2 = SDL_MapRGB(screen->format, 0, 0, 0);
           
-      fill_rectangle(deb_sr_river_f[i  ][k  ][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k  ][n][0],
 		     deb_sr_river_f[i  ][k  ][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k  ][n][0]-deb_sr_river_f[i  ][k  ][n][0],
-		     1);
+		     1,0);
 // / *  repeated
-      fill_rectangle(deb_sr_river_f[i  ][k+1][n][0],
+      fill_rect_green(deb_sr_river_f[i  ][k+1][n][0],
 		     deb_sr_river_f[i  ][k+1][n][1]-deb_sr_win_top,
 		     deb_sr_river_f[i+1][k+1][n][0]-deb_sr_river_f[i  ][k+1][n][0],
-		     1);
+		     1,0);
 // * /
       deb_sr_draw_line3(deb_sr_river_f[i+1][k  ][n][0],
 			deb_sr_river_f[i+1][k  ][n][1],
@@ -12633,10 +12851,34 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
     }
   }
 
-  //SDL_RenderPresent(renderer);
   m_ref=1;
 
   return(0);
+}
+
+int fill_rect_green(int x,int y,int w,int h,unsigned char c)
+{
+  int i,j;
+  for (i=x;i<x+w;i++)
+    for (j=y;j<y+h;j++)
+      deb_set_dot(i,j,0,0,c,0);
+  return(0);
+}
+
+int clr_rect_green(void)
+{
+	int       i,k;
+        uint32_t *pixels;
+
+        pixels=deb_tx_pixels;
+	k=stream_open_is->width * stream_open_is->height;
+	for (i=0;i<k;i++)
+	{
+          *pixels = 0;
+           pixels++;
+        }
+        
+	return(0);
 }
 
 void init_opts(void)
