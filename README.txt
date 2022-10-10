@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.0.1-25
+Purpose player 2  4.1.2-1
 
 
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-5.0.1-src-4.0.1-25" ,decompress "ffmpeg-5.0.1.tar.xz",
-it create a directory "ffmpeg-5.0.1" ,
-use files in "ffmpeg-5.0.1-src-4.0.1-25/fftools" to replace same name files in directory "ffmpeg-5.0.1/fftools",
+there is a directory "ffmpeg-5.1.2-src-4.1.2-1" ,decompress "ffmpeg-5.1.2.tar.xz",
+it create a directory "ffmpeg-5.1.2" ,
+use files in "ffmpeg-5.1.2-src-4.1.2-1/fftools" to replace same name files in directory "ffmpeg-5.1.2/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -17,7 +17,7 @@ it can display "sound river",it separate audio to 117 parts by frequency,display
 
 it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-you can goto http://ffmpeg.org/download.html#release_5.0 to download ffmpeg-5.0.1.tar.xz, or you can download in this web page.
+you can goto http://ffmpeg.org/download.html to download ffmpeg-5.1.2.tar.xz, or you can download in this web page.
 
 
 
@@ -55,12 +55,12 @@ decompress yasm-1.3.0.tar.gz and run
     make -j
     sudo make install
 
-then goto directory "ffmpeg-5.0.1" and run 
+then goto directory "ffmpeg-5.1.2" and run 
 
     ./configure
     make -j
 
-copy ffplay(.exe) to app directory(in directory "ffmpeg-5.0.1")
+copy ffplay(.exe) to app directory(ffplay.exe in directory "ffmpeg-5.1.2")
 
 
 On windows or Ubuntu 14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
@@ -72,15 +72,18 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
   
   version 4.0.1-25 and later is much faster.
 
+  version 4.1.2-1  and later support 8K minitor and has better utf8 character font .
 
-小戴媒体播放器2  4.0.1-25
+
+
+小戴媒体播放器2  4.1.2-1
 
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-5.0.1-src-4.0.1-25,解压ffmpeg-5.0.1.tar.xz,将创建ffmpeg-5.0.1目录, 
-用ffmpeg-5.0.1-src-4.0.1-25/fftools里的文件,替换掉ffmpeg-5.0.1/fftools里的同名文件,
+这里有目录ffmpeg-5.1.2-src-4.1.2-1,解压ffmpeg-5.1.2.tar.xz,将创建ffmpeg-5.1.2目录, 
+用ffmpeg-5.1.2-src-4.1.2-1/fftools里的文件,替换掉ffmpeg-5.1.2/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -88,7 +91,7 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
 
 能显示2.0声道的媒体文件,能显示5.1声道电影文件(只提取左声道一个声道的声音),
 
-你可以在 http://ffmpeg.org/download.html#release_5.0 下载 ffmpeg-5.0.1.tar.xz ，或者在当前页面下载。
+你可以在 http://ffmpeg.org/download.html 下载 ffmpeg-5.1.2.tar.xz ，或者在当前页面下载。
 
 
  
@@ -127,12 +130,12 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
     make -j
     sudo make install
  
-在 ffmpeg-5.0.1 目录下运行：
+在 ffmpeg-5.1.2 目录下运行：
 
     ./configure
     make -j
 
-把ffplay(.exe)拷贝到app目录. (在 ffmpeg-5.0.1 目录下)
+把ffplay(.exe)拷贝到app目录. (ffplay.exe 在 ffmpeg-5.1.2 目录下)
  
 在 Windows 或者 Ubuntu 14.04/16.04(32bit)/22.04上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
@@ -142,5 +145,7 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
   新版本可以显示utf8字符.
 
   新版本快了很多.
+
+  新版本支持8K显示器,有更好的utf8字符字体.
 
 
