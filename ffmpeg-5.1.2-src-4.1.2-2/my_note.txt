@@ -2,6 +2,7 @@ test plan:
 
 
 
+
 not play (st_play==0)									seek
 audio has no pic									volume changing
 audio has pic		x	pause(m.o.)	x	directory screen	x	video on/river on/river off		x	display(m.o.)
@@ -12,7 +13,10 @@ video with subtitle					river screen			max window
 											page up/page down
 
 
+
+
 bad media files:
+
 
 
 

@@ -275,6 +275,10 @@ ffmpeg-5.1.2-src-4.1.2
 ffmpeg-5.1.2-src-4.1.2-1
   2 bugs are ok
 
+ffmpeg-5.1.2-src-4.1.2-2
+  better looking source code
+
+better utf8 bmp data .(file date 2022-10-22)
 
 
 

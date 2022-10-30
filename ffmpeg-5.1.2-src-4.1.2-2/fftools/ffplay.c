@@ -460,10 +460,10 @@ static 	char deb_tableline[3000];
 
 static          int  screen_w;
 static          int  screen_h;
-static    SDL_Rect    m_rect;
-static    int         m_ref;
-static    int         m_ref_v;
-static    int         m_vol=0;
+static    SDL_Rect    deb_m_rect;
+static    int         deb_m_ref;
+static    int         deb_m_ref_v;
+static    int         deb_m_vol=0;
 
 
 
@@ -1603,7 +1603,7 @@ static void video_image_display(VideoState *is)
 
 
     //daipozhi modified
-    m_rect=rect;
+    deb_m_rect=rect;
     
     
     
@@ -1644,12 +1644,12 @@ static void video_image_display(VideoState *is)
 
     //daipozhi modified    
     fill_border(is->xleft, is->ytop, is->width, is->height, 
-                  m_rect.x, m_rect.y, m_rect.w, m_rect.h );
+                  deb_m_rect.x, deb_m_rect.y, deb_m_rect.w, deb_m_rect.h );
 
     //daipozhi modified    
     deb_cover=1;
-    m_ref=1;
-    m_ref_v=1;
+    deb_m_ref=1;
+    deb_m_ref_v=1;
 
 
 
@@ -4388,7 +4388,7 @@ static VideoState *stream_open(const char *filename,
 
 
 
-          m_vol=SDL_MIX_MAXVOLUME;
+          deb_m_vol=SDL_MIX_MAXVOLUME;
         }
 	if (step==2)//daipozhi modified 
 	{
@@ -4439,7 +4439,7 @@ static VideoState *stream_open(const char *filename,
     
     
     //daipozhi modified
-    stream_open_is->audio_volume = m_vol/* startup_volume*/;
+    stream_open_is->audio_volume = deb_m_vol/* startup_volume*/;
     
     
     
@@ -4583,8 +4583,8 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 
 
         //daipozhi modified
-        m_ref=0;
-        m_ref_v=0;
+        deb_m_ref=0;
+        deb_m_ref_v=0;
 
 
 
@@ -4692,7 +4692,7 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 			}
 		}
 
-		if (m_ref==1)
+		if (deb_m_ref==1)
 		{
 		  deb_disp_bar(is); // in sdl2 ,you need prepare full screen data
 		  if (deb_tx_locked==1)
@@ -4704,8 +4704,8 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 		  SDL_RenderPresent(renderer);
 		}
 
-		m_ref=0;
-		m_ref_v=0;
+		deb_m_ref=0;
+		deb_m_ref_v=0;
 
 
 
@@ -4936,7 +4936,7 @@ static void event_loop(VideoState *cur_stream)
 		  deb_tx_locked=0;
 		}
 		SDL_RenderPresent(renderer);
-		m_ref=0;
+		deb_m_ref=0;
 		break;
 	      }
 	      else
@@ -4954,7 +4954,7 @@ static void event_loop(VideoState *cur_stream)
 		    deb_tx_locked=0;
 		  }
 		  SDL_RenderPresent(renderer);
-		  m_ref=0;
+		  deb_m_ref=0;
 		  break;
 		}
 	      }
@@ -5049,7 +5049,7 @@ static void event_loop(VideoState *cur_stream)
 		    //deb_disp_dir(cur_stream);
 		    //deb_disp_bar(cur_stream);
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		    break;
 		  }
 		  else //dir
@@ -5079,7 +5079,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		        SDL_RenderPresent(renderer);
-		        m_ref=0;
+		        deb_m_ref=0;
 		      }
                     }
                     else
@@ -5094,7 +5094,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		      SDL_RenderPresent(renderer);
-		      m_ref=0;
+		      deb_m_ref=0;
                     }
 		  }
 		}
@@ -5118,7 +5118,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		    break;
 		  }
 		}
@@ -5139,7 +5139,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		      SDL_RenderPresent(renderer);
-		      m_ref=0;
+		      deb_m_ref=0;
 		      break;
 		    }
 		  }
@@ -5162,7 +5162,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		      SDL_RenderPresent(renderer);
-		      m_ref=0;
+		      deb_m_ref=0;
 		      break;
 		    }
 		    else  // down page
@@ -5184,7 +5184,7 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 			}
 		      SDL_RenderPresent(renderer);
-		      m_ref=0;
+		      deb_m_ref=0;
 		      break;
 		    }
 		  }
@@ -5241,12 +5241,12 @@ static void event_loop(VideoState *cur_stream)
 	      
 	      if ((xx>=cur_stream->width-185)&&(xx<cur_stream->width-5)) //volume bar
 	      {
-	        m_vol=SDL_MIX_MAXVOLUME*(xx-(cur_stream->width-185))/180;
+	        deb_m_vol=SDL_MIX_MAXVOLUME*(xx-(cur_stream->width-185))/180;
 
-		if (deb_st_play==1) cur_stream->audio_volume=m_vol;
+		if (deb_st_play==1) cur_stream->audio_volume=deb_m_vol;
 		
-		m_ref=0;
-		m_ref_v=0;
+		deb_m_ref=0;
+		deb_m_ref_v=0;
 
 		if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		    video_image_display(cur_stream);
@@ -5255,7 +5255,7 @@ static void event_loop(VideoState *cur_stream)
 		else
 		    deb_disp_dir(cur_stream);
 
-		if (m_ref==1)
+		if (deb_m_ref==1)
 		{
 		  deb_disp_bar(cur_stream);
 		  if (deb_tx_locked==1)
@@ -5265,8 +5265,8 @@ static void event_loop(VideoState *cur_stream)
 		    deb_tx_locked=0;
 		  }
 		  SDL_RenderPresent(renderer);
-		  m_ref=0;
-		  m_ref_v=0;
+		  deb_m_ref=0;
+		  deb_m_ref_v=0;
 		}
 		
 		break;
@@ -5282,8 +5282,8 @@ static void event_loop(VideoState *cur_stream)
 		{
 		  toggle_pause(cur_stream);
 
-		  m_ref=0;
-		  m_ref_v=0;
+		  deb_m_ref=0;
+		  deb_m_ref_v=0;
 
 		  if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		    video_image_display(cur_stream);
@@ -5292,7 +5292,7 @@ static void event_loop(VideoState *cur_stream)
 		  else
 		    deb_disp_dir(cur_stream);
 
-		  if (m_ref==1)
+		  if (deb_m_ref==1)
 		  {
 		    deb_disp_bar(cur_stream);
 		    if (deb_tx_locked==1)
@@ -5302,8 +5302,8 @@ static void event_loop(VideoState *cur_stream)
 		      deb_tx_locked=0;
 		    }
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
-		    m_ref_v=0;
+		    deb_m_ref=0;
+		    deb_m_ref_v=0;
 		  }
 
 		  break;
@@ -5346,7 +5346,7 @@ static void event_loop(VideoState *cur_stream)
 		      deb_tx_locked=0;
 		    }
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		    break;
 		  }
 		}
@@ -5366,7 +5366,7 @@ static void event_loop(VideoState *cur_stream)
 		      deb_tx_locked=0;
 		    }
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		    break;
 		  }
 		  else
@@ -5472,8 +5472,8 @@ static void event_loop(VideoState *cur_stream)
                     
              
              
-		     m_ref=0;
-		     m_ref_v=0;
+		     deb_m_ref=0;
+		     deb_m_ref_v=0;
 
 		     if ((deb_st_play==1)&&(cur_stream->show_mode == SHOW_MODE_VIDEO)&&(deb_cover_close==0))
 		       video_image_display(cur_stream);
@@ -5482,7 +5482,7 @@ static void event_loop(VideoState *cur_stream)
 		     else
 		       deb_disp_dir(cur_stream);
 
-		     if (m_ref==1)
+		     if (deb_m_ref==1)
 		     {
 		       deb_disp_bar(cur_stream);
 		       if (deb_tx_locked==1)
@@ -5492,8 +5492,8 @@ static void event_loop(VideoState *cur_stream)
 		         deb_tx_locked=0;
 		       }
 		       SDL_RenderPresent(renderer);
-		       m_ref=0;
-		       m_ref_v=0;
+		       deb_m_ref=0;
+		       deb_m_ref_v=0;
 		     }
 
 
@@ -5549,7 +5549,7 @@ static void event_loop(VideoState *cur_stream)
 		deb_tx_locked=0;
 	      }
 	      SDL_RenderPresent(renderer);
-	      m_ref=0;
+	      deb_m_ref=0;
 
               break;
             }
@@ -5580,7 +5580,7 @@ static void event_loop(VideoState *cur_stream)
 	      deb_tx_locked=0;
 	    }
 	    SDL_RenderPresent(renderer);
-	    m_ref=0;
+	    deb_m_ref=0;
 
             if (deb_filenameplay>=deb_filenamecnt) // more than filenamecnt 
 	    {
@@ -5669,7 +5669,7 @@ static void event_loop(VideoState *cur_stream)
 		      deb_tx_locked=0;
 		    }
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		  
 		    break;
 	        }
@@ -5693,7 +5693,7 @@ static void event_loop(VideoState *cur_stream)
 		      deb_tx_locked=0;
 		    }
 		    SDL_RenderPresent(renderer);
-		    m_ref=0;
+		    deb_m_ref=0;
 		    
 		    break;
 	        }
@@ -6079,7 +6079,7 @@ int main(void /*int argc, char **argv*/)
       deb_tx_locked=0;
     }
     SDL_RenderPresent(renderer);
-    m_ref=0;
+    deb_m_ref=0;
 
     // daipozhi for sound river
     deb_sr_fft_set_db(deb_sr_rate);
@@ -8374,7 +8374,7 @@ static int deb_disp_dir(VideoState *cur_stream)
     }
   }
 
-  m_ref=1;
+  deb_m_ref=1;
 
   //printf("SDL_MIX_MAXVOLUME=%d,audio_volume=%d,\n",SDL_MIX_MAXVOLUME,cur_stream->audio_volume);
   
@@ -8420,7 +8420,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
         (  (cur_stream2->show_mode == SHOW_MODE_VIDEO)  &&  ((deb_thr_r!=1)||(deb_thr_a!=1)||(deb_thr_a2!=1)||(deb_thr_v!=1)||(!cur_stream2->video_st))  ) ||
         (  (seek_by_bytes || cur_stream2->ic->duration<=0)   )   )
   {
-    if (m_ref_v)
+    if (deb_m_ref_v)
     {
       SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //bgcolor2 = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);//daipozhi modified
@@ -8495,7 +8495,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
     if (i< 640-185 ) i=640-185;
     if (i>=8000-185) i=8000-185-1;
 
-    j=180*m_vol/SDL_MIX_MAXVOLUME;
+    j=180*deb_m_vol/SDL_MIX_MAXVOLUME;
     if (j<0) j=0;
     if (j>=180) j=180-1;
 
@@ -8514,7 +8514,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
 
     deb_scrn_str2[i]=0;
 
-    if (m_ref_v)
+    if (deb_m_ref_v)
     {
       deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,1);
       deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,1);
@@ -8533,7 +8533,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
     deb_thr_frame_d=deb_thr_frame_id-deb_thr_frame_id_old;
     deb_thr_frame_id_old=deb_thr_frame_id;
 
-    if (m_ref_v)
+    if (deb_m_ref_v)
     {
       SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //bgcolor2 = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);//daipozhi modified
@@ -8813,7 +8813,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
       if (i< 640-185 ) i=640-185;
       if (i>=8000-185) i=8000-185-1;
 
-      j=180*m_vol/SDL_MIX_MAXVOLUME;
+      j=180*deb_m_vol/SDL_MIX_MAXVOLUME;
       if (j<0) j=0;
       if (j>=180) j=180-1;
 
@@ -8860,7 +8860,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
       if (i< 640-185 ) i=640-185;
       if (i>=8000-185) i=8000-185-1;
 
-      j=180*m_vol/SDL_MIX_MAXVOLUME;
+      j=180*deb_m_vol/SDL_MIX_MAXVOLUME;
       if (j<0) j=0;
       if (j>=180) j=180-1;
 
@@ -8880,7 +8880,7 @@ static int deb_disp_bar(VideoState *cur_stream2)
       deb_scrn_str2[i]=0;
     }
 
-    if (m_ref_v)
+    if (deb_m_ref_v)
     {
       deb_echo_str4screenstring(0,cur_stream2->height-deb_ch_h*1-deb_ch_d,deb_scrn_str,2000,0,1);
       deb_echo_str4seekbar(cur_stream2->height-deb_ch_h*2-deb_ch_d,deb_scrn_str2,len+1,1);
@@ -11464,7 +11464,7 @@ static int  deb_sr_river_show(VideoState *cur_stream)
     }
   }
 
-  m_ref=1;
+  deb_m_ref=1;
 
   return(0);
 }
@@ -12808,7 +12808,7 @@ static int  deb_sr_river_show_pause(VideoState *cur_stream)
     }
   }
 
-  m_ref=1;
+  deb_m_ref=1;
 
   return(0);
 }

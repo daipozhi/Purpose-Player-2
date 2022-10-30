@@ -60,7 +60,7 @@ then goto directory "ffmpeg-5.1.2" and run
     ./configure
     make -j
 
-copy ffplay(.exe) to app directory(ffplay.exe in directory "ffmpeg-5.1.2")
+copy ffplay(.exe) to app directory ,ffplay(.exe) in directory "ffmpeg-5.1.2" 
 
 
 On windows or Ubuntu 14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
@@ -135,7 +135,7 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
     ./configure
     make -j
 
-把ffplay(.exe)拷贝到app目录. (ffplay.exe 在 ffmpeg-5.1.2 目录下)
+把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-5.1.2 目录下
  
 在 Windows 或者 Ubuntu 14.04/16.04(32bit)/22.04上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
