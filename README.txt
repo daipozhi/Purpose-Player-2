@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.1.2-2
+Purpose player 2  4.1.2-7
 
 
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-5.1.2-src-4.1.2-2" ,decompress "ffmpeg-5.1.2.tar.xz",
+there is a directory "ffmpeg-5.1.2-src-4.1.2-7" ,decompress "ffmpeg-5.1.2.tar.xz",
 it create a directory "ffmpeg-5.1.2" ,
-use files in "ffmpeg-5.1.2-src-4.1.2-2/fftools" to replace same name files in directory "ffmpeg-5.1.2/fftools",
+use files in "ffmpeg-5.1.2-src-4.1.2-7/fftools" to replace same name files in directory "ffmpeg-5.1.2/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -66,25 +66,27 @@ copy ffplay(.exe) to app directory ,ffplay(.exe) in directory "ffmpeg-5.1.2"
 On windows or Ubuntu 14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
 Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,input command "./ffplay" to run it .
 
-  version 4.0.1-17 and later use SDL2,support window resize,support mouse wheel,support volume changing.
+  version 4.0.1-17 use SDL2,supports window resize,supports mouse wheel,supports volume change.
   
-  version 4.0.1-20 and later can display utf8 characters.
+  version 4.0.1-20 can display utf8 characters.
   
-  version 4.0.1-25 and later is much faster.
+  version 4.0.1-25 is much faster.
 
-  version 4.1.2-1  and later support 8K minitor and has better utf8 character font .
+  version 4.1.2-1  supports 8K minitor and has better utf8 character font .
 
-  version 4.1.2-2  and later has better utf8 character font .
+  version 4.1.2-2  has better utf8 character font .
+
+  version 4.1.2-7  has better file name compare .
 
 
-小戴媒体播放器2  4.1.2-2
+小戴媒体播放器2  4.1.2-7
 
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-5.1.2-src-4.1.2-2,解压ffmpeg-5.1.2.tar.xz,将创建ffmpeg-5.1.2目录, 
-用ffmpeg-5.1.2-src-4.1.2-2/fftools里的文件,替换掉ffmpeg-5.1.2/fftools里的同名文件,
+这里有目录ffmpeg-5.1.2-src-4.1.2-7,解压ffmpeg-5.1.2.tar.xz,将创建ffmpeg-5.1.2目录, 
+用ffmpeg-5.1.2-src-4.1.2-7/fftools里的文件,替换掉ffmpeg-5.1.2/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -150,5 +152,7 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
   新版本支持8K显示器,有更好的utf8字符字体.
 
   新版本有更好的utf8字符字体.
+
+  新版本有更好的文件名比较.
 
 

@@ -280,6 +280,19 @@ ffmpeg-5.1.2-src-4.1.2-2
 
 better utf8 bmp data .(file date 2022-10-22)
 
+ffmpeg-5.1.2-src-4.1.2-3
+ffmpeg-5.1.2-src-4.1.2-4
+ffmpeg-5.1.2-src-4.1.2-5
+  free more memory
+  
+ffmpeg-5.1.2-src-4.1.2-6
+  better file name compare
+
+ffmpeg-5.1.2-src-4.1.2-7
+  better file name compare
+
+
+
 
 
 

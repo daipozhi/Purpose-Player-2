@@ -530,6 +530,13 @@ static    char  bt_node_val3[BTREE1_SIZE][6];
 static    char  bt_node_val4[BTREE1_SIZE][7];
 static    char  bt_node_val5[BTREE1_SIZE][21];
 
+//file name compare
+static    char  bt_fnc_str[BTREE1_SIZE][FN_SIZE];
+static    char  bt_fnc_msk[BTREE1_SIZE][FN_SIZE];
+static    int   bt_fnc_istr[BTREE1_SIZE][20];
+static    int   bt_fnc_ptr1[BTREE1_SIZE];
+static    int   bt_fnc_ptr2[BTREE1_SIZE];
+
 static    int   bt_stack[BTREE1_SIZE];
 static    int   bt_stack_ptr;
 
@@ -778,6 +785,18 @@ static int deb_resam_buff2_indx;
 static int deb_resam_last_ptr;
 
 // ------- end of resample ------------------------------------------------
+
+// ------- file name compare ----------------------------------------------
+static    char  fnc_str[FN_SIZE];
+static    char  fnc_msk[FN_SIZE];
+static    int   fnc_istr[20];
+static    int   fnc_ptr1,fnc_ptr2;
+
+int fnc_conv(char *p_str);
+int fnc_comp(int ptr);
+int fnc_save(int ptr);
+int fnc_str2int(char *p_string,int p_string_size);
+// ------- end of file name compare
 
 
 
@@ -4703,6 +4722,14 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 		  }
 		  SDL_RenderPresent(renderer);
 		}
+		else
+		{
+		  if (deb_tx_locked==1)
+		  {
+		    SDL_UnlockTexture(is->vis_texture);
+		    deb_tx_locked=0;
+		  }
+		}
 
 		deb_m_ref=0;
 		deb_m_ref_v=0;
@@ -4994,30 +5021,32 @@ static void event_loop(VideoState *cur_stream)
 
 		    if (deb_st_play==1)
 		    {
-		      if (cur_stream->paused) toggle_pause(cur_stream);
+		      //if (cur_stream->paused) toggle_pause(cur_stream);
 
 		      stream_close(cur_stream);
-                      uninit_opts();
-                      deb_opts_stt=0;
+                      //uninit_opts();
+                      //deb_opts_stt=0;
 		    }
 
-		    if (cur_stream->paused) toggle_pause(cur_stream);
+		    //if (cur_stream->paused) toggle_pause(cur_stream);
+
+		    deb_ini_is(cur_stream);
+		    deb_video_open_again(cur_stream,0);
+
                     if (deb_opts_stt==1)
                     {
                       uninit_opts();
                       deb_opts_stt=0;
                     }
 
+                   init_opts();
+                   deb_opts_stt=1;
+                   
+		    deb_filenameplay=deb_filenamebuff_n+n2;
+
 		    deb_cover=0;
 		    deb_cover_close=0;
 		    deb_frame_num=0;
-
-                    init_opts();
-                    deb_opts_stt=1;
-		    deb_ini_is(cur_stream);
-		    deb_video_open_again(cur_stream,0);
-
-		    deb_filenameplay=deb_filenamebuff_n+n2;
 
 		    deb_thr_v=0;
 		    deb_thr_s=0;
@@ -5048,8 +5077,8 @@ static void event_loop(VideoState *cur_stream)
 
 		    //deb_disp_dir(cur_stream);
 		    //deb_disp_bar(cur_stream);
-		    SDL_RenderPresent(renderer);
-		    deb_m_ref=0;
+		    //SDL_RenderPresent(renderer);
+		    //deb_m_ref=0;
 		    break;
 		  }
 		  else //dir
@@ -5536,6 +5565,7 @@ static void event_loop(VideoState *cur_stream)
             printf("ffplay quit,\n");
             
             //do_exit(cur_stream);
+
             if (deb_stream_err==1)
             {
               deb_st_play=0;
@@ -5554,18 +5584,16 @@ static void event_loop(VideoState *cur_stream)
               break;
             }
 
-	    if (cur_stream->paused) toggle_pause(cur_stream);
+	    //if (cur_stream->paused) toggle_pause(cur_stream);
 
 	    stream_close(cur_stream);
-            uninit_opts();
-            deb_opts_stt=0;
+            //uninit_opts();
+            //deb_opts_stt=0;
 
 	    deb_cover=0;
 	    deb_cover_close=0;
 	    deb_frame_num=0;
 
-            init_opts();
-            deb_opts_stt=1;
 	    deb_ini_is(cur_stream);
 	    deb_video_open_again(cur_stream,0);
 
@@ -5605,7 +5633,17 @@ static void event_loop(VideoState *cur_stream)
 	    {
 	      deb_get_path(deb_filenameplay);
 
-	      deb_video_open_again(cur_stream,0);
+	      //deb_ini_is(cur_stream);
+	      deb_video_open_again(cur_stream,0); //show file name in window title
+
+              if (deb_opts_stt==1)
+              {
+                uninit_opts();
+                deb_opts_stt=0;
+              }
+
+              init_opts();
+              deb_opts_stt=1;
 
 	      deb_thr_v=0;
 	      deb_thr_s=0;
@@ -5639,7 +5677,16 @@ static void event_loop(VideoState *cur_stream)
 	      //SDL_RenderPresent(renderer);
 	      break;
 	    }
+/*
+            if (deb_opts_stt==1)
+            {
+              uninit_opts();
+              deb_opts_stt=0;
+            }
 
+            init_opts();
+            deb_opts_stt=1;
+*/
             break;
 
 
@@ -7295,7 +7342,7 @@ static int deb_dir_add_after(int ptr)
 
     }
 
-    for (i=0;i<=bt_out_ptr-1;i++)
+    for (i=0;i<bt_out_ptr;i++)
     {
         if (i<0) continue;
         if (i>=BTREE1_SIZE) continue;
@@ -7307,24 +7354,38 @@ static int deb_dir_add_after(int ptr)
         if (deb_str_has_null(m101_s1,3000)!=1) continue;
         if (deb_str_has_null(m101_s2,100)!=1) continue;
 
-        if (strlen(bt_out_buff[i])+strlen(m101_s1)+strlen(m101_s2)>=FN_SIZE) continue;
+        if (bt_out_buff2[i]==1) //file
+        {
+          if (strlen(bt_out_buff[i])+strlen(m101_s1)+strlen(m101_s2)>=FN_SIZE) continue;
 
-      	strcpy(deb_filenamebuff[ptr+1+i],m101_s1);
-      	strcat(deb_filenamebuff[ptr+1+i],m101_s2);
-      	strcat(deb_filenamebuff[ptr+1+i],bt_out_buff[i]);
+      	  strcpy(deb_filenamebuff[ptr+1+i],m101_s1);
+      	  strcat(deb_filenamebuff[ptr+1+i],m101_s2);
+      	  strcat(deb_filenamebuff[ptr+1+i],bt_out_buff[i]);
+        }
+        else                    //dir
+        {
+          if (strlen(bt_out_buff[i])+strlen(m101_s1)+strlen(m101_s2)+2>=FN_SIZE) continue;
 
+      	  strcpy(deb_filenamebuff[ptr+1+i],m101_s1);
+      	  strcat(deb_filenamebuff[ptr+1+i],m101_s2);
+      	  strcat(deb_filenamebuff[ptr+1+i],"<");
+      	  strcat(deb_filenamebuff[ptr+1+i],bt_out_buff[i]);
+      	  strcat(deb_filenamebuff[ptr+1+i],">");
+        }
+        
       	strcpy(deb_filenamebuff_ext[ ptr+1+i],bt_out_buff3[i]);
       	strcpy(deb_filenamebuff_size[ptr+1+i],bt_out_buff4[i]);
       	strcpy(deb_filenamebuff_date[ptr+1+i],bt_out_buff5[i]);
 
 	deb_filenamebuff_len[ ptr+1+i]=0;
-	deb_filenamebuff_type[ptr+1+i]=0;
+	deb_filenamebuff_type[ptr+1+i]=bt_out_buff2[i];
+
     }
     
     deb_filenamecnt=deb_filenamecnt+bt_out_ptr;
 
     deb_filenamebuff_len[ ptr]=deb_m_info_len;
-    deb_filenamebuff_type[ptr]=deb_m_info_type;
+    //deb_filenamebuff_type[ptr]=deb_m_info_type;
 
     if (ptr>=deb_filenameplay)
     {
@@ -7386,10 +7447,13 @@ static int deb_dir_add_after(int ptr)
     strcpy(deb_filenamebuff_size[ptr+1],"      ");
     strcpy(deb_filenamebuff_date[ptr+1],"                    ");
     
+    deb_filenamebuff_type[ptr+1]=0;
+    deb_filenamebuff_len[ptr+1] =0;
+
     deb_filenamecnt=deb_filenamecnt+1;
 
     deb_filenamebuff_len[ptr] =12;
-    deb_filenamebuff_type[ptr]=0;
+    //deb_filenamebuff_type[ptr]=0;
 
     if (ptr>=deb_filenameplay)
     {
@@ -9098,6 +9162,16 @@ static int bt_clear_node(int ptr)
   bt_node_val4[ptr][0]=0;
   bt_node_val5[ptr][0]=0;
 
+
+
+  bt_fnc_ptr1[ptr]=0;
+  bt_fnc_ptr2[ptr]=0;
+  bt_fnc_str[ptr][0]=0;
+  bt_fnc_msk[ptr][0]=0;
+  bt_fnc_istr[ptr][0]=0;
+  
+  
+  
   return(0);
 }
 
@@ -9105,6 +9179,7 @@ static char m201_str1[3000];
 static char m201_str2[3000];
 static char m201_str3[3000];
 static char m201_str4[3000];
+static char m201_str5[3000];
 
 static int bt_search_node(char *pstr,char ptype)
 {
@@ -9155,14 +9230,15 @@ static int bt_search_node(char *pstr,char ptype)
 	strcpy(m201_str4,m201_str2);
 //#endif
 
-    if ((string_comp(m201_str3,m201_str4)==0)&&(ptype==bt_node_val2[i]))
+    if ((ptype==bt_node_val2[i])&&(fnc_comp(i)==0)&&(string_comp(m201_str3,m201_str4)==0))
     {
       bt_find_ptr=i;
       return(0);
     }
 
-    if ((ptype<bt_node_val2[i])||
-	((ptype==bt_node_val2[i])&&(string_comp(m201_str3,m201_str4)>0)))
+    if (    (ptype<bt_node_val2[i])                                          ||
+	 (  (ptype==bt_node_val2[i])&&(fnc_comp(i)>0)  )                     ||
+	 (  (ptype==bt_node_val2[i])&&(fnc_comp(i)==0)&&(string_comp(m201_str3,m201_str4)>0)  )  )
     {
       if (bt_node_ptr[i][2]<0)
       {
@@ -9187,8 +9263,9 @@ static int bt_search_node(char *pstr,char ptype)
       }
     }
     
-    if ((ptype>bt_node_val2[i])||
-	((ptype==bt_node_val2[i])&&(string_comp(m201_str3,m201_str4)<0)))
+    if (     (ptype>bt_node_val2[i])                                       ||
+	  (  (ptype==bt_node_val2[i])&&(fnc_comp(i)<0)  )                   ||
+	  (  (ptype==bt_node_val2[i])&&(fnc_comp(i)==0)&&(string_comp(m201_str3,m201_str4)<0)  )  )
     {
       if (bt_node_ptr[i][1]<0)
       {
@@ -9234,7 +9311,7 @@ static int string_comp(char *ps1,char *ps2)
   for (i=0;i<=l1;i++) {
     c1=ps1[i];
     c2=ps2[i];
-    if (c1==0) {
+    if (c1==0)        {
       if (c2==0) return(0);
       else return(-1); }
     else {
@@ -9281,6 +9358,9 @@ static int bt_insert_node(char *pstr,char ptype)
 	bt_node_val2[j]=ptype;
 
 	bt_find_ptr2=j;
+	
+	fnc_save(j);
+	
         return(0);
       }
     }
@@ -9306,6 +9386,8 @@ static int bt_insert_node(char *pstr,char ptype)
 
 	bt_find_ptr2=j;
 
+	fnc_save(j);
+	
         return(0);
       }
     }
@@ -9662,14 +9744,17 @@ static int  deb_get_dir(void)
 
 	  if (strlen(entry->d_name)>=255-2) continue;
 
-	  strcpy(m202_buffer2,"<");
-	  av_strlcat(m202_buffer2,entry->d_name,255);
-	  av_strlcat(m202_buffer2,">",FN_SIZE);
+	  //strcpy(m202_buffer2,"<");
+	  //av_strlcat(m202_buffer2,entry->d_name,255);
+	  //av_strlcat(m202_buffer2,">",FN_SIZE);
+	  strcpy(m202_buffer2,entry->d_name);
 
 	  m202_type=0;
 	  m202_ext[0] =0;
 	  m202_size[0]=0;
 	  m202_date[0]=0;
+	  
+	  fnc_conv(m202_buffer2);
 
 	  bt_insert_node(m202_buffer2,m202_type);
 	  strcpy(bt_node_val3[bt_find_ptr2],m202_ext);
@@ -9803,6 +9888,8 @@ static int  deb_get_dir(void)
 						       deb_m_info_tm->tm_hour,deb_m_info_tm->tm_min,deb_m_info_tm->tm_sec);
 	  if ((int)strlen(m202_buffer5)!=20) strcpy(m202_buffer5,"****                ");
 	  strcpy(m202_date,m202_buffer5);
+
+	  fnc_conv(m202_buffer2);
 
 	  bt_insert_node(m202_buffer2,m202_type);
 	  strcpy(bt_node_val3[bt_find_ptr2],m202_ext);
@@ -12852,6 +12939,261 @@ int clr_rect_white(void)
         }
         
 	return(0);
+}
+
+//file name compare
+
+//static    char  fnc_str[FN_SIZE];
+//static    char  fnc_msk[FN_SIZE];
+//static    int   fnc_istr[20];
+//static    int   fnc_ptr1,fnc_ptr2;
+
+int fnc_conv(char *p_str)
+{
+  int  i,j,k,l,m,n;
+  char c1;
+  char str1[FN_SIZE];
+  char str2[FN_SIZE];
+  
+  fnc_str[0]=0;
+  fnc_msk[0]=0;
+  fnc_istr[0]=0;
+  
+  fnc_ptr1=0;
+  fnc_ptr2=0;
+  
+  if (deb_str_has_null(p_str,FN_SIZE)!=1) return(1);
+  if (strlen(p_str)>=FN_SIZE) return(1);
+
+  strcpy(str2,p_str);
+  deb_lower_string(str2,FN_SIZE);
+  
+  i=strlen(str2)+1;
+  j=0;
+  
+  while(j<i)
+  {
+    c1=str2[j];
+    if ((c1<'0')||(c1>'9'))
+    {
+      fnc_str[fnc_ptr1]=c1;
+      fnc_str[fnc_ptr1+1]=0;
+      
+      if (c1==0) fnc_msk[fnc_ptr1]=0;
+      else fnc_msk[fnc_ptr1]=' ';
+      
+      fnc_msk[fnc_ptr1+1]=0;
+      fnc_ptr1++;
+      j++;
+      if (c1==0) break;
+    }
+    else
+    {
+      k=j;
+      l=k;
+      while(k<i)
+      {
+        if ((str2[k]>='0')&&(str2[k]<='9')) 
+        {
+          k++;
+          continue;
+        }
+        else break;
+      }
+      
+      str1[0]=0;
+      for (m=l;m<k;m++)
+      {
+        str1[m-l+0]=str2[m];
+        str1[m-l+1]=0;
+      }
+      
+      n=fnc_str2int(str1,FN_SIZE);
+      if (n>=0)
+      {
+        fnc_str[fnc_ptr1]=' ';
+        fnc_str[fnc_ptr1+1]=0;
+        fnc_msk[fnc_ptr1]='1';
+        fnc_msk[fnc_ptr1+1]=0;
+        fnc_istr[fnc_ptr2]=n;
+        fnc_ptr1++;
+        fnc_ptr2++;
+        j=k;
+        if (fnc_ptr2>=20) break;
+      }
+      else
+      {
+        for (m=j;m<k;m++)
+        {
+          fnc_str[fnc_ptr1]=str2[m];
+          fnc_str[fnc_ptr1+1]=0;
+          fnc_msk[fnc_ptr1]=' ';
+          fnc_msk[fnc_ptr1+1]=0;
+          fnc_ptr1++;
+        }
+        j=k;
+      }
+    }
+  }
+  
+/*printf("inp str:%s,\n",p_str);
+  printf("out str:%s,\n",fnc_str);
+  printf("out msk:%s,\n",fnc_msk);
+  
+  printf("number :");
+  for (i=0;i<fnc_ptr2;i++)
+    printf("%d,",fnc_istr[i]);
+  printf("\n");*/
+  
+  return(0);
+}
+
+int fnc_comp(int ptr)
+{
+  int           i,j,v1,v2;
+  unsigned char c1,c2;
+  
+  i=0;
+  for (j=0;j<fnc_ptr1;j++)
+  {
+    if ((fnc_msk[j]==' ')&&(bt_fnc_msk[ptr][j]==' '))
+    {      
+      c1=bt_fnc_str[ptr][j];
+      c2=fnc_str[j];
+      if (c1==0)         {
+        if (c2==0) break;
+        else return(-1); }
+      else {
+        if (c2==0) return(1);
+        else {
+          if (c1<c2) return(-1);
+          else {
+            if (c1>c2) return(1); }}}}
+      
+    if ((fnc_msk[j]==' ')&&(bt_fnc_msk[ptr][j]=='1'))
+    {      
+      c1=fnc_str[j];
+      if (c1<'0') return(1);
+      if (c1>'9') return(-1);
+    }
+
+    if ((fnc_msk[j]=='1')&&(bt_fnc_msk[ptr][j]==' '))
+    {      
+      c1=bt_fnc_str[ptr][j];
+      if (c1<'0') return(-1);
+      if (c1>'9') return(1);
+    }
+
+    if ((fnc_msk[j]=='1')&&(bt_fnc_msk[ptr][j]=='1'))
+    {      
+      v1=bt_fnc_istr[ptr][i];
+      v2=fnc_istr[i];
+      if (v1<v2) return(-1);
+      if (v1>v2) return(1);
+      i++;
+    }
+
+    if (fnc_msk[j]==0)
+    {
+      if (bt_fnc_msk[ptr][j]==0) break;
+      else return(1);
+    }
+    else if (bt_fnc_msk[ptr][j]==0)
+    {
+      return(-1);
+    }
+      
+  }
+  
+  //printf("fnc_cmp: default return 0\n");
+  
+  return(0);
+}
+
+int fnc_save(int ptr)
+{
+  int i;
+  
+  bt_fnc_ptr1[ptr]=fnc_ptr1;
+  bt_fnc_ptr2[ptr]=fnc_ptr2;
+  bt_fnc_str[ptr][0]=0;
+  bt_fnc_msk[ptr][0]=0;
+  bt_fnc_istr[ptr][0]=0;
+  
+  for (i=0;i<fnc_ptr1;i++)
+  {
+    bt_fnc_str[ptr][i  ]=fnc_str[i];
+    bt_fnc_str[ptr][i+1]=0;
+    bt_fnc_msk[ptr][i  ]=fnc_msk[i];
+    bt_fnc_msk[ptr][i+1]=0;
+  }
+
+  for (i=0;i<fnc_ptr2;i++)
+  {
+    bt_fnc_istr[ptr][i]=fnc_istr[i];
+  }
+  
+  return(0);
+}
+
+int fnc_str2int(char *p_string,int p_string_size)
+{
+  long long int val;
+  int i,j;
+  int sin;
+  int num;
+
+  i=deb_str_has_null(p_string,p_string_size);
+  if (i!=1) return(-1);
+  
+  val=0;
+  sin=1;
+  num=0;
+  j=strlen(p_string);
+
+  for (i=0;i<j;i++)
+  {
+    if (p_string[i]<=' ') continue;
+    if (p_string[i]=='-')
+    {
+      if (num==0)
+      {
+        sin= -1;
+        continue;
+      }
+      else
+      {
+        val=0;
+        return(-1);
+      }
+    }
+    if (p_string[i]=='+')
+    {
+      if (num==0)
+      {
+        sin=1;
+        continue;
+      }
+      else
+      {
+        val=0;
+        return(-1);
+      }
+    }
+    if ((p_string[i]>='0')&&(p_string[i]<='9'))
+    {
+      num=1;
+      val=val*10+(p_string[i]-'0')*sin;
+      //      g  m  k  b
+      if (val>2000000000) return(-1);
+      continue;
+    }
+   
+    val=0;
+    return(-1);
+  }
+
+  return(val);
 }
 
 static void init_opts(void)
