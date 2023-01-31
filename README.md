@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  4.1.2-7
+Purpose player 2  4.1.2-15
 
 
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-5.1.2-src-4.1.2-7" ,decompress "ffmpeg-5.1.2.tar.xz",
+there is a directory "ffmpeg-5.1.2-src-4.1.2-15" ,decompress "ffmpeg-5.1.2.tar.xz",
 it create a directory "ffmpeg-5.1.2" ,
-use files in "ffmpeg-5.1.2-src-4.1.2-7/fftools" to replace same name files in directory "ffmpeg-5.1.2/fftools",
+use files in "ffmpeg-5.1.2-src-4.1.2-15/fftools" to replace same name files in directory "ffmpeg-5.1.2/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -25,7 +25,7 @@ How to compile:
 
 on windows, you need install Msys64+MinGW64, 
 
-on Ubuntu 14.04/16.04/18.04/20.04/22.04 you need install gcc,please input below command:
+on Ubuntu 14.04/16.04/18.04/20.04/22.04/Linux Mint 20 you need install gcc,please input below command:
 
     sudo apt-get update
     sudo apt-get install build-essential
@@ -49,6 +49,17 @@ and install libsdl2-dev again:
 
     sudo apt-get install libsdl2-dev
 
+if you still can't install SDL2, you can install SDL2 by source code,
+download SDL2-2.26.1.zip (you can goto http://www.libsdl.org/download-2.0.php to download these files,
+or you can download it on this web page)
+
+decompress SDL2-2.26.1.zip and run
+
+    ./configure
+    make -j
+    sudo make install
+
+and then:
 decompress yasm-1.3.0.tar.gz and run
 
     ./configure
@@ -61,6 +72,9 @@ then goto directory "ffmpeg-5.1.2" and run
     make -j
 
 copy ffplay(.exe) to app directory ,ffplay(.exe) in directory "ffmpeg-5.1.2" 
+
+before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.26.1",
+run command "sudo make uninstall"(unload development library).
 
 
 On windows or Ubuntu 14.04/16.04(32bit)/22.04,you can double click "ffplay(.exe)" icon to run it ,if you are on 
@@ -79,14 +93,14 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
   version 4.1.2-7  has better file name compare .
 
 
-小戴媒体播放器2  4.1.2-7
+小戴媒体播放器2  4.1.2-15
 
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-5.1.2-src-4.1.2-7,解压ffmpeg-5.1.2.tar.xz,将创建ffmpeg-5.1.2目录, 
-用ffmpeg-5.1.2-src-4.1.2-7/fftools里的文件,替换掉ffmpeg-5.1.2/fftools里的同名文件,
+这里有目录ffmpeg-5.1.2-src-4.1.2-15,解压ffmpeg-5.1.2.tar.xz,将创建ffmpeg-5.1.2目录, 
+用ffmpeg-5.1.2-src-4.1.2-15/fftools里的文件,替换掉ffmpeg-5.1.2/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -102,7 +116,7 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
 
 如果是Windows平台，需要先安装Msys64+MinGW64,
 
-如果是Ubuntu 14.04/16.04/18.04/20.04/22.04 需要先安装gcc:
+如果是Ubuntu 14.04/16.04/18.04/20.04/22.04/Linux Mint 20 需要先安装gcc:
  
     sudo apt-get update
     sudo apt-get install build-essential
@@ -126,6 +140,17 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
 
     sudo apt-get install libsdl2-dev
 
+如果你还是不能安装SDL2,可以下载源代码SDL2-2.26.1.zip,你可以在 http://www.libsdl.org/download-2.0.php 
+下载这些文件,或者在当前页面下载。
+
+把 SDL2-2.26.1.zip 展开
+在 SDL2-2.26.1 目录下运行：
+
+    ./configure
+    make -j
+    sudo make install
+ 
+然后:
 把 yasm-1.3.0.tar 展开
 在 yasm-1.3.0 目录下运行：
 
@@ -140,6 +165,8 @@ Ubuntu 18.04/20.04 , you need open terminal window, move to "app" directory ,inp
 
 把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-5.1.2 目录下
  
+在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.26.1 目录下运行sudo make uninstall.(把开发库卸载)
+
 在 Windows 或者 Ubuntu 14.04/16.04(32bit)/22.04上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
 
