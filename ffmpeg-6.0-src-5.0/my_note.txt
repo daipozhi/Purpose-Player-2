@@ -1,0 +1,25 @@
+test plan:
+
+
+
+
+not play (st_play==0)									seek
+audio has no pic									volume changing
+audio has pic		x	pause(m.o.)	x	directory screen	x	video on/river on/river off		x	display(m.o.)
+video				not pause(m.o.)		video screen			window resize					operate(m.o.)
+video with subtitle					river screen			max window
+											min window
+											mouse wheel/line up/line down
+											page up/page down
+
+
+
+
+bad media files:
+
+
+
+
+todo:
+
+
