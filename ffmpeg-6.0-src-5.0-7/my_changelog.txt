@@ -333,9 +333,39 @@ ffmpeg-6.0-src-5.0-3
   sound river delay 0.1s
 
 ffmpeg-6.0-src-5.0-4
-  1 bug ok (resample)
+  1 bug ok (audio resample)
+
+ffmpeg-6.0-src-5.0-6
+  3 bugs ok (audio resample)
+
+    3 bugs are:
+
+    in head
+
+        unsigned char deb_resam_buff3[100000]; (bigger size)
+
+    in sdl_audio_callback()
+
+        after resample (convert),
+            is->audio_buf_size = audio_size;  
+        change to : 
+            is->audio_buf_size = size;
+
+    in sdl_audio_callback() resample code (convert code)
+
+        source code:
+                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+        change to:
+                 for (i=  ((160*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((160*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((160*rept-start+m)*deb_sr_ch+2)*2  ;
 
 
-
+        source code:
+                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+        change to:
+                 for (i=  ((320*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((320*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((320*rept-start+m)*deb_sr_ch+2)*2  ;
 
 

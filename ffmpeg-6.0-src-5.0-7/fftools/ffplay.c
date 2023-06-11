@@ -763,9 +763,9 @@ static int deb_resam_dir;
 
 static int deb_resam_f[450];
 
-static unsigned char deb_resam_buff1[256000];
-static unsigned char deb_resam_buff2[256000];
-static unsigned char deb_resam_buff3[50];
+static unsigned char deb_resam_buff1[500000];
+static unsigned char deb_resam_buff2[500000];
+static unsigned char deb_resam_buff3[100000];
 
 static int deb_resam_buff1_ptr;
 static int deb_resam_buff2_ptr;
@@ -3420,9 +3420,10 @@ Uint8 *stream2;
                else if (deb_sr_rate==48000)
                {
                  size=0;
-
+/*
                  for (n=0;n<deb_sr_ch;n++)
                  {
+*/
                    i=0;
                    rept=0;
                    l=deb_resam_last_ptr;
@@ -3441,34 +3442,42 @@ Uint8 *stream2;
 
                      if (  160*rept-start+m  <  j/(deb_sr_ch*2)  )
                      {
+
+                 for (n=0;n<deb_sr_ch;n++)
+                 {
+
                        deb_resam_buff2[(i*deb_sr_ch+n)*2+0]=deb_resam_buff1[( (160*rept-start+m)*deb_sr_ch+n )*2+0];
                        deb_resam_buff2[(i*deb_sr_ch+n)*2+1]=deb_resam_buff1[( (160*rept-start+m)*deb_sr_ch+n )*2+1];
                        if (size<i) size=i;
+                 }
+
                      }
                      else
                      {
-                       if (n==deb_sr_ch-1)
-                       {
+                       //if (n==deb_sr_ch-1)
+                       //{
                          deb_resam_last_ptr=deb_resam_last_ptr+size-((deb_resam_last_ptr+size)/147)*147;
-                       }
+                       //}
                        
                        break;
                      }
 
                      i++;
                    }
+/*
                  }
-
-                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
-                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+*/
+                 for (i=  ((160*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((160*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((160*rept-start+m)*deb_sr_ch+2)*2  ;
                  size=(size+1)*deb_sr_ch*2;
                }
                else if (deb_sr_rate==32000)
                {
                  size=0;
-
+/*
                  for (n=0;n<deb_sr_ch;n++)
                  {
+*/
                    i=0;
                    rept=0;
                    l=deb_resam_last_ptr;
@@ -3487,26 +3496,34 @@ Uint8 *stream2;
 
                      if (  320*rept-start+m  <  j/(deb_sr_ch*2)  )
                      {
+
+                 for (n=0;n<deb_sr_ch;n++)
+                 {
+
                        deb_resam_buff2[(i*deb_sr_ch+n)*2+0]=deb_resam_buff1[( (320*rept-start+m)*deb_sr_ch+n )*2+0];
                        deb_resam_buff2[(i*deb_sr_ch+n)*2+1]=deb_resam_buff1[( (320*rept-start+m)*deb_sr_ch+n )*2+1];
                        if (size<i) size=i;
+
+                 }
+
                      }
                      else
                      {
-                       if (n==deb_sr_ch-1)
-                       {
+                       //if (n==deb_sr_ch-1)
+                       //{
                          deb_resam_last_ptr=deb_resam_last_ptr+size-((deb_resam_last_ptr+size)/441)*441;
-                       }
+                       //}
                        
                        break;
                      }
 
                      i++;
                    }
+/*
                  }
-
-                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
-                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+*/
+                 for (i=  ((320*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((320*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((320*rept-start+m)*deb_sr_ch+2)*2  ;
                  size=(size+1)*deb_sr_ch*2;
                }
                else size=j;
@@ -3521,7 +3538,7 @@ Uint8 *stream2;
 
 
 
-               is->audio_buf_size = audio_size;
+               is->audio_buf_size = size;
            }
            is->audio_buf_index = 0;
 

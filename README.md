@@ -1,15 +1,15 @@
 # Purpose-Player-2
 
-Purpose player 2  5.0-5
+Purpose player 2  5.0-7
 
 
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-6.0-src-5.0-5" ,decompress "ffmpeg-6.0.tar.xz",
+there is a directory "ffmpeg-6.0-src-5.0-7" ,decompress "ffmpeg-6.0.tar.xz",
 it create a directory "ffmpeg-6.0" ,
-use files in "ffmpeg-6.0-src-5.0-5/fftools" to replace same name files in directory "ffmpeg-6.0/fftools",
+use files in "ffmpeg-6.0-src-5.0-7/fftools" to replace same name files in directory "ffmpeg-6.0/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -92,15 +92,16 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
   version 4.1.2-7  has better file name compare .
 
+  version 5.0-4 to version 5.0-7 fixed 4 bugs, all about audio resample .
 
-小戴媒体播放器2  5.0-5
+小戴媒体播放器2  5.0-7
 
 
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-6.0-src-5.0-5,解压ffmpeg-6.0.tar.xz,将创建ffmpeg-6.0目录, 
-用ffmpeg-6.0-src-5.0-5/fftools里的文件,替换掉ffmpeg-6.0/fftools里的同名文件,
+这里有目录ffmpeg-6.0-src-5.0-7,解压ffmpeg-6.0.tar.xz,将创建ffmpeg-6.0目录, 
+用ffmpeg-6.0-src-5.0-7/fftools里的文件,替换掉ffmpeg-6.0/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -181,4 +182,6 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
   4.1.2-2版本有更好的utf8字符字体.
 
   4.1.2-7版本有更好的文件名比较.
+
+  5.0-4版本到5.0-7版本改掉了4个bug,都是关于audio resample的.
 
