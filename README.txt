@@ -1,15 +1,13 @@
 # Purpose-Player-2
 
-Purpose player 2  5.0-7
-
-
+Purpose player 2  5.0-21
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-6.0-src-5.0-7" ,decompress "ffmpeg-6.0.tar.xz",
+there is a directory "ffmpeg-6.0-src-5.0-21" ,decompress "ffmpeg-6.0.tar.xz",
 it create a directory "ffmpeg-6.0" ,
-use files in "ffmpeg-6.0-src-5.0-7/fftools" to replace same name files in directory "ffmpeg-6.0/fftools",
+use files in "ffmpeg-6.0-src-5.0-21/fftools" to replace same name files in directory "ffmpeg-6.0/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -25,7 +23,7 @@ How to compile:
 
 on windows, you need install Msys64+MinGW64, 
 
-on Ubuntu 14.04/16.04/18.04/20.04/22.04/Linux Mint 20/21 you need install gcc,please input below command:
+on Ubuntu 14.04/16.04/18.04/20.04/22.04 or Linux Mint 20/21.1 you need install gcc,please input below command:
 
     sudo apt-get update
     sudo apt-get install build-essential
@@ -53,14 +51,16 @@ if you still can't install SDL2, you can install SDL2 by source code,
 download SDL2-2.26.5.tar.gz (you can goto http://www.libsdl.org/download-2.0.php to download these files,
 or you can download it on this web page)
 
-decompress SDL2-2.26.5.tar.gz and run
+decompress SDL2-2.26.5.tar.gz and 
+in directory SDL2-2.26.5 run
 
     ./configure
     make -j
     sudo make install
 
 and then:
-decompress yasm-1.3.0.tar.gz and run
+decompress yasm-1.3.0.tar.gz and 
+in directory yasm-1.3.0 run
 
     ./configure
     make -j
@@ -71,7 +71,7 @@ then goto directory "ffmpeg-6.0" and run
     ./configure
     make -j
 
-copy ffplay(.exe) to app directory ,ffplay(.exe) in directory "ffmpeg-6.0" 
+copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-6.0" 
 
 before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.26.5",
 run command "sudo make uninstall"(unload development library).
@@ -94,14 +94,16 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
   version 5.0-4 to version 5.0-7 fixed 4 bugs, all about audio resample .
 
-小戴媒体播放器2  5.0-7
+  version 5.0-21 has real GUI .
 
 
+
+小戴媒体播放器2  5.0-21
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-6.0-src-5.0-7,解压ffmpeg-6.0.tar.xz,将创建ffmpeg-6.0目录, 
-用ffmpeg-6.0-src-5.0-7/fftools里的文件,替换掉ffmpeg-6.0/fftools里的同名文件,
+这里有目录ffmpeg-6.0-src-5.0-21,解压ffmpeg-6.0.tar.xz,将创建ffmpeg-6.0目录, 
+用ffmpeg-6.0-src-5.0-21/fftools里的文件,替换掉ffmpeg-6.0/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -117,7 +119,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
 如果是Windows平台，需要先安装Msys64+MinGW64,
 
-如果是Ubuntu 14.04/16.04/18.04/20.04/22.04/Linux Mint 20/21 需要先安装gcc:
+如果是Ubuntu 14.04/16.04/18.04/20.04/22.04 or Linux Mint 20/21.1 需要先安装gcc:
  
     sudo apt-get update
     sudo apt-get install build-essential
@@ -184,5 +186,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
   4.1.2-7版本有更好的文件名比较.
 
   5.0-4版本到5.0-7版本改掉了4个bug,都是关于audio resample的.
+
+  5.0-21版本有真正的GUI.
 
 

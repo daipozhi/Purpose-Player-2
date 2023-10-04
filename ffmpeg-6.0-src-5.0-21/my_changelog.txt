@@ -368,4 +368,28 @@ ffmpeg-6.0-src-5.0-6
                  for (i=  ((320*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((320*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
                  deb_resam_buff3_ptr=j-  ((320*rept-start+m)*deb_sr_ch+2)*2  ;
 
+ffmpeg-6.0-src-5.0-8
+  1 bugs ok (REFRESH_RATE)
+
+ffmpeg-6.0-src-5.0-9
+ffmpeg-6.0-src-5.0-10
+ffmpeg-6.0-src-5.0-11
+ffmpeg-6.0-src-5.0-12
+ffmpeg-6.0-src-5.0-13
+ffmpeg-6.0-src-5.0-14
+ffmpeg-6.0-src-5.0-15
+ffmpeg-6.0-src-5.0-16
+ffmpeg-6.0-src-5.0-17
+ffmpeg-6.0-src-5.0-18
+ffmpeg-6.0-src-5.0-19
+ffmpeg-6.0-src-5.0-20
+ffmpeg-6.0-src-5.0-21
+  for GUI
+
+
+
+
+
+
+
 
