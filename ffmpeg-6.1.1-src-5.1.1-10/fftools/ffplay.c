@@ -358,6 +358,14 @@ static unsigned char u_b6s[ 8192][2];
 
 //static char u_tc[30][5];
 
+static int    u_err;
+static int    u_err2;
+
+static int    u_char_size_x;
+static int    u_char_size_y;    
+
+static unsigned char u_char_bmp[14][14];
+
 static unsigned char* u_str;
 
 static int  u_n1, u_n2, u_n3;
@@ -371,6 +379,8 @@ static char u_test_buf[64][300];
 static int u_test(void);
 static int u_test_disp_win(void);
 static int u_test_disp_ter(void);
+
+static int u_get_char_bmp(unsigned char c1,unsigned char c2,unsigned char c3);
 
 static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int fldlen,int st);
 static int u_strlen(char *str,int str_size);
@@ -393,21 +403,37 @@ static 	int    deb_ch_d=0;
 static void init_opts(void);
 
 #define FN_SIZE       300
-#define MAX_FILE_NUM  50000
+#define MAX_FILE_NUM  100000
 
 static  char   deb_filenamebuff[MAX_FILE_NUM][FN_SIZE];
-static  int    deb_filenamebuffptr[MAX_FILE_NUM];
 static  char   deb_filenamebuff_ext[MAX_FILE_NUM][6];
 static  char   deb_filenamebuff_size[MAX_FILE_NUM][7];
 static  char   deb_filenamebuff_date[MAX_FILE_NUM][21];
 static  int    deb_filenamebuff_len[MAX_FILE_NUM];
+static  int    deb_filenamebuff_len2[MAX_FILE_NUM];
 static  char   deb_filenamebuff_type[MAX_FILE_NUM];
 static  char   deb_filenamebuff_icon[MAX_FILE_NUM];
 static  int    deb_filenamebuff_space[MAX_FILE_NUM];
+static  char   deb_filenamebuff_subline[MAX_FILE_NUM];
+static  int    deb_filenamebuff_ptr;
 static  int    deb_filenamebuff_n;
-static  int    deb_filenamecnt;
+static  int    deb_filenamebuff_n2;
 static  int    deb_filenameplay;
 static  char   deb_currentpath[FN_SIZE];
+
+
+static  char   deb_filenamebuff2[MAX_FILE_NUM][FN_SIZE];
+static  char   deb_filenamebuff2_ext[MAX_FILE_NUM][6];
+static  char   deb_filenamebuff2_size[MAX_FILE_NUM][7];
+static  char   deb_filenamebuff2_date[MAX_FILE_NUM][21];
+static  int    deb_filenamebuff2_len[MAX_FILE_NUM];
+static  int    deb_filenamebuff2_len2[MAX_FILE_NUM];
+static  char   deb_filenamebuff2_type[MAX_FILE_NUM];
+static  char   deb_filenamebuff2_icon[MAX_FILE_NUM];
+static  int    deb_filenamebuff2_space[MAX_FILE_NUM];
+static  char   deb_filenamebuff2_subline[MAX_FILE_NUM];
+static  int    deb_filenamebuff2_ptr;
+
 
 // daipozhi modified 
 static 	int    deb_get_dir(void);
@@ -417,6 +443,7 @@ static 	char   deb_upper(char c1);
 static 	int    deb_upper_string(char *p_instr,int p_instr_size);
 static 	int    deb_string2int(char *string,int p1,int p2);
 static 	int    deb_disp_dir(VideoState *is);
+static 	int    deb_conv_dir(void);
 static 	int    deb_disp_bar(VideoState *is);
 static  int    deb_utf8_to_gb18030(char *inbuffer,char *outbuffer,int outbufferlen);
 static  int    deb_gb18030_to_utf8(char *inbuffer,char *outbuffer,int outbufferlen);
@@ -471,6 +498,7 @@ static  int  deb_cover=0;
 static  int  deb_cover_close=0;
 static  int  deb_frame_num=0;
 static  int  deb_stream_err=0;
+static  int  deb_stream_open=0;
 static  int  deb_opts_stt=0;
 
 static  char deb_dir_buffer[FN_SIZE];
@@ -479,6 +507,7 @@ static  char deb_dir_buffer[FN_SIZE];
 static 	int  deb_get_dir_ini(void);
 static 	int  deb_dir_opened(int ptr );
 static 	int  deb_get_space(int ptr);
+static 	int  deb_get_space2(int ptr);
 //static 	char deb_getfirstchar(char *buffer,int buffer_size);
 static 	int  deb_dir_add_after(int ptr);
 static 	int  deb_dir_remove_after(int ptr);
@@ -498,7 +527,8 @@ static  int           deb_m_info_len;
 static  char          deb_m_info_type;
 
 static int deb_size_format(int pn,char *buffer);
-static int deb_get_dir_len(int ptr);
+//static int deb_get_dir_len(int ptr);
+//static int deb_get_dir_len2(int ptr);
 
 
 // ---- binary tree ----------------------------------------------------------
@@ -747,7 +777,8 @@ static int deb_sr_draw_line4_get2(int ptr);
 
 // ------- end of sound river --------------------------------------------
 
-// ------- resample ------------------------------------------------------
+
+// ------- audio resample ------------------------------------------------------
 
 static int deb_resam_rate;
 static int deb_resam_dir;
@@ -765,6 +796,7 @@ static int deb_resam_buff2_indx;
 static int deb_resam_last_ptr;
 
 // ------- end of resample ------------------------------------------------
+
 
 // ------- file name compare ----------------------------------------------
 //#define FNC_NUM 150
@@ -1133,6 +1165,38 @@ int g_get_radiobutton_value_group(int ptr);
 int string_trim_nos(char *pstr);// no space
 
 // ================ end of GUI ===================
+
+
+// ================= lib automatic return ===============================
+//     in today, file name usually very long, and screen is small,
+//     lib automatic return separate one line file name to mutiple lines
+//     in the best way.
+
+// ar : automatic return
+
+int ar_buff1_val[1000];
+int ar_buff1_len[1000];
+int ar_buff1_ptr;
+
+int ar_buff2_len[1000];
+int ar_buff2_ptr;
+
+char ar_buff3[1000];
+
+char ar_buff4[300][FN_SIZE];
+int  ar_buff4_ptr;
+
+char ar_char[1000][5];
+int  ar_len[1000];
+int  ar_len2[1000];
+int  ar_size[1000];
+int  ar_size2[1000];
+int  ar_char_ptr;
+
+int ar_conv(char *p_in_str,int p_in_str_size,int p_len);
+int ar_separ2char(char *instr,int instr_size);
+
+// ============== end of lib automatic return ============
 
 
 
@@ -4574,6 +4638,7 @@ static int read_thread(void *arg)
 
     //daipozhi modified
     deb_stream_err=0;
+    deb_stream_open=0;
     deb_eo_stream=0;
 
 
@@ -5205,8 +5270,9 @@ static void event_loop(VideoState *cur_stream)
     int  vid;
     char str1[FN_SIZE];
     char str2[FN_SIZE];
+    char str3[FN_SIZE];
     int  cntr=0;
-    int  j,k;
+    int  j,k,l;
     
     int  s_shift;
     int  s_caps;
@@ -5720,8 +5786,13 @@ static void event_loop(VideoState *cur_stream)
 	    if ((g_detect_ptr1==1)&&(g_detect_ptr2==0)&&(g_detect_ptr3==1))    // in play list
 	    {
 		  n2=g_detect_ptr4;
+		  
+		  while ((deb_filenamebuff_subline[deb_filenamebuff_n+n2]==1)&&(deb_filenamebuff_n+n2>0))
+		  {
+		    n2--;
+		  }
 
-	          if (deb_filenamebuff_n+n2>=deb_filenamecnt) // more than filenamecnt 
+	          if (deb_filenamebuff_n+n2>=deb_filenamebuff_ptr) // more than filenamecnt 
 		  {
                     break;
 		  }
@@ -5736,13 +5807,28 @@ static void event_loop(VideoState *cur_stream)
                     break;
 		  }
 		  
-		  if (deb_no_support(deb_filenamebuff[deb_filenamebuff_n+n2],FN_SIZE)==1) break;
-
+		  str3[0]=0;
+		  strcpy(str3,deb_filenamebuff[deb_filenamebuff_n+n2]);
+		  l=deb_filenamebuff_n+n2+1;
+		  
+		  while ((deb_filenamebuff_subline[l]==1)&&(l<deb_filenamebuff_ptr))
+		  {
+		    if (strlen(str3)+strlen(deb_filenamebuff[l])>=FN_SIZE) break;
+		    
+		    strcat(str3,deb_filenamebuff[l]);
+		    l++;
+		  }
+		  
                   sc1=deb_filenamebuff_type[deb_filenamebuff_n+n2];
+                  
                   if (sc1==2) break; // comment line
                   if (sc1==3) break; // empty line
 		  if (sc1!=0)        // not dir not empty
 		  {
+		    if (deb_stream_open==1) break;
+
+		    if (deb_no_support(str3,FN_SIZE)==1) break;
+
 		    deb_get_path(deb_filenamebuff_n+n2);
 
 		    if (deb_st_play==1)
@@ -5798,6 +5884,7 @@ static void event_loop(VideoState *cur_stream)
 		    strcpy(deb_currentpath,deb_dir_buffer);
 
                     deb_stream_err=1;
+                    deb_stream_open=1;
                     
 		    stream_open(deb_dir_buffer, file_iformat,2);
 
@@ -5810,9 +5897,9 @@ static void event_loop(VideoState *cur_stream)
 		  else //dir
 		  {
 		    deb_get_path(deb_filenamebuff_n+n2);
-
+		    
                     s_dir_opened=deb_dir_opened(deb_filenamebuff_n+n2);
-
+                    
                     if (s_dir_opened==0)
                     {
 		      i=chdir(deb_dir_buffer);
@@ -5910,10 +5997,10 @@ static void event_loop(VideoState *cur_stream)
 		      //n3=(cur_stream->height)/deb_ch_h-2-2;
 		      n3=g_dirview_posi[g_detect_ptr2][3]/14;
 		      
-		      if (deb_filenamebuff_n+n3+n3<deb_filenamecnt) deb_filenamebuff_n=deb_filenamebuff_n+n3;
+		      if (deb_filenamebuff_n+n3+n3<deb_filenamebuff_ptr) deb_filenamebuff_n=deb_filenamebuff_n+n3;
 		      else
 		      {
-			deb_filenamebuff_n=deb_filenamecnt-n3;
+			deb_filenamebuff_n=deb_filenamebuff_ptr-n3;
 			if (deb_filenamebuff_n<0) deb_filenamebuff_n=0;
 		      }
 
@@ -5942,6 +6029,8 @@ static void event_loop(VideoState *cur_stream)
 	        if ((screen_w<640)||(screen_w>7680)) break;
 	        if ((screen_h<480)||(screen_h>4320)) break;
 	      
+		if (deb_stream_open==1) break;
+
 	        if (deb_st_play==1)
 	        {
 
@@ -6029,6 +6118,8 @@ static void event_loop(VideoState *cur_stream)
 	    // daipozhi modified 
 	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==0))    //pause button
 	    {
+		if (deb_stream_open==1) break;
+
 		if (deb_st_play==1)
 		{
 		  toggle_pause(cur_stream);
@@ -6087,6 +6178,8 @@ static void event_loop(VideoState *cur_stream)
 	      
 	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==1))   // dir,video,river switch button
 	    {
+		if (deb_stream_open==1) break;
+
 		if ((deb_cover==1)&&(deb_cover_close==0)) // status switch, video,river,file name
 		{
 		  if (deb_sr_show==1)
@@ -6244,7 +6337,7 @@ static void event_loop(VideoState *cur_stream)
 	      }
 	    }
 
-	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==5))   // enable button
+	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==5))   // delete button
 	    {
 	      g_delete_button(2);
 	      g_delete_button(3);
@@ -6265,7 +6358,7 @@ static void event_loop(VideoState *cur_stream)
 	      g_delete_scrollbar(2);
 	    }
 
-	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==6))   // enable button
+	    if ((g_detect_ptr1==3)&&(g_detect_ptr2==6))   // create button
 	    {
     // for testing of mini GUI lib , color item ,color text
     
@@ -6391,7 +6484,7 @@ static void event_loop(VideoState *cur_stream)
     
 	      g_dirview_top=g_dirview_top+yy3;
     
-	      deb_filenamebuff_n=deb_filenamecnt*(g_dirview_top-g_dirview_posi[0][1]-1)/(g_dirview_posi[0][3]-2);
+	      deb_filenamebuff_n=deb_filenamebuff_ptr*(g_dirview_top-g_dirview_posi[0][1]-1)/(g_dirview_posi[0][3]-2);
     	    }
 	    else if (yy2<g_dirview_mouse_down_y)
 	    {
@@ -6404,7 +6497,7 @@ static void event_loop(VideoState *cur_stream)
     
 	      g_dirview_top=g_dirview_top-yy3;
     
-	      deb_filenamebuff_n=deb_filenamecnt*(g_dirview_top-g_dirview_posi[0][1]-1)/(g_dirview_posi[0][3]-2);
+	      deb_filenamebuff_n=deb_filenamebuff_ptr*(g_dirview_top-g_dirview_posi[0][1]-1)/(g_dirview_posi[0][3]-2);
     	    }  	    
 	    
 	    deb_disp_bar(cur_stream);
@@ -6511,6 +6604,8 @@ static void event_loop(VideoState *cur_stream)
                     */
                     // test end
                     
+             
+             	     deb_conv_dir();   //resize dir view
              
 		     deb_m_ref=0;
 		     deb_m_ref_v=0;
@@ -6637,6 +6732,11 @@ static void event_loop(VideoState *cur_stream)
 	    deb_video_open_again(cur_stream,0);
 
 	    deb_filenameplay++;
+	    
+	    while ((deb_filenamebuff_subline[deb_filenameplay]==1)&&(deb_filenameplay<deb_filenamebuff_ptr))
+	    {
+	      deb_filenameplay++;
+	    }
 
 	    deb_disp_bar(cur_stream);
 	    g_paint_dirview();//deb_disp_dir(cur_stream);
@@ -6655,9 +6755,9 @@ static void event_loop(VideoState *cur_stream)
 	    SDL_RenderPresent(renderer);
 	    deb_m_ref=0;
 
-            if (deb_filenameplay>=deb_filenamecnt) // more than filenamecnt 
+            if (deb_filenameplay>=deb_filenamebuff_ptr) // more than filenamecnt 
 	    {
-	      deb_filenameplay=deb_filenamecnt-1;
+	      deb_filenameplay=deb_filenamebuff_ptr-1;
               break;
 	    }
             if (deb_filenameplay>=MAX_FILE_NUM) // more than MAX_FILE_NUM
@@ -6671,13 +6771,25 @@ static void event_loop(VideoState *cur_stream)
               break;
 	    }
 
-	    if (deb_no_support(deb_filenamebuff[deb_filenameplay],FN_SIZE)==1) break;
+	    str3[0]=0;
+	    strcpy(str3,deb_filenamebuff[deb_filenameplay]);
+	    l=deb_filenameplay+1;
+		  
+	    while ((deb_filenamebuff_subline[l]==1)&&(l<deb_filenamebuff_ptr))
+	    {
+	      if (strlen(str3)+strlen(deb_filenamebuff[l])>=FN_SIZE) break;
+		    
+	      strcat(str3,deb_filenamebuff[l]);
+	      l++;
+	    }
 
             sc1=deb_filenamebuff_type[deb_filenameplay];  //daipozhi modified for audio
             if (sc1==2) break; // comment line
             if (sc1==3) break; // empty line
 	    if (sc1!=0)        // not dir not empty
 	    {
+	      if (deb_no_support(str3,FN_SIZE)==1) break;
+
 	      deb_get_path(deb_filenameplay);
 
 	      //deb_ini_is(cur_stream);
@@ -6716,6 +6828,7 @@ static void event_loop(VideoState *cur_stream)
 	      strcpy(deb_currentpath,deb_dir_buffer);
 
               deb_stream_err=1;
+              deb_stream_open=1;
 
 	      stream_open(deb_dir_buffer, file_iformat,2);
 
@@ -6779,10 +6892,10 @@ static void event_loop(VideoState *cur_stream)
 	        {
 		    n3=(cur_stream->height)/deb_ch_h-2-2;
 		    
-		    if (deb_filenamebuff_n+n3+5<deb_filenamecnt) deb_filenamebuff_n=deb_filenamebuff_n+5;
+		    if (deb_filenamebuff_n+n3+5<deb_filenamebuff_ptr) deb_filenamebuff_n=deb_filenamebuff_n+5;
 		    else
 		    {
-		      deb_filenamebuff_n=deb_filenamecnt-n3;
+		      deb_filenamebuff_n=deb_filenamebuff_ptr-n3;
 		      if (deb_filenamebuff_n<0) deb_filenamebuff_n=0;
 		    }
 		    
@@ -7474,75 +7587,66 @@ static int deb_set_dot(int x1, int y1, unsigned char r, unsigned char g, unsigne
 	return(0);
 }
 
-static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,int st,int vid)
+static int u_get_char_bmp(unsigned char c1,unsigned char c2,unsigned char c3)
 {
-  int			i,j,k,l,m,n;
-  int			x,y;
-  int 			err,err2;
-  unsigned char		c1,c2,c3/*,c4*/;
-  int  			i1;
-  int			len;
-
-  if (deb_str_has_null(str,str_size)!=1) return(0);
-
-  if ((deb_tx_locked!=1)&&(vid!=1)) return(0);
-
-  len=strlen(str);
-  x=xx;
-  y=yy;
-  i=len;
-  j=0;
-
-  while(j<i)
-  {
-    err=0;
-    err2=0;
+    int k,l,m,n;
+    int i1;
     
-    c1=(unsigned char)str[j];
+    u_err=0;
+    u_err2=0;
+    
     u_ptr=0;
     u_cptr=0;
     u_nb=1;
+
+    u_char_size_x=7;
+    u_char_size_y=14;
     
     if (c1<128)
     {
       u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-      if ((u_cptr<0)||(u_cptr>=128)) err=1;
+      if ((u_cptr<0)||(u_cptr>=128)) u_err=1;
     }
     else if ((c1>=194)&&(c1<=223))
     {
-      c2= (unsigned char)str[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-      if ((u_cptr<0)||(u_cptr>=1920)) err=1;
+      u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
+      if ((u_cptr<0)||(u_cptr>=1920)) u_err=1;
     }
     else if (c1==224)
     {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
+      u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
+      if ((u_cptr<0)||(u_cptr>=2048)) u_err=1;
     }
     else if ((c1>=225)&&(c1<=236))
     {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=49152)) err=1;
+      u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
+      if ((u_cptr<0)||(u_cptr>=49152)) u_err=1;
     }
     else if (c1==237)
     {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
+      u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
+      if ((u_cptr<0)||(u_cptr>=2048)) u_err=1;
     }
     else if ((c1>=238)&&(c1<=239))
     {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=8192)) err=1;
+      u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
+      if ((u_cptr<0)||(u_cptr>=8192)) u_err=1;
     }
     else if ((c1>=240)&&(c1<=244))
     {
       u_nb = 4;
-      err2=1;
+      u_char_size_x=14;
+      u_err2=1;
     }
-    else err=1;
-
-    if (err==0)
+    else
     {
-      if (err2==0)
+      u_nb = 1;
+      u_err=1;
+    }
+    
+    if (u_err==0) 
+    {
+      if (u_err2==0)
       {
         k=0;
         l=0;
@@ -7558,6 +7662,9 @@ static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,
         if (k>14) k=14;
         if (l<14) l=14;
         if (l>14) l=14;
+        
+        u_char_size_x=k;
+        u_char_size_y=l;
     
         for (m=0;m<k;m++)
         {
@@ -7575,16 +7682,65 @@ static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,
             if (u_ptr==4) i1=u_b5p[u_cptr][m][n];
             if (u_ptr==5) i1=u_b6p[u_cptr][m][n];
         
+            u_char_bmp[m][n]=i1;
+          }
+        }
+    
+      }
+    }
+    
+    return(0);
+}
+
+static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,int st,int vid)
+{
+  int			i,j,m,n;
+  int			x,y;
+  unsigned char		c1,c2,c3;
+  int  			i1;
+  int			len;
+
+  if (deb_str_has_null(str,str_size)!=1) return(0);
+
+  if ((deb_tx_locked!=1)&&(vid!=1)) return(0);
+
+  len=strlen(str);
+  x=xx;
+  y=yy;
+  i=len;
+  j=0;
+
+  while(j<i)
+  {
+    if (strlen(str)>j+0) c1=(unsigned char)str[j+0];
+    else c1=0;
+    
+    if (strlen(str)>j+1) c2=(unsigned char)str[j+1];
+    else c2=0;
+    
+    if (strlen(str)>j+2) c3=(unsigned char)str[j+2];
+    else c3=0;
+    
+    u_get_char_bmp(c1,c2,c3);
+    
+    if ((u_err==0)&&(u_err2==0))
+    {
+        for (m=0;m<u_char_size_x;m++)
+        {
+          for (n=0;n<u_char_size_y;n++)
+          {
+            if ((m<0)||(m>=14)) continue;
+            if ((n<0)||(n>=14)) continue;
+        
+            i1=u_char_bmp[m][n];
+            
             if (st==0)  // normal
             {
                 if (vid)
                 {
                   SDL_SetRenderDrawColor(renderer, i1, i1, i1, i1);
-                  //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
 
-                  fill_rectangle(
-                     x+m, y+n,
-                     1, 1);
+                  fill_rectangle(x+m, y+n, 1, 1);
                 }
                 else
                 {
@@ -7593,45 +7749,24 @@ static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,
             }
             else if (st==1) //black
             {
-              //SDL_SetRenderDrawColor(renderer, 255-i1, 255-i1, 255-i1, 255-i1);
-              //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
-
-              //fill_rectangle(
-              //       x+m, y+n,
-              //       1, 1);
-
               deb_set_dot(x+m,y+n,255-i1,255-i1,255-i1);
             }
             else  // green
             {
-              //SDL_SetRenderDrawColor(renderer, 0, 255-i1, 0, 0);
-              //bgcolor = SDL_MapRGB(screen->format, 0, 255-i2, 0);
-
-              //fill_rectangle(
-              //       x+m, y+n,
-              //       1, 1);
-                     
               deb_set_dot(x+m,y+n,0,255-i1,0);
             }
           }
         }
     
-        x=x+k;
+        x=x+u_char_size_x;
         j=j+u_nb;
         continue;
-      }
-      else
-      {
-        x=x+14;
-        j=j+u_nb;
-        continue;
-      }
     }
     else
     {
-      x=x+7;
-      j=j+1;
-      continue;
+        x=x+u_char_size_x;
+        j=j+u_nb;
+        continue;
     }
   }
         
@@ -7640,11 +7775,9 @@ static int deb_echo_str4screenstring(int xx,int yy,const char *str,int str_size,
 
 static int u_strlen(char *str,int str_size)
 {
-  int			i,j,k,l/*,m,n*/;
-  int			x/*,y*/;
-  int 			err,err2;
-  unsigned char		c1,c2,c3/*,c4*/;
-  //int  			i1;
+  int			i,j;
+  int			x;
+  unsigned char		c1,c2,c3;
   int                   len;
 
   if (deb_str_has_null(str,str_size)!=1) return(0);
@@ -7656,87 +7789,28 @@ static int u_strlen(char *str,int str_size)
 
   while(j<i)
   {
-    err=0;
-    err2=0;
+    if (strlen(str)>j+0) c1=(unsigned char)str[j+0];
+    else c1=0;
     
-    c1=(unsigned char)str[j];
-    u_ptr=0;
-    u_cptr=0;
-    u_nb=1;
+    if (strlen(str)>j+1) c2=(unsigned char)str[j+1];
+    else c2=0;
     
-    if (c1<128)
-    {
-      u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-      if ((u_cptr<0)||(u_cptr>=128)) err=1;
-    }
-    else if ((c1>=194)&&(c1<=223))
-    {
-      c2= (unsigned char)str[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-      if ((u_cptr<0)||(u_cptr>=1920)) err=1;
-    }
-    else if (c1==224)
-    {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-    }
-    else if ((c1>=225)&&(c1<=236))
-    {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=49152)) err=1;
-    }
-    else if (c1==237)
-    {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-    }
-    else if ((c1>=238)&&(c1<=239))
-    {
-      c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=8192)) err=1;
-    }
-    else if ((c1>=240)&&(c1<=244))
-    {
-      u_nb = 4;
-      err2=1;
-    }
-    else err=1;
-
-    if (err==0)
-    {
-      if (err2==0)
-      {
-        k=0;
-        l=0;
-        
-        if (u_ptr==0) { k=u_b1s[u_cptr][0]; l=u_b1s[u_cptr][1]; }
-        if (u_ptr==1) { k=u_b2s[u_cptr][0]; l=u_b2s[u_cptr][1]; }
-        if (u_ptr==2) { k=u_b3s[u_cptr][0]; l=u_b3s[u_cptr][1]; }
-        if (u_ptr==3) { k=u_b4s[u_cptr][0]; l=u_b4s[u_cptr][1]; }
-        if (u_ptr==4) { k=u_b5s[u_cptr][0]; l=u_b5s[u_cptr][1]; }
-        if (u_ptr==5) { k=u_b6s[u_cptr][0]; l=u_b6s[u_cptr][1]; }
-        
-        if (k<7)  k=7;
-        if (k>14) k=14;
-        if (l<14) l=14;
-        if (l>14) l=14;
+    if (strlen(str)>j+2) c3=(unsigned char)str[j+2];
+    else c3=0;
     
+    u_get_char_bmp(c1,c2,c3);
     
-        x=x+k;
+    if ((u_err==0)&&(u_err2==0))
+    {
+        x=x+u_char_size_x;
         j=j+u_nb;
         continue;
-      }
-      else
-      {
-        x=x+14;
-        j=j+u_nb;
-        continue;
-      }
     }
     else
     {
-      x=x+7;
-      j=j+1;
-      continue;
+        x=x+u_char_size_x;
+        j=j+u_nb;
+        continue;
     }
   }
         
@@ -7749,9 +7823,8 @@ int  m81_size[1500];
 
 static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int fldlen,int st)
 {
-  int				i,j,k,l,m,n,o,p,q;
+  int				i,j,m,n,o,p,q;
   int				x;
-  int 				err,err2;
   unsigned char		c1,c2,c3,c4;
   int                   len;
   int                   sptr,mi;
@@ -7766,77 +7839,21 @@ static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int 
 
   while(j<i)
   {
-    err=0;
-    err2=0;
+    if (strlen(instr)>j+0) c1=(unsigned char)instr[j+0];
+    else c1=0;
     
-    c1=(unsigned char)instr[j];
-    u_ptr=0;
-    u_cptr=0;
-    u_nb=1;
+    if (strlen(instr)>j+1) c2=(unsigned char)instr[j+1];
+    else c2=0;
     
-    if (c1<128)
-    {
-      u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-      if ((u_cptr<0)||(u_cptr>=128)) err=1;
-      
-      //printf("%d,",c1);
-    }
-    else if ((c1>=194)&&(c1<=223))
-    {
-      c2= (unsigned char)instr[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-      if ((u_cptr<0)||(u_cptr>=1920)) err=1;
-    }
-    else if (c1==224)
-    {
-      c2=(unsigned char)instr[j+1]; c3=(unsigned char)instr[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-    }
-    else if ((c1>=225)&&(c1<=236))
-    {
-      c2=(unsigned char)instr[j+1]; c3=(unsigned char)instr[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=49152)) err=1;
-    }
-    else if (c1==237)
-    {
-      c2=(unsigned char)instr[j+1]; c3=(unsigned char)instr[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-    }
-    else if ((c1>=238)&&(c1<=239))
-    {
-      c2=(unsigned char)instr[j+1]; c3=(unsigned char)instr[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-      if ((u_cptr<0)||(u_cptr>=8192)) err=1;
-    }
-    else if ((c1>=240)&&(c1<=244))
-    {
-      c2=(unsigned char)instr[j+1];c3=(unsigned char)instr[j+2];c4=(unsigned char)instr[j+3];
-      u_nb = 4;
-      err2=1;
-    }
-    else
-    {
-      u_nb=1;
-      err=1;
-    }
+    if (strlen(instr)>j+2) c3=(unsigned char)instr[j+2];
+    else c3=0;
+    
+    u_get_char_bmp(c1,c2,c3);
 
-    if (err==0)
+    if (u_err==0)
     {
-      if (err2==0)
+      if (u_err2==0)
       {
-        k=0;
-        l=0;
-        
-        if (u_ptr==0) { k=u_b1s[u_cptr][0]; l=u_b1s[u_cptr][1]; }
-        if (u_ptr==1) { k=u_b2s[u_cptr][0]; l=u_b2s[u_cptr][1]; }
-        if (u_ptr==2) { k=u_b3s[u_cptr][0]; l=u_b3s[u_cptr][1]; }
-        if (u_ptr==3) { k=u_b4s[u_cptr][0]; l=u_b4s[u_cptr][1]; }
-        if (u_ptr==4) { k=u_b5s[u_cptr][0]; l=u_b5s[u_cptr][1]; }
-        if (u_ptr==5) { k=u_b6s[u_cptr][0]; l=u_b6s[u_cptr][1]; }
-        
-        if (k<7)  k=7;
-        if (k>14) k=14;
-        if (l<14) l=14;
-        if (l>14) l=14;
-    
         if (u_nb==1)
         {
           m81_str[sptr][0]=c1;
@@ -7849,7 +7866,7 @@ static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int 
           m81_str[sptr][0]=c1;
           m81_str[sptr][1]=c2;
           m81_str[sptr][2]=0;
-          m81_len[sptr]   =k/7;
+          m81_len[sptr]   =u_char_size_x/7;
           m81_size[sptr]  =2;
         }
         else if (u_nb==3)
@@ -7858,12 +7875,12 @@ static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int 
           m81_str[sptr][1]=c2;
           m81_str[sptr][2]=c3;
           m81_str[sptr][3]=0;
-          m81_len[sptr]   =k/7;
+          m81_len[sptr]   =u_char_size_x/7;
           m81_size[sptr]  =3;
         }
     
         sptr++;
-        x=x+k;
+        x=x+u_char_size_x;
         j=j+u_nb;
         continue;
       }
@@ -7892,7 +7909,7 @@ static int u_strcut(char *instr,int instr_size,char *outstr,int outstr_size,int 
 
       sptr++;
       x=x+7;
-      j=j+1;
+      j=j+u_nb;
       continue;
     }
   }
@@ -8232,84 +8249,106 @@ static int deb_get_dir_ini(void)
 
   deb_filenamebuff_n=0;
   deb_filenameplay=0;
-  deb_filenamecnt=0;
+  deb_filenamebuff_ptr=0;
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=2;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"C:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"C:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"D:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"D:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"E:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"E:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"F:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"F:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"G:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"G:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"H:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"H:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"I:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"I:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"J:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"J:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"K:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"K:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
-  strcpy(deb_filenamebuff[deb_filenamecnt],"L:/");
-  deb_filenamebuffptr[deb_filenamecnt]=2;
-  deb_filenamebuff_type[deb_filenamecnt]=0;
-  deb_filenamebuff_icon[deb_filenamecnt]=1;
-  deb_filenamecnt++;
-  if (deb_filenamecnt>=MAX_FILE_NUM) return(0);
+  strcpy(deb_filenamebuff[deb_filenamebuff_ptr],"L:/");
+  //deb_filenamebuffptr[deb_filenamebuff_ptr]=2;
+  deb_filenamebuff_type[deb_filenamebuff_ptr]=0;
+  deb_filenamebuff_icon[deb_filenamebuff_ptr]=1;
+  deb_filenamebuff_len[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_len2[deb_filenamebuff_ptr]=30;
+  deb_filenamebuff_ptr++;
+  if (deb_filenamebuff_ptr>=MAX_FILE_NUM) return(0);
 
   return(0);
 }
@@ -8320,11 +8359,16 @@ static int deb_dir_opened(int ptr )
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
-  if (ptr>=deb_filenamecnt) return(0);
+  if (ptr>=deb_filenamebuff_ptr) return(0);
+
+  while ((deb_filenamebuff_subline[ptr+1]==1)&&(ptr+1<deb_filenamebuff_ptr))
+  {
+    ptr++;
+  }
 
   i=deb_get_space(ptr);
 
-  if (ptr+1>=deb_filenamecnt) return(0);
+  if (ptr+1>=deb_filenamebuff_ptr) return(0);
   else
   {
     j=deb_get_space(ptr+1);
@@ -8337,58 +8381,138 @@ static int deb_get_space(int ptr)
 {
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
-  if (ptr>=deb_filenamecnt) return(0);
+  if (ptr>=deb_filenamebuff_ptr) return(0);
 
   return(deb_filenamebuff_space[ptr]);
 }
 
-static char m101_s1[3000];
-static char m101_s2[100];
+static int deb_get_space2(int ptr)
+{
+  if (ptr<0) return(0);
+  if (ptr>=MAX_FILE_NUM) return(0);
+  if (ptr>=deb_filenamebuff2_ptr) return(0);
+
+  return(deb_filenamebuff2_space[ptr]);
+}
+
+//static char m101_s1[3000];
+//static char m101_s2[100];
 
 static int deb_dir_add_after(int ptr)
 {
-  int i,j,l;
+  int i,k,l,w;
+  int leftspace,dirlen,filelen;
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
-  if (ptr>=deb_filenamecnt) return(0);
+  if (ptr>=deb_filenamebuff_ptr) return(0);
 
-  if (bt_out_ptr>0)
+  ptr++;
+  
+  while ((deb_filenamebuff_subline[ptr]==1)&&(ptr<deb_filenamebuff_ptr))
   {
-    //m101_s1[0]=0;
+    ptr++;
+  }
 
-    j=deb_get_space(ptr);
-    //for (k=0;k<j;k++)
-    //{
-    //  m101_s1[k+0]=' ';
-    //  m101_s1[k+1]=0;
-    //}
+  ptr--;
 
-    //strcpy(m101_s2,"  ");
+
+    w = (g_dirview_posi[0][2]-3-4) /*cur_stream->width*/  /deb_ch_w;
+    leftspace=deb_get_space(ptr);
+    dirlen=deb_m_info_len;
+
+    if (leftspace+dirlen+36<=w-2-2-2)
+    {
+      filelen=dirlen;
+    }
+    else
+    {
+      filelen=w-2-2-2-36-leftspace;
+    }
+
+
+
+    deb_filenamebuff2_ptr=0;
+    
+    for (i=0;i<bt_out_ptr;i++)
+    {
+        if (i<0) continue;
+        if (i>=BTREE1_SIZE) continue;
+
+        if (deb_str_has_null(bt_out_buff[i],FN_SIZE)!=1) continue;
+
+	ar_conv(bt_out_buff[i],FN_SIZE,filelen);
+
+	if (deb_str_has_null(ar_buff4[0],FN_SIZE)!=1) continue;
+
+      	strcpy(deb_filenamebuff2[deb_filenamebuff2_ptr],ar_buff4[0]);
+        
+      	strcpy(deb_filenamebuff2_ext[ deb_filenamebuff2_ptr],bt_out_buff3[i]);
+      	strcpy(deb_filenamebuff2_size[deb_filenamebuff2_ptr],bt_out_buff4[i]);
+      	strcpy(deb_filenamebuff2_date[deb_filenamebuff2_ptr],bt_out_buff5[i]);
+
+	deb_filenamebuff2_len[    deb_filenamebuff2_ptr]=filelen;
+	deb_filenamebuff2_len2[   deb_filenamebuff2_ptr]=deb_m_info_len;
+	deb_filenamebuff2_type[   deb_filenamebuff2_ptr]=bt_out_buff2[i];
+	deb_filenamebuff2_icon[   deb_filenamebuff2_ptr]=bt_out_buff6[i];
+	deb_filenamebuff2_space[  deb_filenamebuff2_ptr]=leftspace+2;
+	deb_filenamebuff2_subline[deb_filenamebuff2_ptr]=0;
+	
+	deb_filenamebuff2_ptr++;
+	if (deb_filenamebuff2_ptr>=MAX_FILE_NUM) deb_filenamebuff2_ptr=MAX_FILE_NUM-1;
+	
+	for (k=1;k<ar_buff4_ptr;k++)
+	{
+	    if (deb_str_has_null(ar_buff4[k],FN_SIZE)!=1) continue;
+	
+      	    strcpy(deb_filenamebuff2[deb_filenamebuff2_ptr],ar_buff4[k]);
+        
+      	    deb_filenamebuff2_ext[ deb_filenamebuff2_ptr][0]=0;
+      	    deb_filenamebuff2_size[deb_filenamebuff2_ptr][0]=0;
+      	    deb_filenamebuff2_date[deb_filenamebuff2_ptr][0]=0;
+
+	    deb_filenamebuff2_len[    deb_filenamebuff2_ptr]=filelen;
+	    deb_filenamebuff2_len2[   deb_filenamebuff2_ptr]=deb_m_info_len;
+	    deb_filenamebuff2_type[   deb_filenamebuff2_ptr]=bt_out_buff2[i];
+	    deb_filenamebuff2_icon[   deb_filenamebuff2_ptr]=0;
+	    deb_filenamebuff2_space[  deb_filenamebuff2_ptr]=leftspace+2;
+	    deb_filenamebuff2_subline[deb_filenamebuff2_ptr]=1;
+	
+	    deb_filenamebuff2_ptr++;
+	    if (deb_filenamebuff2_ptr>=MAX_FILE_NUM) deb_filenamebuff2_ptr=MAX_FILE_NUM-1;
+	}
+    }
+
+
+
+  if (deb_filenamebuff2_ptr>0)
+  {
     l=2;
 
-    for (i=deb_filenamecnt-1;i>ptr;i--)
+    for (i=deb_filenamebuff_ptr-1;i>ptr;i--)
     {
         if (i<0) continue;
         if (i>=MAX_FILE_NUM) continue;
 
-        if (i+bt_out_ptr<0) continue;
-        if (i+bt_out_ptr>=MAX_FILE_NUM) continue;
+        if (i+deb_filenamebuff2_ptr<0) continue;
+        if (i+deb_filenamebuff2_ptr>=MAX_FILE_NUM) continue;
 
         if (deb_str_has_null(deb_filenamebuff[i],FN_SIZE)!=1) continue;
 
         //if (strlen(deb_filenamebuff[i])>=FN_SIZE) continue;
 
-      	strcpy(deb_filenamebuff[i+bt_out_ptr],deb_filenamebuff[i]);
+      	strcpy(deb_filenamebuff[i+deb_filenamebuff2_ptr],deb_filenamebuff[i]);
 
-      	strcpy(deb_filenamebuff_ext[ i+bt_out_ptr],deb_filenamebuff_ext[ i]);
-      	strcpy(deb_filenamebuff_size[i+bt_out_ptr],deb_filenamebuff_size[i]);
-      	strcpy(deb_filenamebuff_date[i+bt_out_ptr],deb_filenamebuff_date[i]);
+      	strcpy(deb_filenamebuff_ext[ i+deb_filenamebuff2_ptr],deb_filenamebuff_ext[ i]);
+      	strcpy(deb_filenamebuff_size[i+deb_filenamebuff2_ptr],deb_filenamebuff_size[i]);
+      	strcpy(deb_filenamebuff_date[i+deb_filenamebuff2_ptr],deb_filenamebuff_date[i]);
 
-	deb_filenamebuff_len[ i+bt_out_ptr]=deb_filenamebuff_len[ i];
-	deb_filenamebuff_type[i+bt_out_ptr]=deb_filenamebuff_type[i];
-	deb_filenamebuff_icon[i+bt_out_ptr]=deb_filenamebuff_icon[i];
-	deb_filenamebuff_space[i+bt_out_ptr]=deb_filenamebuff_space[i];
+	deb_filenamebuff_len[ i+deb_filenamebuff2_ptr]=deb_filenamebuff_len[ i];
+	deb_filenamebuff_len2[i+deb_filenamebuff2_ptr]=deb_filenamebuff_len2[i];
+	deb_filenamebuff_type[i+deb_filenamebuff2_ptr]=deb_filenamebuff_type[i];
+	deb_filenamebuff_icon[i+deb_filenamebuff2_ptr]=deb_filenamebuff_icon[i];
+	deb_filenamebuff_space[i+deb_filenamebuff2_ptr]=deb_filenamebuff_space[i];
+	deb_filenamebuff_subline[i+deb_filenamebuff2_ptr]=deb_filenamebuff_subline[i];
 
       	deb_filenamebuff[i][0]=0;
 
@@ -8397,67 +8521,57 @@ static int deb_dir_add_after(int ptr)
 	deb_filenamebuff_date[i][0]=0;
 
 	deb_filenamebuff_len[i]=0;
+	deb_filenamebuff_len2[i]=0;
 	deb_filenamebuff_type[i]=0;
 	deb_filenamebuff_icon[i]=0;
 	deb_filenamebuff_space[i]=0;
+	deb_filenamebuff_subline[i]=0;
     }
 
-    for (i=0;i<bt_out_ptr;i++)
+    for (i=0;i<deb_filenamebuff2_ptr;i++)
     {
         if (i<0) continue;
-        if (i>=BTREE1_SIZE) continue;
+        if (i>=MAX_FILE_NUM) continue;
 
         if (ptr+1+i<0) continue;
         if (ptr+1+i>=MAX_FILE_NUM) continue;
 
-        if (deb_str_has_null(bt_out_buff[i],FN_SIZE)!=1) continue;
+        if (deb_str_has_null(deb_filenamebuff2[i],FN_SIZE)!=1) continue;
         //if (deb_str_has_null(m101_s1,3000)!=1) continue;
         //if (deb_str_has_null(m101_s2,100)!=1) continue;
 
         //if (strlen(bt_out_buff[i])>=FN_SIZE) continue;
 
-	//printf("out_buff=%s,\n",bt_out_buff[i]);
-
-      	strcpy(deb_filenamebuff[ptr+1+i],bt_out_buff[i]);
+      	strcpy(deb_filenamebuff[ptr+1+i],deb_filenamebuff2[i]);
         
-      	strcpy(deb_filenamebuff_ext[ ptr+1+i],bt_out_buff3[i]);
-      	strcpy(deb_filenamebuff_size[ptr+1+i],bt_out_buff4[i]);
-      	strcpy(deb_filenamebuff_date[ptr+1+i],bt_out_buff5[i]);
+      	strcpy(deb_filenamebuff_ext[ ptr+1+i],deb_filenamebuff2_ext[i]);
+      	strcpy(deb_filenamebuff_size[ptr+1+i],deb_filenamebuff2_size[i]);
+      	strcpy(deb_filenamebuff_date[ptr+1+i],deb_filenamebuff2_date[i]);
 
-	deb_filenamebuff_len[ ptr+1+i]=0;
-	deb_filenamebuff_type[ptr+1+i]=bt_out_buff2[i];
-	deb_filenamebuff_icon[ptr+1+i]=bt_out_buff6[i];
-	deb_filenamebuff_space[ptr+1+i]=j+l;
+	deb_filenamebuff_len[ ptr+1+i]=deb_filenamebuff2_len[i];
+	deb_filenamebuff_len2[ptr+1+i]=deb_filenamebuff2_len2[i];
+	deb_filenamebuff_type[ptr+1+i]=deb_filenamebuff2_type[i];
+	deb_filenamebuff_icon[ptr+1+i]=deb_filenamebuff2_icon[i];
+	deb_filenamebuff_space[ptr+1+i]=deb_filenamebuff2_space[i];
+	deb_filenamebuff_subline[ptr+1+i]=deb_filenamebuff2_subline[i];
     }
     
-    deb_filenamecnt=deb_filenamecnt+bt_out_ptr;
-
-    deb_filenamebuff_len[ ptr]=deb_m_info_len;
-    //deb_filenamebuff_type[ptr]=deb_m_info_type;
+    deb_filenamebuff_ptr=deb_filenamebuff_ptr+deb_filenamebuff2_ptr;
+    if (deb_filenamebuff_ptr>=MAX_FILE_NUM) deb_filenamebuff_ptr=MAX_FILE_NUM-1;
 
     if (ptr>=deb_filenameplay)
     {
     }
     else
     {
-      deb_filenameplay=deb_filenameplay+bt_out_ptr;
+      deb_filenameplay=deb_filenameplay+deb_filenamebuff2_ptr;
     }
   }
   else
   {
-    m101_s1[0]=0;
-
-    j=deb_get_space(ptr);
-    //for (k=0;k<j;k++)
-    //{
-    //  m101_s1[k+0]=' ';
-    //  m101_s1[k+1]=0;
-    //}
-
-    //strcpy(m101_s2,"  ");
     l=2;
 
-    for (i=deb_filenamecnt-1;i>ptr;i--)
+    for (i=deb_filenamebuff_ptr-1;i>ptr;i--)
     {
         if (i<0) continue;
         if (i>=MAX_FILE_NUM) continue;
@@ -8476,9 +8590,11 @@ static int deb_dir_add_after(int ptr)
       	strcpy(deb_filenamebuff_date[i+1],deb_filenamebuff_date[i]);
 
 	deb_filenamebuff_len[ i+1]=deb_filenamebuff_len[ i];
+	deb_filenamebuff_len2[i+1]=deb_filenamebuff_len2[i];
 	deb_filenamebuff_type[i+1]=deb_filenamebuff_type[i];
 	deb_filenamebuff_icon[i+1]=deb_filenamebuff_icon[i];
 	deb_filenamebuff_space[i+1]=deb_filenamebuff_space[i];
+	deb_filenamebuff_subline[i+1]=deb_filenamebuff_subline[i];
 
       	deb_filenamebuff[i][0]=0;
 
@@ -8487,9 +8603,11 @@ static int deb_dir_add_after(int ptr)
 	deb_filenamebuff_date[i][0]=0;
 
 	deb_filenamebuff_len[i]=0;
+	deb_filenamebuff_len2[i]=0;
 	deb_filenamebuff_type[i]=0;
 	deb_filenamebuff_icon[i]=0;
 	deb_filenamebuff_space[i]=0;
+	deb_filenamebuff_subline[i]=0;
     }
 
     strcpy(deb_filenamebuff[ptr+1],"Empty Fold");
@@ -8498,16 +8616,15 @@ static int deb_dir_add_after(int ptr)
     strcpy(deb_filenamebuff_size[ptr+1],"      ");
     strcpy(deb_filenamebuff_date[ptr+1],"                    ");
     
+    deb_filenamebuff_len[ptr+1] =12;
+    deb_filenamebuff_len2[ptr+1] =12;
     deb_filenamebuff_type[ptr+1]=2;
     deb_filenamebuff_icon[ptr+1]=0;
-    deb_filenamebuff_space[ptr+1]=j+l;
+    deb_filenamebuff_space[ptr+1]=leftspace+l;
+    deb_filenamebuff_subline[ptr+1]=0;
 
-    deb_filenamebuff_len[ptr+1] =0;
-
-    deb_filenamecnt=deb_filenamecnt+1;
-
-    deb_filenamebuff_len[ptr] =12;
-    //deb_filenamebuff_type[ptr]=0;
+    deb_filenamebuff_ptr=deb_filenamebuff_ptr+1;
+    if (deb_filenamebuff_ptr>=MAX_FILE_NUM) deb_filenamebuff_ptr=MAX_FILE_NUM-1;
 
     if (ptr>=deb_filenameplay)
     {
@@ -8517,8 +8634,6 @@ static int deb_dir_add_after(int ptr)
       deb_filenameplay=deb_filenameplay+1;
     }
   }
-
-  //printf("add after=%s,\n",deb_filenamebuff[ptr+1]);
 
   return(0);
 }
@@ -8530,13 +8645,22 @@ static int deb_dir_remove_after(int ptr)
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
-  if (ptr>=deb_filenamecnt) return(0);
+  if (ptr>=deb_filenamebuff_ptr) return(0);
+
+  ptr++;
+  
+  while ((deb_filenamebuff_subline[ptr]==1)&&(ptr<deb_filenamebuff_ptr))
+  {
+    ptr++;
+  }
+
+  ptr--;
 
   i=deb_get_space(ptr);
 
   k=0;
 
-  for (j=ptr+1;j<deb_filenamecnt;j++)
+  for (j=ptr+1;j<deb_filenamebuff_ptr;j++)
   {
     if (j<0) continue;
     if (j>=MAX_FILE_NUM) continue;
@@ -8552,7 +8676,7 @@ static int deb_dir_remove_after(int ptr)
 
   if (k==0)
   {
-    for (j=ptr+1;j<deb_filenamecnt;j++)
+    for (j=ptr+1;j<deb_filenamebuff_ptr;j++)
     {
       if (j<0) continue;
       if (j>=MAX_FILE_NUM) continue;
@@ -8564,18 +8688,20 @@ static int deb_dir_remove_after(int ptr)
       deb_filenamebuff_date[j][0]=0;
 
       deb_filenamebuff_len[j]=0;
+      deb_filenamebuff_len2[j]=0;
       deb_filenamebuff_type[j]=0;
       deb_filenamebuff_icon[j]=0;
       deb_filenamebuff_space[j]=0;
+      deb_filenamebuff_subline[j]=0;
     }
 
-    deb_filenamecnt=ptr+1;
+    deb_filenamebuff_ptr=ptr+1;
 
     deb_filenameplay=ptr;
   }
   else
   {
-    for (j=p1;j<deb_filenamecnt;j++)
+    for (j=p1;j<deb_filenamebuff_ptr;j++)
     {
       if (j<0) continue;
       if (j>=MAX_FILE_NUM) continue;
@@ -8594,9 +8720,11 @@ static int deb_dir_remove_after(int ptr)
       strcpy(deb_filenamebuff_date[ptr+1+j-p1],deb_filenamebuff_date[j]);
 
       deb_filenamebuff_len[ptr+1+j-p1] =deb_filenamebuff_len[j];
+      deb_filenamebuff_len2[ptr+1+j-p1] =deb_filenamebuff_len2[j];
       deb_filenamebuff_type[ptr+1+j-p1]=deb_filenamebuff_type[j];
       deb_filenamebuff_icon[ptr+1+j-p1]=deb_filenamebuff_icon[j];
       deb_filenamebuff_space[ptr+1+j-p1]=deb_filenamebuff_space[j];
+      deb_filenamebuff_subline[ptr+1+j-p1]=deb_filenamebuff_subline[j];
 
       deb_filenamebuff[j][0]=0;
 
@@ -8605,12 +8733,14 @@ static int deb_dir_remove_after(int ptr)
       deb_filenamebuff_date[j][0]=0;
 
       deb_filenamebuff_len[j]=0;
+      deb_filenamebuff_len2[j]=0;
       deb_filenamebuff_type[j]=0;
       deb_filenamebuff_icon[j]=0;
       deb_filenamebuff_space[j]=0;
+      deb_filenamebuff_subline[j]=0;
     }
 
-    for (j=ptr+deb_filenamecnt-p1+1;j<p1;j++)
+    for (j=ptr+deb_filenamebuff_ptr-p1+1;j<p1;j++)
     {
       if (j<0) continue;
       if (j>=MAX_FILE_NUM) continue;
@@ -8622,12 +8752,14 @@ static int deb_dir_remove_after(int ptr)
       deb_filenamebuff_date[j][0]=0;
 
       deb_filenamebuff_len[j]=0;
+      deb_filenamebuff_len2[j]=0;
       deb_filenamebuff_type[j]=0;
       deb_filenamebuff_icon[j]=0;
       deb_filenamebuff_space[j]=0;
+      deb_filenamebuff_subline[j]=0;
     }
 
-    deb_filenamecnt=deb_filenamecnt-(p1-ptr-1);
+    deb_filenamebuff_ptr=deb_filenamebuff_ptr-(p1-ptr-1);
 
     if ((ptr>=deb_filenameplay)&&(p1>=deb_filenameplay))
     {
@@ -8657,10 +8789,11 @@ static int deb_get_path(int ptr)
 {
   int  ns1,ns2;
   int  p1;
+  int  i;
 
   if (ptr<0) return(0);
   if (ptr>=MAX_FILE_NUM) return(0);
-  if (ptr>=deb_filenamecnt) return(0);
+  if (ptr>=deb_filenamebuff_ptr) return(0);
 
   p1=ptr;
 
@@ -8675,10 +8808,17 @@ static int deb_get_path(int ptr)
     if (ns1<2)
     {
       strcpy(m5_buffer1,deb_filenamebuff[p1]);
-
+        
+      i=p1+1;
+      while ((deb_filenamebuff_subline[i]==1)&&(i<deb_filenamebuff_ptr))
+      {
+	if (strlen(m5_buffer1)+strlen(deb_filenamebuff[i])>=FN_SIZE) break;
+		    
+        strcat(m5_buffer1,deb_filenamebuff[i]);
+        i++;
+      }
+        
       deb_get_path2(m5_buffer1,m5_buffer2);
-      //strcpy(deb_dir_buffer,"/");
-      //return(0);
       strcpy(m5_buffer3,m5_buffer2);
     }
     else
@@ -8686,12 +8826,32 @@ static int deb_get_path(int ptr)
       if (ns1<4)
       {
         strcpy(m5_buffer1,deb_filenamebuff[p1]);
+        
+        i=p1+1;
+        while ((deb_filenamebuff_subline[i]==1)&&(i<deb_filenamebuff_ptr))
+        {
+	  if (strlen(m5_buffer1)+strlen(deb_filenamebuff[i])>=FN_SIZE) break;
+		    
+          strcat(m5_buffer1,deb_filenamebuff[i]);
+          i++;
+        }
+        
         deb_get_path2(m5_buffer1,m5_buffer2);
         strcpy(m5_buffer3,m5_buffer2);
       }
       else
       {
         strcpy(m5_buffer1,deb_filenamebuff[p1]);
+        
+        i=p1+1;
+        while ((deb_filenamebuff_subline[i]==1)&&(i<deb_filenamebuff_ptr))
+        {
+	  if (strlen(m5_buffer1)+strlen(deb_filenamebuff[i])>=FN_SIZE) break;
+		    
+          strcat(m5_buffer1,deb_filenamebuff[i]);
+          i++;
+        }
+        
         deb_get_path1(m5_buffer1,m5_buffer2);
         strcpy(m5_buffer3,m5_buffer2);
       }
@@ -8710,6 +8870,12 @@ static int deb_get_path(int ptr)
       else
       {
         ns1=ns2;
+        
+        while ((deb_filenamebuff_subline[p1]==1)&&(p1>0))
+        {
+          p1--;
+        }
+        
         break;
       }
     }
@@ -8725,11 +8891,11 @@ static char m102_buffer4[3000];
 
 static int deb_get_path1(char *buffer1,char *buffer2)
 {
-  int  i,j,k;
+  //int  i,j,k;
 
   strcpy(m102_buffer3,buffer1);
-  strcpy(m102_buffer4,"");
-
+  strcpy(m102_buffer4,m102_buffer3);
+/*
   j=0;
   k=0;
 
@@ -8759,7 +8925,7 @@ static int deb_get_path1(char *buffer1,char *buffer2)
       j++;
     }
   }
-
+*/
   strcpy(buffer2,"/");
   strcat(buffer2,m102_buffer4);
 
@@ -8771,11 +8937,11 @@ static char m103_buffer4[3000];
 
 static int deb_get_path2(char *buffer1,char *buffer2)
 {
-  int  i,j,k;
+  //int  i,j,k;
 
   strcpy(m103_buffer3,buffer1);
-  strcpy(m102_buffer4,"");
-
+  strcpy(m103_buffer4,m103_buffer3);
+/*
   j=0;
   k=0;
 
@@ -8805,12 +8971,11 @@ static int deb_get_path2(char *buffer1,char *buffer2)
       j++;
     }
   }
-
+*/
   strcpy(buffer2,m103_buffer4);
 
   return(0);
 }
-
 
 static int deb_filename_ext(char *name,int name_size,char *fext,int fext_size)
 {
@@ -8819,14 +8984,14 @@ static int deb_filename_ext(char *name,int name_size,char *fext,int fext_size)
   if (deb_str_has_null(name,name_size)!=1)
   {
     fext[0]=0;
-    return(0);
+    return(1);
   }
   
   i=(int)strlen(name);
   if (i<=0)
   {
     fext[0]=0;
-    return(0);
+    return(1);
   }
   //if (i>name_size) i=name_size;
   
@@ -8844,6 +9009,7 @@ static int deb_filename_ext(char *name,int name_size,char *fext,int fext_size)
   if (k<0)
   {
     fext[0]=0;
+    return(1);
   }
   else
   {
@@ -9136,14 +9302,14 @@ static int  disp_leftspace[350];
 static int  disp_icon[350];
 static char m11_str1[6000];
 //static char m11_str2[6000];
-static char m11_str3[6000];
-static char m11_str4[6000];
+//static char m11_str3[6000];
+//static char m11_str4[6000];
 
 static int deb_disp_dir(VideoState *cur_stream)
 {
-  int  i;
+  int  i,j,k,l;
   int  h,w;
-  int  leftspace,dirlen,filelen,start;
+  int  leftspace,dirlen,filelen;
   int  n1,n4,n5,n6;
   char *strptr;
   int  icon;
@@ -9152,7 +9318,7 @@ static int deb_disp_dir(VideoState *cur_stream)
   if ((screen_w<640)||(screen_w>7680)) return(1);
   if ((screen_h<480)||(screen_h>4320)) return(1);
   
-  start=(-1);
+  //start=(-1);
 
   for (n1=0;n1<350;n1++)
   {
@@ -9201,108 +9367,46 @@ static int deb_disp_dir(VideoState *cur_stream)
   {
     if (deb_filenamebuff_n+n4<0) continue;
     if (deb_filenamebuff_n+n4>=MAX_FILE_NUM) continue;
-    if (deb_filenamebuff_n+n4>=deb_filenamecnt) continue;
+    if (deb_filenamebuff_n+n4>=deb_filenamebuff_ptr) continue;
 
     if (deb_str_has_null(deb_filenamebuff[deb_filenamebuff_n+n4],FN_SIZE)!=1) continue;
-
-    //if (strlen(deb_filenamebuff[deb_filenamebuff_n+n4])>=FN_SIZE) continue;
 
     strcpy(m11_str1,deb_filenamebuff[deb_filenamebuff_n+n4]);
 
     if (deb_str_has_null(m11_str1,6000)!=1) continue;
 
-    m11_str4[0]=0;
-
-#if defined(_WIN32) && GB18030
-    deb_gb18030_to_utf8(m11_str1,m11_str4,6000);
-#else
-    strcpy(m11_str4,m11_str1);
-#endif
-
-    if (deb_str_has_null(m11_str4,6000)!=1) return(0);
-
-    //printf("str4=%s,\n",m11_str4);
-
     icon=deb_filenamebuff_icon[deb_filenamebuff_n+n4];
 
-    if (start<0)
+    leftspace=deb_get_space(deb_filenamebuff_n+n4);
+    dirlen =deb_filenamebuff_len[deb_filenamebuff_n+n4];
+    
+    if (leftspace+dirlen+36<=w-2-2)
     {
-      leftspace=deb_get_space(deb_filenamebuff_n+n4);
-      if (leftspace>0)
-      {
-        i      =deb_get_dir_len(deb_filenamebuff_n+n4);
-	dirlen =deb_filenamebuff_len[i];
-	//dirtype=deb_filenamebuff_type[i]; //keep
-	start  =leftspace;
-
-	//printf("cur=%s,leftspace=%d,dirlen=%d,up=%s,\n",deb_filenamebuff[deb_filenamebuff_n+n4],leftspace,dirlen,
-	//				                  deb_filenamebuff[i]);
-      }
-      else
-      {
-        dirlen =10;
-	//dirtype=0; //keep
-	start  =0;
-      }
+      filelen=dirlen;
     }
     else
     {
-      leftspace=deb_get_space(deb_filenamebuff_n+n4);
-      if (start!=leftspace)
-      {
-	if (leftspace>0)
-	{
-	  i      =deb_get_dir_len(deb_filenamebuff_n+n4);
-	  dirlen =deb_filenamebuff_len[i];
-	  //dirtype=deb_filenamebuff_type[i]; //keep
-	  start  =leftspace;
-
-	  //printf("cur=%s,leftspace=%d,dirlen=%d,up=%s,\n",deb_filenamebuff[deb_filenamebuff_n+n4],leftspace,dirlen,
-	  //						  deb_filenamebuff[i]);
-	}
-	else
-	{
-	  dirlen =10;
-	  //dirtype=0; //keep
-	  start  =0;
-	}
-      }
+      filelen=w-2-2-36-leftspace;
     }
-
-    //c3=deb_getfirstchar(deb_filenamebuff[deb_filenamebuff_n+n4],FN_SIZE);
+    
+    if (filelen<2) continue;
     
     disp_leftspace[n4]=leftspace;
     disp_icon[n4]=icon;
+    
+    strcpy(disp_buff[n4],m11_str1);
+    
+    for (l=u_strlen(m11_str1,6000);l<filelen;l++) strcat(disp_buff[n4]," ");
 
-    if (leftspace+dirlen+36<=w-2-2)
+    if (deb_filenamebuff_subline[deb_filenamebuff_n+n4]==0)
     {
-      filelen=/*leftspace+*/dirlen;
-      //mi=0; //keep
+      strcat(disp_buff[n4],"  ");
+      strcat(disp_buff[n4],deb_filenamebuff_ext[ deb_filenamebuff_n+n4]);
+      strcat(disp_buff[n4],"  ");
+      strcat(disp_buff[n4],deb_filenamebuff_size[deb_filenamebuff_n+n4]);
+      strcat(disp_buff[n4],"  ");
+      strcat(disp_buff[n4],deb_filenamebuff_date[deb_filenamebuff_n+n4]);
     }
-    else
-    {
-	filelen=w-2-2-36-leftspace;
-	//if (filelen>=(int)u_strlen(m11_str4,6000)) mi=0;
-	//else mi=1;         //keep
-    }
-
-    //printf("w=%d,leftspace=%d,dirlen=%d,filelen=%d,\n",w,leftspace,dirlen,filelen);
-
-    if (filelen</*leftspace+*/3) continue;
-
-    u_strcut(m11_str4,6000,m11_str3,6000,filelen,0);
-
-    if (deb_str_has_null(m11_str3,6000)!=1) continue;
-
-    strcpy(disp_buff[n4],m11_str3);
-
-    strcat(disp_buff[n4],"  ");
-    strcat(disp_buff[n4],deb_filenamebuff_ext[ deb_filenamebuff_n+n4]);
-    strcat(disp_buff[n4],"  ");
-    strcat(disp_buff[n4],deb_filenamebuff_size[deb_filenamebuff_n+n4]);
-    strcat(disp_buff[n4],"  ");
-    strcat(disp_buff[n4],deb_filenamebuff_date[deb_filenamebuff_n+n4]);
-
   }
 
   //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -9318,39 +9422,252 @@ static int deb_disp_dir(VideoState *cur_stream)
     n5=disp_leftspace[n4];
     n6=disp_icon[n4];
     
-    g_paint_icon(x+3+n5*7,y+n4*deb_ch_h ,n6);
+    if (deb_filenamebuff_subline[deb_filenamebuff_n+n4]==0)
+    {
+      g_paint_icon(x+3+n5*7,y+n4*deb_ch_h ,n6);
+    }
     
     deb_echo_str4screenstring(x+3+n5*7+2*deb_ch_w+4 ,y+n4*deb_ch_h ,strptr ,6000,0,0);
   }
 
-  n4=deb_filenameplay-deb_filenamebuff_n;
-  if ((n4>=0)&&(n4<h)) 
+  i=deb_filenameplay+1;
+  j=0;
+  
+  while ((deb_filenamebuff_subline[i]==1)&&(i<deb_filenamebuff_ptr))
   {
-    if (n4<350)
+    j++;
+    i++;
+  }
+  
+  for (k=deb_filenameplay;k<=deb_filenameplay+j;k++)
+  {
+    n4=k-deb_filenamebuff_n;
+    if ((n4>=0)&&(n4<h)&&(n4<350)) 
     {
-      strptr=disp_buff[n4];
-      n5=disp_leftspace[n4];
-      n6=disp_icon[n4];
+        strptr=disp_buff[n4];
+        n5=disp_leftspace[n4];
+        n6=disp_icon[n4];
     
-      g_paint_icon(x+3+n5*7,y+n4*deb_ch_h ,n6);
+        //g_paint_icon(x+3+n5*7,y+n4*deb_ch_h ,n6);
     
-      deb_echo_str4screenstring(x+3+n5*7+2*deb_ch_w+4 ,y+n4*deb_ch_h ,strptr ,6000,1,0);
+        deb_echo_str4screenstring(x+3+n5*7+2*deb_ch_w+4 ,y+n4*deb_ch_h ,strptr ,6000,1,0);
     }
   }
-
+  
   deb_m_ref=1;
 
   return(0);
 }
 
+// dir_view resize
+static int deb_conv_dir(void)
+{
+    int  i,j,k,l,m,n,o,p,w;
+    char str1[FN_SIZE];
+    int  dirlen,filelen,leftspace;
+    
+    if ((screen_w<640)||(screen_w>7680)) return(1);
+    if ((screen_h<480)||(screen_h>4320)) return(1);
+      
+    deb_filenamebuff2_ptr=0;
+    w = (g_dirview_posi[0][2]-3-4) /*cur_stream->width*/  /deb_ch_w;
+    i=0;
+    
+    while (i<deb_filenamebuff_ptr)
+    {
+        k=i;
+        strcpy(str1,deb_filenamebuff[i]);
 
+        leftspace=deb_get_space(i);
+	dirlen =deb_filenamebuff_len2[i];
+        
+        if (leftspace+dirlen+36<=w-2-2)
+        {
+            filelen=dirlen;
+        }
+        else
+        {
+            filelen=w-2-2-36-leftspace;
+        }
+
+        i++;
+        
+        while ((deb_filenamebuff_subline[i]==1)&&(i<deb_filenamebuff_ptr))
+        {
+            if (strlen(str1)+strlen(deb_filenamebuff[i])>=FN_SIZE) break;
+            
+            strcat(str1,deb_filenamebuff[i]);
+            i++;
+        }
+
+        if (filelen<2) continue;
+
+	ar_conv(str1,FN_SIZE,filelen);
+	
+	if (deb_str_has_null(ar_buff4[0],FN_SIZE)!=1) continue;
+
+      	strcpy(deb_filenamebuff2[deb_filenamebuff2_ptr],ar_buff4[0]);
+
+      	strcpy(deb_filenamebuff2_ext[ deb_filenamebuff2_ptr],deb_filenamebuff_ext[k]);
+      	strcpy(deb_filenamebuff2_size[deb_filenamebuff2_ptr],deb_filenamebuff_size[k]);
+      	strcpy(deb_filenamebuff2_date[deb_filenamebuff2_ptr],deb_filenamebuff_date[k]);
+
+	deb_filenamebuff2_len[    deb_filenamebuff2_ptr]=filelen;
+	deb_filenamebuff2_len2[   deb_filenamebuff2_ptr]=deb_filenamebuff_len2[k];
+	deb_filenamebuff2_type[   deb_filenamebuff2_ptr]=deb_filenamebuff_type[k];
+	deb_filenamebuff2_icon[   deb_filenamebuff2_ptr]=deb_filenamebuff_icon[k];
+	deb_filenamebuff2_space[  deb_filenamebuff2_ptr]=deb_filenamebuff_space[k];
+	deb_filenamebuff2_subline[deb_filenamebuff2_ptr]=0;
+
+	deb_filenamebuff2_ptr++;
+	if (deb_filenamebuff2_ptr>=MAX_FILE_NUM) deb_filenamebuff2_ptr=MAX_FILE_NUM-1;
+	
+	for (l=1;l<ar_buff4_ptr;l++)
+	{
+	    if (deb_str_has_null(ar_buff4[l],FN_SIZE)!=1) continue;
+	    
+      	    strcpy(deb_filenamebuff2[deb_filenamebuff2_ptr],ar_buff4[l]);
+
+      	    deb_filenamebuff2_ext[ deb_filenamebuff2_ptr][0]=0;
+      	    deb_filenamebuff2_size[deb_filenamebuff2_ptr][0]=0;
+      	    deb_filenamebuff2_date[deb_filenamebuff2_ptr][0]=0;
+
+	    deb_filenamebuff2_len[    deb_filenamebuff2_ptr]=filelen;
+	    deb_filenamebuff2_len2[   deb_filenamebuff2_ptr]=deb_filenamebuff_len2[k];
+	    deb_filenamebuff2_type[   deb_filenamebuff2_ptr]=deb_filenamebuff_type[k];
+	    deb_filenamebuff2_icon[   deb_filenamebuff2_ptr]=0;
+	    deb_filenamebuff2_space[  deb_filenamebuff2_ptr]=deb_filenamebuff_space[k];
+	    deb_filenamebuff2_subline[deb_filenamebuff2_ptr]=1;
+	
+	    deb_filenamebuff2_ptr++;
+	    if (deb_filenamebuff2_ptr>=MAX_FILE_NUM) deb_filenamebuff2_ptr=MAX_FILE_NUM-1;
+	}
+    }
+    
+    
+    // find new window top
+    i=deb_filenamebuff_n;
+    
+    while ((deb_filenamebuff_subline[i]==1)&&(i>0))
+    {
+      i--;
+    }
+    
+    deb_filenamebuff_n2=deb_filenamebuff_n-i;
+    
+    j=0;
+    
+    for (i=0;i<=deb_filenamebuff_n;i++)
+    {
+        if (deb_filenamebuff_subline[i]==0) j++;
+    }
+    
+    k=0;
+    
+    for (i=0;i<deb_filenamebuff2_ptr;i++)
+    {
+        if (deb_filenamebuff2_subline[i]==0) k++;
+        if (k>=j) break;
+    }
+        
+    l=i;
+    m=l+1;
+    n=0;
+    
+    while ((deb_filenamebuff2_subline[m]==1)&&(m<deb_filenamebuff2_ptr))
+    {
+        n++;
+        m++;
+    }
+    
+    if (n>deb_filenamebuff_n2) o=deb_filenamebuff_n2;
+    else o=n;
+    
+    deb_filenamebuff_n =l+o;
+    deb_filenamebuff_n2=o;
+
+    // find new play id
+    i=deb_filenameplay;
+    
+    while ((deb_filenamebuff_subline[i]==1)&&(i>0))
+    {
+      i--;
+    }
+    
+    j=0;
+    
+    for (i=0;i<=deb_filenameplay;i++)
+    {
+        if (deb_filenamebuff_subline[i]==0) j++;
+    }
+    
+    k=0;
+    
+    for (i=0;i<deb_filenamebuff2_ptr;i++)
+    {
+        if (deb_filenamebuff2_subline[i]==0) k++;
+        if (k>=j) break;
+    }
+        
+    deb_filenameplay=i;
+    
+    //copy to main buff
+    for (i=0;i<deb_filenamebuff2_ptr;i++)
+    {
+        if (deb_str_has_null(deb_filenamebuff2[i],FN_SIZE)!=1) continue;
+        
+      	strcpy(deb_filenamebuff[i],deb_filenamebuff2[i]);
+
+      	strcpy(deb_filenamebuff_ext[ i],deb_filenamebuff2_ext[ i]);
+      	strcpy(deb_filenamebuff_size[i],deb_filenamebuff2_size[i]);
+      	strcpy(deb_filenamebuff_date[i],deb_filenamebuff2_date[i]);
+
+	deb_filenamebuff_len[    i]=deb_filenamebuff2_len[    i];
+	deb_filenamebuff_len2[   i]=deb_filenamebuff2_len2[   i];
+	deb_filenamebuff_type[   i]=deb_filenamebuff2_type[   i];
+	deb_filenamebuff_icon[   i]=deb_filenamebuff2_icon[   i];
+	deb_filenamebuff_space[  i]=deb_filenamebuff2_space[  i];
+	deb_filenamebuff_subline[i]=deb_filenamebuff2_subline[i];
+    }
+
+    p=deb_filenamebuff_ptr;
+    deb_filenamebuff_ptr=deb_filenamebuff2_ptr;
+    
+    //clear memory
+    for (j=deb_filenamebuff_ptr;j<p;j++)
+    {
+      if (j<0) continue;
+      if (j>=MAX_FILE_NUM) continue;
+
+      deb_filenamebuff[j][0]=0;
+
+      deb_filenamebuff_ext[j][0]=0;
+      deb_filenamebuff_size[j][0]=0;
+      deb_filenamebuff_date[j][0]=0;
+
+      deb_filenamebuff_len[j]=0;
+      deb_filenamebuff_len2[j]=0;
+      deb_filenamebuff_type[j]=0;
+      deb_filenamebuff_icon[j]=0;
+      deb_filenamebuff_space[j]=0;
+      deb_filenamebuff_subline[j]=0;
+    }
+    
+    return(0);
+}
+/*
 static int deb_get_dir_len(int ptr)
 {
     int i,j,k;
 
     if (ptr<0) return(0);
     if (ptr>=MAX_FILE_NUM) return(0);
-    if (ptr>=deb_filenamecnt) return(0);
+    if (ptr>=deb_filenamebuff_ptr) return(0);
+
+    while ((deb_filenamebuff_subline[ptr]==1)&&(ptr>0))
+    {
+      ptr--;
+    }
 
     i=deb_get_space(ptr);
 
@@ -9358,14 +9675,58 @@ static int deb_get_dir_len(int ptr)
     {
 	ptr--;
 	j=deb_get_space(ptr);
-	if (j<i) break;
+	if (j<i)
+	{
+	  while ((deb_filenamebuff_subline[ptr]==1)&&(ptr>0))
+	  {
+	    ptr--;
+	  }
+	  
+	  break;
+	}
     }
 
     k=ptr;
 
     return(k);
 }
+*/
+/*
+static int deb_get_dir_len2(int ptr)
+{
+    int i,j,k;
 
+    if (ptr<0) return(0);
+    if (ptr>=MAX_FILE_NUM) return(0);
+    if (ptr>=deb_filenamebuff2_ptr) return(0);
+
+    while ((deb_filenamebuff2_subline[ptr]==1)&&(ptr>0))
+    {
+      ptr--;
+    }
+
+    i=deb_get_space2(ptr);
+
+    while(ptr>0)
+    {
+	ptr--;
+	j=deb_get_space2(ptr);
+	if (j<i)
+	{
+	  while ((deb_filenamebuff2_subline[ptr]==1)&&(ptr>0))
+	  {
+	    ptr--;
+	  }
+	  
+	  break;
+	}
+    }
+
+    k=ptr;
+
+    return(k);
+}
+*/
 static int deb_disp_bar(VideoState *cur_stream2)
 {
   int   uns, uhh, umm, uss;
@@ -13773,7 +14134,11 @@ char m302_str1[300];
 
 static int deb_no_support(char *p_str,int p_str_size)
 {
-  deb_filename_ext(p_str,p_str_size,m302_str1,300);
+  int i;
+  
+  i=deb_filename_ext(p_str,p_str_size,m302_str1,300);
+  if (i!=0) return(1);
+  if (strlen(m302_str1)>5) return(1);
 
   if (strcmp(m302_str1,"txt")==0 ) return(1);
   if (strcmp(m302_str1,"doc")==0 ) return(1);
@@ -13950,7 +14315,6 @@ int g_paint_button(int vid)
 {
   int			i,j,k,l,m,n,o,p,q,r;
   int			x,y;
-  int 			err,err2;
   unsigned char		c1,c2,c3;
   int  			i0,i1,i2,i3,i4;
   int                      j1,j2,j3,j4;
@@ -14064,85 +14428,27 @@ int g_paint_button(int vid)
 
     while(j<len)
     {
-      err=0;
-      err2=0;
+      if (strlen(str)>j+0) c1=(unsigned char)str[j+0];
+      else c1=0;
     
-      c1=(unsigned char)str[j];
-      u_ptr=0;
-      u_cptr=0;
-      u_nb=1;
+      if (strlen(str)>j+1) c2=(unsigned char)str[j+1];
+      else c2=0;
     
-      if (c1<128)
-      {
-        u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-        if ((u_cptr<0)||(u_cptr>=128)) err=1;
-      }
-      else if ((c1>=194)&&(c1<=223))
-      {
-        c2= (unsigned char)str[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-        if ((u_cptr<0)||(u_cptr>=1920)) err=1;
-      }
-      else if (c1==224)
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=225)&&(c1<=236))
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=49152)) err=1;
-      }
-      else if (c1==237)
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=238)&&(c1<=239))
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=8192)) err=1;
-      }
-      else if ((c1>=240)&&(c1<=244))
-      {
-        u_nb = 4;
-        err2=1;
-      }
-      else err=1;
+      if (strlen(str)>j+2) c3=(unsigned char)str[j+2];
+      else c3=0;
+    
+      u_get_char_bmp(c1,c2,c3);
 
-      if (err==0)
+      if ((u_err==0)&&(u_err2==0))
       {
-        if (err2==0)
-        {
-          k=0;
-          l=0;
-        
-          if (u_ptr==0) { k=u_b1s[u_cptr][0]; l=u_b1s[u_cptr][1]; }
-          if (u_ptr==1) { k=u_b2s[u_cptr][0]; l=u_b2s[u_cptr][1]; }
-          if (u_ptr==2) { k=u_b3s[u_cptr][0]; l=u_b3s[u_cptr][1]; }
-          if (u_ptr==3) { k=u_b4s[u_cptr][0]; l=u_b4s[u_cptr][1]; }
-          if (u_ptr==4) { k=u_b5s[u_cptr][0]; l=u_b5s[u_cptr][1]; }
-          if (u_ptr==5) { k=u_b6s[u_cptr][0]; l=u_b6s[u_cptr][1]; }
-        
-          if (k<7)  k=7;
-          if (k>14) k=14;
-          if (l<14) l=14;
-          if (l>14) l=14;
-    
-          for (m=0;m<k;m++)
+          for (m=0;m<u_char_size_x;m++)
           {
-            for (n=0;n<l;n++)
+            for (n=0;n<u_char_size_y;n++)
             {
               if ((m<0)||(m>=14)) continue;
               if ((n<0)||(n>=14)) continue;
         
-              i0=255;
-            
-              if (u_ptr==0) i0=u_b1p[u_cptr][m][n];
-              if (u_ptr==1) i0=u_b2p[u_cptr][m][n];
-              if (u_ptr==2) i0=u_b3p[u_cptr][m][n];
-              if (u_ptr==3) i0=u_b4p[u_cptr][m][n];
-              if (u_ptr==4) i0=u_b5p[u_cptr][m][n];
-              if (u_ptr==5) i0=u_b6p[u_cptr][m][n];
+              i0=u_char_bmp[m][n];
         
               if (g_button_enable[i]==1)
               {
@@ -14255,22 +14561,15 @@ int g_paint_button(int vid)
             }
           }
     
-          x=x+k;
+          x=x+u_char_size_x;
           j=j+u_nb;
           continue;
-        }
-        else
-        {
-          x=x+14;
-          j=j+u_nb;
-          continue;
-        }
       }
       else
       {
-        x=x+7;
-        j=j+1;
-        continue;
+          x=x+u_char_size_x;
+          j=j+u_nb;
+          continue;
       }
     }
     
@@ -14638,18 +14937,18 @@ int g_paint_dirview(void)
       }
     }
       
-    //deb_filenamecnt
+    //deb_filenamebuff_ptr
     //deb_filenamebuff_n+1
     //deb_filenamebuff_n+m/14
       
-    if (deb_filenamecnt<=m/14)
+    if (deb_filenamebuff_ptr<=m/14)
     {
       g_dirview_top=0;
       continue;
     }
       
-    r=(m-2)*(deb_filenamebuff_n+1   )/deb_filenamecnt;
-    s=(m-2)*(deb_filenamebuff_n+m/14)/deb_filenamecnt;
+    r=(m-2)*(deb_filenamebuff_n+1   )/deb_filenamebuff_ptr;
+    s=(m-2)*(deb_filenamebuff_n+m/14)/deb_filenamebuff_ptr;
       
     if ((r<0)||(s<0)) continue;
       
@@ -15090,7 +15389,6 @@ int g_paint_label(int vid)
 {
   int			i,j,k,l,m,n,o,p,q,r;
   int			x,y;
-  int 			err,err2;
   unsigned char		c1,c2,c3;
   int  			i0,i1,i2,i3,i4;
   int                      j1,j2,j3,j4;
@@ -15177,85 +15475,27 @@ int g_paint_label(int vid)
 
     while(j<len)
     {
-      err=0;
-      err2=0;
+      if (strlen(str)>j+0) c1=(unsigned char)str[j+0];
+      else c1=0;
     
-      c1=(unsigned char)str[j];
-      u_ptr=0;
-      u_cptr=0;
-      u_nb=1;
+      if (strlen(str)>j+1) c2=(unsigned char)str[j+1];
+      else c2=0;
     
-      if (c1<128)
-      {
-        u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-        if ((u_cptr<0)||(u_cptr>=128)) err=1;
-      }
-      else if ((c1>=194)&&(c1<=223))
-      {
-        c2= (unsigned char)str[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-        if ((u_cptr<0)||(u_cptr>=1920)) err=1;
-      }
-      else if (c1==224)
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=225)&&(c1<=236))
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=49152)) err=1;
-      }
-      else if (c1==237)
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=238)&&(c1<=239))
-      {
-        c2=(unsigned char)str[j+1]; c3=(unsigned char)str[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=8192)) err=1;
-      }
-      else if ((c1>=240)&&(c1<=244))
-      {
-        u_nb = 4;
-        err2=1;
-      }
-      else err=1;
+      if (strlen(str)>j+2) c3=(unsigned char)str[j+2];
+      else c3=0;
+    
+      u_get_char_bmp(c1,c2,c3);
 
-      if (err==0)
+      if ((u_err==0)&&(u_err2==0))
       {
-        if (err2==0)
-        {
-          k=0;
-          l=0;
-        
-          if (u_ptr==0) { k=u_b1s[u_cptr][0]; l=u_b1s[u_cptr][1]; }
-          if (u_ptr==1) { k=u_b2s[u_cptr][0]; l=u_b2s[u_cptr][1]; }
-          if (u_ptr==2) { k=u_b3s[u_cptr][0]; l=u_b3s[u_cptr][1]; }
-          if (u_ptr==3) { k=u_b4s[u_cptr][0]; l=u_b4s[u_cptr][1]; }
-          if (u_ptr==4) { k=u_b5s[u_cptr][0]; l=u_b5s[u_cptr][1]; }
-          if (u_ptr==5) { k=u_b6s[u_cptr][0]; l=u_b6s[u_cptr][1]; }
-        
-          if (k<7)  k=7;
-          if (k>14) k=14;
-          if (l<14) l=14;
-          if (l>14) l=14;
-    
-          for (m=0;m<k;m++)
+          for (m=0;m<u_char_size_x;m++)
           {
-            for (n=0;n<l;n++)
+            for (n=0;n<u_char_size_y;n++)
             {
               if ((m<0)||(m>=14)) continue;
               if ((n<0)||(n>=14)) continue;
         
-              i0=255;
-            
-              if (u_ptr==0) i0=u_b1p[u_cptr][m][n];
-              if (u_ptr==1) i0=u_b2p[u_cptr][m][n];
-              if (u_ptr==2) i0=u_b3p[u_cptr][m][n];
-              if (u_ptr==3) i0=u_b4p[u_cptr][m][n];
-              if (u_ptr==4) i0=u_b5p[u_cptr][m][n];
-              if (u_ptr==5) i0=u_b6p[u_cptr][m][n];
+              i0=u_char_bmp[m][n];
         
         
         
@@ -15373,22 +15613,15 @@ int g_paint_label(int vid)
             }
           }
     
-          x=x+k;
+          x=x+u_char_size_x;
           j=j+u_nb;
           continue;
-        }
-        else
-        {
-          x=x+14;
-          j=j+u_nb;
-          continue;
-        }
       }
       else
       {
-        x=x+7;
-        j=j+1;
-        continue;
+          x=x+u_char_size_x;
+          j=j+u_nb;
+          continue;
       }
     }
     
@@ -15719,7 +15952,6 @@ int g_paint_lineedit(int vid)
 {
   int			i,j,k,l,m,n,o,p,q,r;
   int			x,y;
-  int 			err,err2;
   unsigned char		c1,c2,c3;
   int  			i0,i1,i2,i3,i4;
   int                      j1,j2,j3,j4;
@@ -15861,9 +16093,6 @@ int g_paint_lineedit(int vid)
 
     while(j<len)
     {
-      err=0;
-      err2=0;
-    
       if (g_lineedit_type[i]=='p')
       {
         if (g_lineedit_enable[i]==1)
@@ -15904,82 +16133,27 @@ int g_paint_lineedit(int vid)
         continue;
       }
     
-      c1=(unsigned char)str2[j];
-      u_ptr=0;
-      u_cptr=0;
-      u_nb=1;
+      if (strlen(str)>j+0) c1=(unsigned char)str[j+0];
+      else c1=0;
     
-      if (c1<128)
-      {
-        u_ptr = 0; u_nb = 1; u_n1 = 0; u_cptr= c1;
-        if ((u_cptr<0)||(u_cptr>=128)) err=1;
-      }
-      else if ((c1>=194)&&(c1<=223))
-      {
-        c2= (unsigned char)str2[j+1]; u_ptr = 1; u_nb = 2; u_n1 = 194; u_n2 = 128; u_cptr= (c1-u_n1)*64+c2-u_n2;
-        if ((u_cptr<0)||(u_cptr>=1920)) err=1;
-      }
-      else if (c1==224)
-      {
-        c2=(unsigned char)str2[j+1]; c3=(unsigned char)str2[j+2]; u_ptr = 2; u_nb = 3; u_n1 = 224; u_n2 = 160; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=225)&&(c1<=236))
-      {
-        c2=(unsigned char)str2[j+1]; c3=(unsigned char)str2[j+2]; u_ptr = 3; u_nb = 3; u_n1 = 225; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=49152)) err=1;
-      }
-      else if (c1==237)
-      {
-        c2=(unsigned char)str2[j+1]; c3=(unsigned char)str2[j+2]; u_ptr = 4; u_nb = 3; u_n1 = 237; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*32*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=2048)) err=1;
-      }
-      else if ((c1>=238)&&(c1<=239))
-      {
-        c2=(unsigned char)str2[j+1]; c3=(unsigned char)str2[j+2]; u_ptr = 5; u_nb = 3; u_n1 = 238; u_n2 = 128; u_n3 = 128; u_cptr=(c1-u_n1)*64*64+(c2-u_n2)*64+c3-u_n3;
-        if ((u_cptr<0)||(u_cptr>=8192)) err=1;
-      }
-      else if ((c1>=240)&&(c1<=244))
-      {
-        u_nb = 4;
-        err2=1;
-      }
-      else err=1;
+      if (strlen(str)>j+1) c2=(unsigned char)str[j+1];
+      else c2=0;
+    
+      if (strlen(str)>j+2) c3=(unsigned char)str[j+2];
+      else c3=0;
+    
+      u_get_char_bmp(c1,c2,c3);
 
-      if (err==0)
+      if ((u_err==0)&&(u_err2==0))
       {
-        if (err2==0)
-        {
-          k=0;
-          l=0;
-        
-          if (u_ptr==0) { k=u_b1s[u_cptr][0]; l=u_b1s[u_cptr][1]; }
-          if (u_ptr==1) { k=u_b2s[u_cptr][0]; l=u_b2s[u_cptr][1]; }
-          if (u_ptr==2) { k=u_b3s[u_cptr][0]; l=u_b3s[u_cptr][1]; }
-          if (u_ptr==3) { k=u_b4s[u_cptr][0]; l=u_b4s[u_cptr][1]; }
-          if (u_ptr==4) { k=u_b5s[u_cptr][0]; l=u_b5s[u_cptr][1]; }
-          if (u_ptr==5) { k=u_b6s[u_cptr][0]; l=u_b6s[u_cptr][1]; }
-        
-          if (k<7)  k=7;
-          if (k>14) k=14;
-          if (l<14) l=14;
-          if (l>14) l=14;
-    
-          for (m=0;m<k;m++)
+          for (m=0;m<u_char_size_x;m++)
           {
-            for (n=0;n<l;n++)
+            for (n=0;n<u_char_size_y;n++)
             {
               if ((m<0)||(m>=14)) continue;
               if ((n<0)||(n>=14)) continue;
         
-              i0=255;
-            
-              if (u_ptr==0) i0=u_b1p[u_cptr][m][n];
-              if (u_ptr==1) i0=u_b2p[u_cptr][m][n];
-              if (u_ptr==2) i0=u_b3p[u_cptr][m][n];
-              if (u_ptr==3) i0=u_b4p[u_cptr][m][n];
-              if (u_ptr==4) i0=u_b5p[u_cptr][m][n];
-              if (u_ptr==5) i0=u_b6p[u_cptr][m][n];
+              i0=u_char_bmp[m][n];
         
               if (g_lineedit_enable[i]==1)
               {
@@ -16096,22 +16270,15 @@ int g_paint_lineedit(int vid)
             }
           }
     
-          x=x+k;
+          x=x+u_char_size_x;
           j=j+u_nb;
           continue;
-        }
-        else
-        {
-          x=x+14;
-          j=j+u_nb;
-          continue;
-        }
       }
       else
       {
-        x=x+7;
-        j=j+1;
-        continue;
+          x=x+u_char_size_x;
+          j=j+u_nb;
+          continue;
       }
     }
     
@@ -19212,6 +19379,507 @@ int g_draw_circle(int x,int y,int r,int vid,int color1,int color2,int color3,int
     }
   }
   
+  return(0);
+}
+
+
+// ---------------- lib automatic return -------------------------------
+//     in today, file name usually very long, and screen is small,
+//     lib automatic return separate one line file name to mutiple lines
+//     in the best way.
+
+// ar : automatic return
+
+int ar_conv(char *p_in_str,int p_in_str_size,int p_len)
+{
+  int  i,j,k,l,m,n;
+  char c1,c2;
+  int  val1,val2,val3;
+  int  len3;
+  
+  if (p_len<2) return(1);
+  
+  ar_buff2_ptr=0;
+  ar_buff4_ptr=0;
+  
+  cpy_string(ar_buff3,1000,p_in_str,p_in_str_size);    
+  
+  while (1)
+  {
+    ar_buff1_ptr=0;
+  
+    i=u_strlen(ar_buff3,1000);  // if string's len < p_len, don't need calculate
+  
+    if (i<=p_len)
+    {
+      j=strlen(ar_buff3);
+      ar_buff2_len[ar_buff2_ptr]=j;
+      ar_buff2_ptr++;
+      if (ar_buff2_ptr>=1000) ar_buff2_ptr=1000-1;
+      break;
+    }
+  
+    ar_separ2char(ar_buff3,1000);
+  
+    j=0;   //calculate last char
+    k=0;
+  
+    while (j<ar_char_ptr)
+    {
+      if (ar_len2[j]<=p_len) k=j;
+    
+      j++;
+    }
+  
+    if (k>0) k--;
+  
+    for (l=k;l>=0;l--)   // scan string
+    {
+      c1=ar_char[l][0];
+      c2=ar_char[l+1][0];
+  
+      val1=ar_len2[l+1]*10;  // calculate value
+      val2=0;
+    
+      if (c1==' ')
+      {
+        val2=0;
+      }
+      else if (c1=='!')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='"')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='#')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='$')
+      {
+        if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='%')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='&')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==39/*'''*/)
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='(')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==')')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='*')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='+')
+      {
+        if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==',')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='-')
+      {
+        if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='.')
+      {
+        if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='/')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if ((c1>='0')&&(c1<='9'))
+      {
+        if (c2=='.') val2=(-80);
+        else if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if ((c2>='A')&&(c2<='Z')) val2=(-80);
+        else if ((c2>='a')&&(c2<='z')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==':')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==';')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='<')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='=')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='>')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='?')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='@')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if ((c1>='A')&&(c1<='Z'))
+      {
+        if ((c2>='A')&&(c2<='Z')) val2=(-80);
+        else if ((c2>='a')&&(c2<='z')) val2=(-80);
+        else if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='[')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==92/*'\'*/)
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1==']')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='^')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='_')
+      {
+        if (c2==' ') val2=0;
+        else if (c2<0) val2=0;
+        else val2=(-10);
+      }
+      else if (c1=='`')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if ((c1>='a')&&(c1<='z'))
+      {
+        if ((c2>='A')&&(c2<='Z')) val2=(-80);
+        else if ((c2>='a')&&(c2<='z')) val2=(-80);
+        else if ((c2>='0')&&(c2<='9')) val2=(-80);
+        else if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='{')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='|')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='}')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+      else if (c1=='~')
+      {
+        if (c2==' ') val2=0;
+        else if (c2=='_') val2=10;
+        else if (c2<0) val2=0;
+        else val2=(-30);
+      }
+//DEL (delete)
+      else
+      {
+        val2=0;
+      }
+    
+      ar_buff1_val[ar_buff1_ptr]=val1+val2;     // store every value to buffer 1
+      ar_buff1_len[ar_buff1_ptr]=ar_size2[l+1];
+      ar_buff1_ptr++;
+      if (ar_buff1_ptr>=1000) ar_buff1_ptr=1000-1;
+    }
+  
+    val3=(-1000000);
+    len3=1;
+  
+    for (l=0;l<ar_buff1_ptr;l++)  //choose max value one
+    {
+      if (ar_buff1_val[l]>val3)
+      {
+        val3=ar_buff1_val[l];
+        len3=ar_buff1_len[l];
+      }
+    }
+  
+    ar_buff2_len[ar_buff2_ptr]=len3;  // store to buffer 2 (result)
+    ar_buff2_ptr++;
+    if (ar_buff2_ptr>=1000) ar_buff2_ptr=1000-1;
+  
+    m=0;            // copy left string
+    
+    for (l=len3;l<strlen(ar_buff3);l++)
+    {
+      ar_buff3[m]=ar_buff3[l];
+      m++;
+    }
+  
+    ar_buff3[m]=0;
+  
+  }
+  
+  n=0;                //generate result
+  ar_buff4[0][0]=0;
+  
+  for (l=0;l<ar_buff2_ptr;l++)
+  {
+    ar_buff4[l][0]=0;
+    
+    for (m=0;m<ar_buff2_len[l];m++)
+    {
+      if ((m<0)||(m>=FN_SIZE)) continue;
+      if ((m+1<0)||(m+1>=FN_SIZE)) continue;
+      if ((n+m<0)||(n+m>=p_in_str_size)) continue;
+      
+      ar_buff4[l][m+0]=p_in_str[n+m];
+      ar_buff4[l][m+1]=0;
+    }
+    
+    n=n+ar_buff2_len[l];
+  }
+  
+  ar_buff4_ptr=ar_buff2_ptr;
+  
+  return(0);
+}
+
+int ar_separ2char(char *instr,int instr_size)
+{
+  int			i,j;
+  unsigned char		c1,c2,c3,c4;
+  int                   len,len2,size2;
+
+  if (deb_str_has_null(instr,instr_size)!=1) return(0);
+
+  len=strlen(instr);
+  i=len;
+  j=0;
+  len2=0;
+  size2=0;
+  ar_char_ptr=0;
+
+  while(j<i)
+  {
+    if (len>j+0) c1=(unsigned char)instr[j+0];
+    else c1=0;
+    
+    if (len>j+1) c2=(unsigned char)instr[j+1];
+    else c2=0;
+    
+    if (len>j+2) c3=(unsigned char)instr[j+2];
+    else c3=0;
+    
+    u_get_char_bmp(c1,c2,c3);
+
+    if (u_err==0)
+    {
+      if (u_err2==0)
+      {
+        if (u_nb==1)
+        {
+          ar_char[ar_char_ptr][0]=c1;
+          ar_char[ar_char_ptr][1]=0;
+          ar_len[ar_char_ptr]   =1;
+          ar_len2[ar_char_ptr]  =len2;
+          ar_size[ar_char_ptr]  =1;
+          ar_size2[ar_char_ptr]  =size2;
+          len2=len2+1;
+          size2=size2+1;
+        }
+        else if (u_nb==2)
+        {
+          ar_char[ar_char_ptr][0]=c1;
+          ar_char[ar_char_ptr][1]=c2;
+          ar_char[ar_char_ptr][2]=0;
+          ar_len[ar_char_ptr]   =u_char_size_x/7;
+          ar_len2[ar_char_ptr]  =len2;
+          ar_size[ar_char_ptr]  =2;
+          ar_size2[ar_char_ptr]  =size2;
+          len2=len2+u_char_size_x/7;
+          size2=size2+2;
+        }
+        else if (u_nb==3)
+        {
+          ar_char[ar_char_ptr][0]=c1;
+          ar_char[ar_char_ptr][1]=c2;
+          ar_char[ar_char_ptr][2]=c3;
+          ar_char[ar_char_ptr][3]=0;
+          ar_len[ar_char_ptr]   =u_char_size_x/7;
+          ar_len2[ar_char_ptr]  =len2;
+          ar_size[ar_char_ptr]  =3;
+          ar_size2[ar_char_ptr] =size2;
+          len2=len2+u_char_size_x/7;
+          size2=size2+3;
+        }
+    
+        ar_char_ptr++;
+        if (ar_char_ptr>=1000) ar_char_ptr=1000-1;
+        j=j+u_nb;
+        continue;
+      }
+      else
+      {
+        ar_char[ar_char_ptr][0]=c1;
+        ar_char[ar_char_ptr][1]=c2;
+        ar_char[ar_char_ptr][2]=c3;
+        ar_char[ar_char_ptr][3]=c4;
+        ar_char[ar_char_ptr][4]=0;
+        ar_len[ar_char_ptr]   =14/7;
+        ar_len2[ar_char_ptr]  =len2;
+        ar_size[ar_char_ptr]=4;
+        ar_size2[ar_char_ptr]=size2;
+        len2=len2+14/7;
+        size2=size2+4;
+
+        ar_char_ptr++;
+        if (ar_char_ptr>=1000) ar_char_ptr=1000-1;
+        j=j+u_nb;
+        continue;
+      }
+    }
+    else
+    {
+      ar_char[ar_char_ptr][0]=c1;
+      ar_char[ar_char_ptr][1]=0;
+      ar_len[ar_char_ptr]   =7/7;
+      ar_len2[ar_char_ptr]  =len2;
+      ar_size[ar_char_ptr]  =1;
+      ar_size2[ar_char_ptr] =size2;
+      len2=len2+7/7;
+      size2=size2+1;
+
+      ar_char_ptr++;
+      if (ar_char_ptr>=1000) ar_char_ptr=1000-1;
+      j=j+u_nb;
+      continue;
+    }
+  }
+
   return(0);
 }
 

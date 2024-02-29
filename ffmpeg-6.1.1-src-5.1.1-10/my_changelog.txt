@@ -439,6 +439,27 @@ ffmpeg-6.1-src-5.1-9
 ffmpeg-6.1.1-src-5.1.1
   for ffmpeg-6.1.1
 
+ffmpeg-6.1.1-src-5.1.1-1
+  better looking source codes
+    (added function u_get_char_bmp(...))
+
+ffmpeg-6.1.1-src-5.1.1-b2
+ffmpeg-6.1.1-src-5.1.1-b3
+ffmpeg-6.1.1-src-5.1.1-ok4
+ffmpeg-6.1.1-src-5.1.1-5
+ffmpeg-6.1.1-src-5.1.1-6
+ffmpeg-6.1.1-src-5.1.1-7
+ffmpeg-6.1.1-src-5.1.1-8
+  for lib automatic return
+
+ffmpeg-6.1.1-src-5.1.1-9
+  fixed a bug
+
+ffmpeg-6.1.1-src-5.1.1-10
+  fixed a bug
+
+
+
 
 
 
