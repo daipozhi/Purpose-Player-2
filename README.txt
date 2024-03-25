@@ -1,13 +1,13 @@
 # Purpose-Player-2
 
-Purpose player 2  5.1.1-10
+Purpose player 2  5.1.1-18
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-6.1.1-src-5.1.1-10" ,decompress "ffmpeg-6.1.1.tar.xz",
+there is a directory "ffmpeg-6.1.1-src-5.1.1-18" ,decompress "ffmpeg-6.1.1.tar.xz",
 it create a directory "ffmpeg-6.1.1" ,
-use files in "ffmpeg-6.1.1-src-5.1.1-10/fftools" to replace same name files in directory "ffmpeg-6.1.1/fftools",
+use files in "ffmpeg-6.1.1-src-5.1.1-18/fftools" to replace same name files in directory "ffmpeg-6.1.1/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -48,11 +48,11 @@ and install libsdl2-dev again:
     sudo apt-get install libsdl2-dev
 
 if you still can't install SDL2, you can install SDL2 by source code,
-download SDL2-2.30.0.tar.gz (you can goto http://www.libsdl.org/download-2.0.php to download these files,
+download SDL2-2.30.1.tar.gz (you can goto http://www.libsdl.org/download-2.0.php to download these files,
 or you can download it on this web page)
 
-decompress SDL2-2.30.0.tar.gz and 
-in directory SDL2-2.30.0 run
+decompress SDL2-2.30.1.tar.gz and 
+in directory SDL2-2.30.1 run
 
     ./configure
     make -j
@@ -73,7 +73,7 @@ then goto directory "ffmpeg-6.1.1" and run
 
 copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-6.1.1" 
 
-before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.30.0",
+before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.30.1",
 run command "sudo make uninstall"(unload development library).
 
 
@@ -98,17 +98,19 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
   version 5.1-3 has mini GUI lib.
 
-  version 5.11-10 has lib automatic return
+  version 5.1.1-10 has lib automatic return
   in today, file name usually very long, and screen is small,
   lib automatic return separate one line file name to mutiple lines
   in the best way.
 
-小戴媒体播放器2  5.1.1-10
+  version 5.1.1-18 has better GUI .
+
+小戴媒体播放器2  5.1.1-18
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-6.1.1-src-5.1.1-10,解压ffmpeg-6.1.1.tar.xz,将创建ffmpeg-6.1.1目录, 
-用ffmpeg-6.1.1-src-5.1.1-10/fftools里的文件,替换掉ffmpeg-6.1.1/fftools里的同名文件,
+这里有目录ffmpeg-6.1.1-src-5.1.1-18,解压ffmpeg-6.1.1.tar.xz,将创建ffmpeg-6.1.1目录, 
+用ffmpeg-6.1.1-src-5.1.1-18/fftools里的文件,替换掉ffmpeg-6.1.1/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -148,11 +150,11 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
     sudo apt-get install libsdl2-dev
 
-如果你还是不能安装SDL2,可以下载源代码SDL2-2.30.0.tar.gz,你可以在 http://www.libsdl.org/download-2.0.php 
+如果你还是不能安装SDL2,可以下载源代码SDL2-2.30.1.tar.gz,你可以在 http://www.libsdl.org/download-2.0.php 
 下载这些文件,或者在当前页面下载。
 
-把 SDL2-2.30.0.tar.gz 展开
-在 SDL2-2.30.0 目录下运行：
+把 SDL2-2.30.1.tar.gz 展开
+在 SDL2-2.30.1 目录下运行：
 
     ./configure
     make -j
@@ -173,7 +175,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
 把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-6.1.1 目录下
  
-在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.30.0 目录下运行sudo make uninstall.(把开发库卸载)
+在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.30.1 目录下运行sudo make uninstall.(把开发库卸载)
 
 在 Windows 或者 Ubuntu 14.04/16.04(32bit)/22.04/Linux Mint 21/Debian 12上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04/Linux Mint 20
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
@@ -198,6 +200,8 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
   5.1.1-10版本有lib automatic return
   现在的文件名通常很长,屏幕很小,lib automatic return用最好的方法把一行较长的文件名分成几行
+
+  5.1.1-18版本有更好的GUI.
 
 
 
