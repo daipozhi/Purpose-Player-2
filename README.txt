@@ -1,13 +1,13 @@
 # Purpose-Player-2
 
-Purpose player 2  6.0-2
+Purpose player 2  6.0.2
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-7.0-src-6.0-2" ,decompress "ffmpeg-7.0.tar.xz",
-it create a directory "ffmpeg-7.0" ,
-use files in "ffmpeg-7.0-src-6.0-2/fftools" to replace same name files in directory "ffmpeg-7.0/fftools",
+there is a directory "ffmpeg-7.0.2-src-6.0.2" ,decompress "ffmpeg-7.0.2.tar.xz",
+it create a directory "ffmpeg-7.0.2" ,
+use files in "ffmpeg-7.0.2-src-6.0.2/fftools" to replace same name files in directory "ffmpeg-7.0.2/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -15,7 +15,7 @@ it can display "sound river",it separate audio to 117 parts by frequency,display
 
 it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-you can goto http://ffmpeg.org/download.html to download ffmpeg-7.0.tar.xz, or you can download in this web page.
+you can goto http://ffmpeg.org/download.html to download ffmpeg-7.0.2.tar.xz, or you can download in this web page.
 
 
 
@@ -48,11 +48,11 @@ and install libsdl2-dev again:
     sudo apt-get install libsdl2-dev
 
 if you still can't install SDL2, you can install SDL2 by source code,
-download SDL2-2.30.2.tar.gz (you can goto http://www.libsdl.org/download-2.0.php to download these files,
+download SDL2-2.30.6.tar.gz (you can goto http://www.libsdl.org/download-2.0.php to download these files,
 or you can download it on this web page)
 
-decompress SDL2-2.30.2.tar.gz and 
-in directory SDL2-2.30.2 run
+decompress SDL2-2.30.6.tar.gz and 
+in directory SDL2-2.30.6 run
 
     ./configure
     make -j
@@ -66,14 +66,14 @@ in directory yasm-1.3.0 run
     make -j
     sudo make install
 
-then goto directory "ffmpeg-7.0" and run 
+then goto directory "ffmpeg-7.0.2" and run 
 
     ./configure
     make -j
 
-copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-7.0" 
+copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-7.0.2" 
 
-before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.30.2",
+before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.30.6",
 run command "sudo make uninstall"(unload development library).
 
 
@@ -105,12 +105,12 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
   version 5.1.1-18 has better GUI .
 
-小戴媒体播放器2  6.0-2
+小戴媒体播放器2  6.0.2
  
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
  
-这里有目录ffmpeg-7.0-src-6.0-2,解压ffmpeg-7.0.tar.xz,将创建ffmpeg-7.0目录, 
-用ffmpeg-7.0-src-6.0-2/fftools里的文件,替换掉ffmpeg-7.0/fftools里的同名文件,
+这里有目录ffmpeg-7.0.2-src-6.0.2,解压ffmpeg-7.0.2.tar.xz,将创建ffmpeg-7.0.2目录, 
+用ffmpeg-7.0.2-src-6.0.2/fftools里的文件,替换掉ffmpeg-7.0.2/fftools里的同名文件,
 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
  
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来,
@@ -118,7 +118,7 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
 能显示2.0声道的媒体文件,能显示5.1声道电影文件(只提取左声道一个声道的声音),
 
-你可以在 http://ffmpeg.org/download.html 下载 ffmpeg-7.0.tar.xz ，或者在当前页面下载。
+你可以在 http://ffmpeg.org/download.html 下载 ffmpeg-7.0.2.tar.xz ，或者在当前页面下载。
 
 
  
@@ -150,11 +150,11 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
     sudo apt-get install libsdl2-dev
 
-如果你还是不能安装SDL2,可以下载源代码SDL2-2.30.2.tar.gz,你可以在 http://www.libsdl.org/download-2.0.php 
+如果你还是不能安装SDL2,可以下载源代码SDL2-2.30.6.tar.gz,你可以在 http://www.libsdl.org/download-2.0.php 
 下载这些文件,或者在当前页面下载。
 
-把 SDL2-2.30.2.tar.gz 展开
-在 SDL2-2.30.2 目录下运行：
+把 SDL2-2.30.6.tar.gz 展开
+在 SDL2-2.30.6 目录下运行：
 
     ./configure
     make -j
@@ -168,14 +168,14 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
     make -j
     sudo make install
  
-在 ffmpeg-7.0 目录下运行：
+在 ffmpeg-7.0.2 目录下运行：
 
     ./configure
     make -j
 
-把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-7.0 目录下
+把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-7.0.2 目录下
  
-在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.30.2 目录下运行sudo make uninstall.(把开发库卸载)
+在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.30.6 目录下运行"sudo make uninstall"(把开发库卸载).
 
 在 Windows 或者 Ubuntu 14.04/16.04(32bit)/22.04/24.04/Linux Mint 21/Debian 12上面 , 双击ffplay(.exe)图标就可以运行 ,在 Ubuntu 18.04/20.04/Linux Mint 20
 上面 ,你需要打开Terminal窗口 ,移动到app目录 ,输入命令"./ffplay" 去运行 .
