@@ -125,45 +125,45 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
 如果是Ubuntu 18.04/20.04/22.04/24.04 or Linux Mint 20/21.1 or Debian 12 需要先安装gcc:
 
-sudo apt-get update
-sudo apt-get install build-essential
-
+    sudo apt-get update
+    sudo apt-get install build-essential
+    
 然后安装SDL2
 
-sudo apt-get update
-sudo add-apt-repository universe
-sudo apt-get install libsdl2-2.0
-sudo apt-get install libsdl2-dev
+    sudo apt-get update
+    sudo add-apt-repository universe
+    sudo apt-get install libsdl2-2.0
+    sudo apt-get install libsdl2-dev
 
 如果系统说 : E: Package 'libsdl2-dev' has no installation candidate
 
 请再次运行命令:
 
-sudo apt-get update
-sudo add-apt-repository universe
+    sudo apt-get update
+    sudo add-apt-repository universe
 
 然后再次安装SDL2:
 
-sudo apt-get install libsdl2-dev
+    sudo apt-get install libsdl2-dev
 
 如果你还是不能安装SDL2,可以下载源代码SDL2-2.30.12.tar.gz,你可以在 http://www.libsdl.org/download-2.0.php 下载这些文件,或者在当前页面下载。
 
 把 SDL2-2.30.12.tar.gz 展开 在 SDL2-2.30.12 目录下运行：
 
-./configure
-make -j
-sudo make install
+    ./configure
+    make -j
+    sudo make install
 
 然后: 把 yasm-1.3.0.tar 展开 在 yasm-1.3.0 目录下运行：
 
-./configure
-make -j
-sudo make install
+    ./configure
+    make -j
+    sudo make install
 
 在 ffmpeg-7.1 目录下运行：
 
-./configure
-make -j
+    ./configure
+    make -j
 
 把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-7.1 目录下
 
