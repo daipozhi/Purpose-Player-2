@@ -1,0 +1,583 @@
+
+ffmpeg-4.3-src-3.3ok12
+  adjust sound river's refresh rate
+
+ffmpeg-4.3-src-3.3ok15
+  finish "DPZ_DEBUG2" relative code 
+
+ffmpeg-4.3-src-3.3ok16
+  fft-size 4096 , seg-num 100 .
+
+ffmpeg-4.3-src-3.3ok17
+  1 bug ok , fft-size 512 , seg-num 256 .
+
+ffmpeg-4.3-src-3.3ok18
+ffmpeg-4.3-src-3.3ok19
+  all audio resample to 44.1khz,so sound river's speed is fixed,
+  frequency's position is fixed .
+
+ffmpeg-4.3-src-3.3ok20
+  in sound river ,display where is 1KHz,where is 2KHz...
+
+ffmpeg-4.3-src-3.3ok21
+  better sound river , 1 bug ok .
+
+ffmpeg-4.3-src-3.3ok22
+  faster
+
+ffmpeg-4.3-src-3.3ok23
+  faster
+
+ffmpeg-4.3-src-3.3ok24
+  faster
+
+ffmpeg-4.3-src-3.3ok25
+  less warning when compile
+
+ffmpeg-4.3-src-3.3ok26
+  faster , 2 core CPU(2 thread) is ok for sound river .
+
+ffmpeg-4.3-src-3.3ok27
+  better sound river
+
+ffmpeg-4.3.2-src-3.3.9
+  for ffmpeg-4.3.2
+
+ffmpeg-4.4-src-3.4
+  for ffmpeg-4.4
+
+ffmpeg-4.4-src-3.4-2
+  better resample code 
+
+ffmpeg-4.4-src-3.4-3
+  fft-size 256 , seg-num 117 .
+
+ffmpeg-4.4-src-3.4-4
+  2 bug ok
+
+ffmpeg-4.4-src-3.4-5
+  better looking source code
+
+ffmpeg-4.4-src-3.4-6
+  file name size set to 300
+
+ffmpeg-4.4-src-3.4-7
+  no extend file name check
+
+ffmpeg-4.4-src-3.4-8
+  better looking source code
+
+ffmpeg-4.4-src-3.4-9
+  function utf8-to-gb18030() is better
+
+ffmpeg-4.4-src-3.4-10
+  1 bug ok
+
+ffmpeg-4.4-src-3.4-11
+  better looking source code
+
+ffmpeg-4.4-src-3.4-12
+  better looking source code
+
+ffmpeg-4.4-src-3.4-13
+  better looking source code
+
+ffmpeg-4.4-src-3.4-14
+  better looking source code
+
+ffmpeg-4.4-src-3.4-15
+  better looking source code
+
+ffmpeg-4.4-src-3.4-16
+  better looking source code
+
+ffmpeg-4.4-src-3.4-17
+  better looking source code
+
+ffmpeg-4.4-src-3.4-18
+  better sound river
+
+ffmpeg-4.4-src-3.4-19
+  remove deb_filenamebuff2[]
+  remove out_mixed_buff[]
+    -6MB memory
+
+ffmpeg-4.4-src-3.4-20
+  better looking source code
+
+ffmpeg-4.4-src-3.4-21
+  better looking source code
+
+ffmpeg-4.4-src-3.4-22
+  better looking source code
+
+ffmpeg-4.4-src-3.4-23
+  better looking source code
+
+ffmpeg-4.4-src-3.4-24
+  better looking source code
+
+ffmpeg-4.4-src-3.4-25
+  better looking source code
+
+ffmpeg-4.4-src-3.4-26
+  better looking source code
+
+ffmpeg-4.4-src-3.4-27
+  MAX_FILE_NUM1 change to MAX_FILE_NUM
+  MAX_FILE_NUM set to 30000
+  BTREE1_SIZE BTREE1_LSIZE set to 30000
+
+ffmpeg-4.4-src-3.4-28
+  better FFT comment
+
+ffmpeg-4.4-src-3.4-29
+  better looking source code
+
+ffmpeg-4.4-src-3.4-30
+  1 bug maybe ok , pix_fmt .
+
+ffmpeg-4.4-src-3.4-31
+  better looking source code
+
+ffmpeg-4.4-src-3.4-32
+  better : ...disp_dir()
+
+ffmpeg-4.4-src-3.4-33
+  better message proccess,mouse button down 
+
+ffmpeg-4.4-src-3.4-34
+  in sound river , no  volume=volume/3
+
+ffmpeg-4.4-src-3.4-35
+  1 bug ok , window title
+
+ffmpeg-4.4-src-3.4-36
+  remove function deb_supported_formats()
+  better looking source code
+
+ffmpeg-4.4.1-src-3.4.1
+  for ffmpeg-4.4.1
+
+ffmpeg-4.4.1-src-3.4.1-2
+  adjusted sound river
+
+ffmpeg-4.4.1-src-3.4.1-3
+  adjusted sound river
+
+ffmpeg-4.4.1-src-3.4.1-4
+  adjusted sound river
+
+ffmpeg-4.4.1-src-3.4.1-5
+  chs_bmpxxx.data change to chn_bmpxxx.data
+
+ffmpeg-4.4.1-src-3.4.1-6
+  remove function bt_opendir(void)
+
+ffmpeg-4.4.1-src-3.4.1-7
+  adjusted sound river
+  reduced window size , good for small screen (window size 1224x725)
+
+ffmpeg-4.4.1-src-3.4.1-8
+  adjusted sound river
+
+ffmpeg-4.4.1-src-3.4.1-9
+  adjusted sound river
+
+ffmpeg-4.4.1-src-3.4.1-10
+  adjusted sound river
+
+ffmpeg-5.0-src-4.0-4
+  for ffmpeg-5.0
+
+ffmpeg-5.0-src-4.0-5
+  better looking source code
+
+ffmpeg-5.0-src-4.0-6
+  better looking source code
+
+ffmpeg-5.0-src-4.0-7
+  1 bug ok (when seek at end of stream or begin of stream,ffplay will be dumped)
+
+ffmpeg-5.0.1-src-4.0.1
+  for ffmpeg-5.0.1
+
+ffmpeg-5.0.1-src-4.0.1-2
+  better file name sorting
+
+ffmpeg-5.0.1-src-4.0.1-3
+  better lower_str...() upper_str...() and ...
+
+ffmpeg-5.0.1-src-4.0.1-4
+  remove un-nesessery comment
+
+ffmpeg-5.0.1-src-4.0.1-5
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-6
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-7
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-8
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-9
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-10
+  added volume bar
+
+ffmpeg-5.0.1-src-4.0.1-11
+  better looking source code
+
+ffmpeg-5.0.1-src-4.0.1-12
+  better sound river
+
+ffmpeg-5.0.1-src-4.0.1-13...
+  for sdl2
+
+ffmpeg-5.0.1-src-4.0.1-18
+  bug fix
+
+ffmpeg-5.0.1-src-4.0.1-19
+  less compiler warning message
+
+ffmpeg-5.0.1-src-4.0.1-20
+  utf8 char display
+
+ffmpeg-5.0.1-src-4.0.1-21
+  bug fix
+
+...
+
+ffmpeg-5.0.1-src-4.0.1-25
+  its much faster
+
+ffmpeg-5.1.1-src-4.1.1-1
+  for ffmpeg-5.1.1
+
+ffmpeg-5.1.1-src-4.1.1-2
+  support 8k monitor
+
+ffmpeg-5.1.1-src-4.1.1-3
+  better sound river
+
+ffmpeg-5.1.1-src-4.1.1-4
+  add comment at sound river screen
+
+better utf8 bmp data .(file date 2022-10-06)
+
+ffmpeg-5.1.2-src-4.1.2
+  for ffmpeg-5.1.2
+
+ffmpeg-5.1.2-src-4.1.2-1
+  2 bugs are ok
+
+ffmpeg-5.1.2-src-4.1.2-2
+  better looking source code
+
+better utf8 bmp data .(file date 2022-10-22)
+
+ffmpeg-5.1.2-src-4.1.2-3
+ffmpeg-5.1.2-src-4.1.2-4
+ffmpeg-5.1.2-src-4.1.2-5
+  free more memory
+  
+ffmpeg-5.1.2-src-4.1.2-6
+  better file name compare
+
+ffmpeg-5.1.2-src-4.1.2-7
+  better file name compare
+
+ffmpeg-5.1.2-src-4.1.2-8
+  add comment
+
+ffmpeg-5.1.2-src-4.1.2-9
+  fix 1 bug,(click button '[Play]')
+
+ffmpeg-5.1.2-src-4.1.2-10
+  add title 'Purpose Player 2'
+
+ffmpeg-5.1.2-src-4.1.2-11
+  better looking source code 
+  better cpy_string()
+
+ffmpeg-5.1.2-src-4.1.2-12
+  fix 1 bug, bt_after_list()...
+
+ffmpeg-5.1.2-src-4.1.2-15
+  printf() change to av_log()
+
+ffmpeg-5.1.2-src-4.1.2-16
+ffmpeg-5.1.2-src-4.1.2-17
+  better file name compare
+
+ffmpeg-5.1.2-src-4.1.2-18
+  less compiler warning
+
+ffmpeg-5.1.2-src-4.1.2-19
+  less compiler warning
+
+ffmpeg-6.0-src-5.0
+  for ffmpeg-6.0
+
+ffmpeg-6.0-src-5.0-1
+  set FNC_NUM to 150
+
+ffmpeg-6.0-src-5.0-2
+  set MAX_FILE_NUM to 50000
+
+ffmpeg-6.0-src-5.0-3
+  sound river delay 0.1s
+
+ffmpeg-6.0-src-5.0-4
+  1 bug ok (audio resample)
+
+ffmpeg-6.0-src-5.0-6
+  3 bugs ok (audio resample)
+
+    3 bugs are:
+
+    in head
+
+        unsigned char deb_resam_buff3[100000]; (bigger size)
+
+    in sdl_audio_callback()
+
+        after resample (convert),
+            is->audio_buf_size = audio_size;  
+        change to : 
+            is->audio_buf_size = size;
+
+    in sdl_audio_callback() resample code (convert code)
+
+        source code:
+                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+        change to:
+                 for (i=  ((160*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((160*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((160*rept-start+m)*deb_sr_ch+2)*2  ;
+
+
+        source code:
+                 for (i=(size+1)*deb_sr_ch*2;i<j;i++) deb_resam_buff3[i-(size+1)*deb_sr_ch*2]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-(size+1)*deb_sr_ch*2;
+        change to:
+                 for (i=  ((320*rept-start+m)*deb_sr_ch+2)*2  ;i<j;i++) deb_resam_buff3[i-  ((320*rept-start+m)*deb_sr_ch+2)*2  ]=deb_resam_buff1[i];
+                 deb_resam_buff3_ptr=j-  ((320*rept-start+m)*deb_sr_ch+2)*2  ;
+
+ffmpeg-6.0-src-5.0-8
+  1 bugs ok (REFRESH_RATE)
+
+ffmpeg-6.0-src-5.0-9
+ffmpeg-6.0-src-5.0-10
+ffmpeg-6.0-src-5.0-11
+ffmpeg-6.0-src-5.0-12
+ffmpeg-6.0-src-5.0-13
+ffmpeg-6.0-src-5.0-14
+ffmpeg-6.0-src-5.0-15
+ffmpeg-6.0-src-5.0-16
+ffmpeg-6.0-src-5.0-17
+ffmpeg-6.0-src-5.0-18
+ffmpeg-6.0-src-5.0-19
+ffmpeg-6.0-src-5.0-20
+ffmpeg-6.0-src-5.0-21
+  for GUI
+
+ffmpeg-6.0-src-5.0-22
+  better GUI
+      g_resize... change to g_move...
+  better looking code
+
+ffmpeg-6.0-src-5.0-23
+  better GUI
+      g_bar... change to g_scrollbar...
+
+ffmpeg-6.0-src-5.0-24
+  better GUI
+      button text color
+      label color
+      label text color
+
+ffmpeg-6.0-src-5.0-25
+ffmpeg-6.0-src-5.0-26
+  fixed 1 bug
+  better source code
+
+ffmpeg-6.0-src-5.0-27
+ffmpeg-6.0-src-5.0-28
+ffmpeg-6.0-src-5.0-29
+ffmpeg-6.0-src-5.0-30
+ffmpeg-6.0-src-5.0-31
+ffmpeg-6.0-src-5.0-32
+ffmpeg-6.0-src-5.0-33
+ffmpeg-6.0-src-5.0-34
+ffmpeg-6.0-src-5.0-35
+ffmpeg-6.0-src-5.0-36
+ffmpeg-6.0-src-5.0-37
+ffmpeg-6.0-src-5.0-38
+ffmpeg-6.0-src-5.0-39
+ffmpeg-6.0-src-5.0-40
+ffmpeg-6.0-src-5.0-41
+  for mini GUI lib
+
+ffmpeg-6.1-src-5.1
+  for ffmpeg-6.1
+
+ffmpeg-6.1-src-5.1-2
+ffmpeg-6.1-src-5.1-3
+ffmpeg-6.1-src-5.1-4
+ffmpeg-6.1-src-5.1-5
+ffmpeg-6.1-src-5.1-6
+ffmpeg-6.1-src-5.1-7
+ffmpeg-6.1-src-5.1-8
+ffmpeg-6.1-src-5.1-9
+  for mini GUI lib
+
+ffmpeg-6.1.1-src-5.1.1
+  for ffmpeg-6.1.1
+
+ffmpeg-6.1.1-src-5.1.1-1
+  better looking source codes
+    (added function u_get_char_bmp(...))
+
+ffmpeg-6.1.1-src-5.1.1-b2
+ffmpeg-6.1.1-src-5.1.1-b3
+ffmpeg-6.1.1-src-5.1.1-ok4
+ffmpeg-6.1.1-src-5.1.1-5
+ffmpeg-6.1.1-src-5.1.1-6
+ffmpeg-6.1.1-src-5.1.1-7
+ffmpeg-6.1.1-src-5.1.1-8
+  for lib automatic return
+
+ffmpeg-6.1.1-src-5.1.1-9
+  fixed a bug
+
+ffmpeg-6.1.1-src-5.1.1-10
+  fixed a bug
+
+ffmpeg-6.1.1-src-5.1.1-11
+ffmpeg-6.1.1-src-5.1.1-12
+ffmpeg-6.1.1-src-5.1.1-13
+ffmpeg-6.1.1-src-5.1.1-14
+ffmpeg-6.1.1-src-5.1.1-15
+ffmpeg-6.1.1-src-5.1.1-16
+ffmpeg-6.1.1-src-5.1.1-17
+ffmpeg-6.1.1-src-5.1.1-18
+  for better mini GUI lib
+
+ffmpeg-6.1.1-src-5.1.1-19
+ffmpeg-6.1.1-src-5.1.1-20
+  for better automatic return
+
+ffmpeg-7.0-src-6.0
+  for ffmpeg-7.0
+
+ffmpeg-7.0-src-6.0-1
+  for better automatic return
+
+ffmpeg-7.0-src-6.0-2
+  for better mini GUI lib
+
+ffmpeg-7.0-src-6.0-3
+  for better DirView's scrollbar
+
+ffmpeg-7.0-src-6.0-4
+  better deb_no_support(...
+
+ffmpeg-7.0-src-6.0-5
+ffmpeg-7.0-src-6.0-6
+ffmpeg-7.0-src-6.0-7
+  for better GUI (better button)
+
+ffmpeg-7.0-src-6.0-8
+  for better GUI
+
+ffmpeg-7.0.2-src-6.0.2
+  for ffmpeg-7.0.2
+
+ffmpeg-7.0.2-src-6.0.2-2
+  for better GUI
+
+ffmpeg-7.1-src-6.1
+  for ffmpeg-7.1
+
+ffmpeg-7.1-src-6.1-1
+  for better GUI
+
+  todo:
+     *disp scrollbar
+         hori==1
+     *list all format in usb disk
+         choose no-support ext name
+
+ffmpeg-7.1-src-6.1-2
+  for better deb_no_support(...
+
+ffmpeg-7.1-src-6.1-3
+ffmpeg-7.1-src-6.1-4
+ffmpeg-7.1-src-6.1-5
+ffmpeg-7.1-src-6.1-6
+ffmpeg-7.1-src-6.1-7
+ffmpeg-7.1-src-6.1-8
+ffmpeg-7.1-src-6.1-9
+ffmpeg-7.1-src-6.1-10
+ffmpeg-7.1-src-6.1-11
+ffmpeg-7.1-src-6.1-12
+ffmpeg-7.1-src-6.1-13
+ffmpeg-7.1-src-6.1-14
+ffmpeg-7.1-src-6.1-15
+  for 10 segment equalizer
+
+  smooth proc
+    if
+      m2==0 and m5==0
+    else
+      m2>0 and m5<0
+        m2 1   m5  -0.n
+        m2 0.n m5  -1
+        
+      m2<0 and m5>0
+        m2 -1   m5 0.n
+        m2 -0.n m5 1
+    
+      m2>0 and m5>0
+        m2>=m5
+        m2<m5
+
+      m2<0 and m5<0
+        m2>=m5
+        m2<m5
+
+ffmpeg-7.1-src-6.1-15
+ffmpeg-7.1-src-6.1-16
+ffmpeg-7.1-src-6.1-17
+ffmpeg-7.1-src-6.1-18-eq
+  for 10 segment equalizer
+
+ffmpeg-7.1-src-6.1-19-eq
+ffmpeg-7.1-src-6.1-20-eq
+  better update_sample_display()
+  
+ffmpeg-7.1-src-6.1-21-eq
+  better equalizer's label
+
+ffmpeg-7.1-src-6.1-22-eq
+  better scroll bar's paint
+  
+ffmpeg-7.1-src-6.1-23-eq
+ffmpeg-7.1-src-6.1-24-eq
+ffmpeg-7.1-src-6.1-25-n
+  better mini GUI lib
+  
+ffmpeg-7.1-src-6.1-40-n
+  modularized mini GUI lib
+
+
+
+
+
+
+
