@@ -1,13 +1,13 @@
 # Purpose-Player-2
 
-Purpose player 2  6.1-40
+Purpose player 2  6.1.1-4
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-7.1-src-6.1-40-n" ,decompress "ffmpeg-7.1.tar.xz",
-it create a directory "ffmpeg-7.1" ,
-use files in "ffmpeg-7.1-src-6.1-40-n/fftools" to replace same name files in directory "ffmpeg-7.1/fftools",
+there is a directory "ffmpeg-7.1.1-src-6.1.1-4" ,decompress "ffmpeg-7.1.1.tar.xz",
+it create a directory "ffmpeg-7.1.1" ,
+use files in "ffmpeg-7.1.1-src-6.1.1-4/fftools" to replace same name files in directory "ffmpeg-7.1.1/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -15,7 +15,7 @@ it can display "sound river",it separate audio to 117 parts by frequency,display
 
 it can process 2.0 channel audio and 5.1 channel audio,only display left channel(1 channel) audio.
 
-you can goto http://ffmpeg.org/download.html to download ffmpeg-7.1.tar.xz, or you can download in this web page.
+you can goto http://ffmpeg.org/download.html to download ffmpeg-7.1.1.tar.xz, or you can download in this web page.
 
 
 
@@ -66,12 +66,12 @@ in directory yasm-1.3.0 run
     make -j
     sudo make install
 
-then goto directory "ffmpeg-7.1" and run 
+then goto directory "ffmpeg-7.1.1" and run 
 
     ./configure
     make -j
 
-copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-7.1" 
+copy ffplay(.exe) to app directory ,ffplay(.exe) is in directory "ffmpeg-7.1.1" 
 
 before you run ffplay(.exe),if you installed SDL2 by source code,you need goto directory "SDL2-2.30.12",
 run command "sudo make uninstall"(unload development library).
@@ -106,18 +106,20 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
   version 5.1.1-18 has better GUI .
 
   version 6.1-40-n has modularized mini GUI lib.
+  
+  version 6.1.1-4 is for ffmpeg-7.1.1
 
-小戴媒体播放器2 6.1-40
+小戴媒体播放器2 6.1.1-4
 
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
 
-这里有目录ffmpeg-7.1-src-6.1-40-n,解压ffmpeg-7.1.tar.xz,将创建ffmpeg-7.1目录, 用ffmpeg-7.1-src-6.1-40-n/fftools里的文件,替换掉ffmpeg-7.1/fftools里的同名文件, 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
+这里有目录ffmpeg-7.1.1-src-6.1.1-4,解压ffmpeg-7.1.1.tar.xz,将创建ffmpeg-7.1.1目录, 用ffmpeg-7.1.1-src-6.1.1-4/fftools里的文件,替换掉ffmpeg-7.1.1/fftools里的同名文件, 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
 
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来, (点击窗口右下角的"River On"),最下面的是20KHz,最上面的是20Hz,河流从左向右流动,
 
 能显示2.0声道的媒体文件,能显示5.1声道电影文件(只提取左声道一个声道的声音),
 
-你可以在 http://ffmpeg.org/download.html 下载 ffmpeg-7.1.tar.xz ，或者在当前页面下载。
+你可以在 http://ffmpeg.org/download.html 下载 ffmpeg-7.1.1.tar.xz ，或者在当前页面下载。
 
 编译方法如下：
 
@@ -160,12 +162,12 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
     make -j
     sudo make install
 
-在 ffmpeg-7.1 目录下运行：
+在 ffmpeg-7.1.1 目录下运行：
 
     ./configure
     make -j
 
-把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-7.1 目录下
+把ffplay(.exe)拷贝到app目录. ffplay(.exe) 在 ffmpeg-7.1.1 目录下
 
 在运行ffplay(.exe)之前,如果你用源代码安装SDL2,需要在 SDL2-2.30.12 目录下运行"sudo make uninstall"(把开发库卸载).
 
@@ -194,4 +196,6 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 5.1.1-18版本有更好的GUI.
 
 6.1-40-n版本有模块化的mini GUI Lib.
+
+6.1.1-4版本有ffmpeg-7.1.1
 
