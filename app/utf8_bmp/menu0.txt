@@ -1,0 +1,16 @@
+// main menu
+fathercode:0,item:Copy,  selfcode:11,notfather,,
+fathercode:0,item:,      selfcode:00,notfather,separation,
+fathercode:0,item:Paste, selfcode:12,notfather,,
+fathercode:0,item:,      selfcode:00,notfather,separation,
+fathercode:0,item:Rename,selfcode:13,notfather,,
+fathercode:0,item:,      selfcode:00,notfather,separation,
+fathercode:0,item:New,   selfcode:14,isfather ,,
+fathercode:0,item:,      selfcode:00,notfather,separation,
+fathercode:0,item:Delete,selfcode:15,notfather,,
+
+//sub menu
+fathercode:14,item:Folder,   selfcode:141,notfather,,
+fathercode:14,item:,         selfcode:00, notfather,separation,
+fathercode:14,item:Text File,selfcode:142,notfather,,
+

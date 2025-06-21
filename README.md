@@ -1,13 +1,13 @@
 # Purpose-Player-2
 
-Purpose player 2  6.1.1-4
+Purpose player 2  6.1.1-16
 
 this is a open source software,based on FFmpeg,play audio and video
 on Windows and Ubuntu,and it can display "sound river".
 
-there is a directory "ffmpeg-7.1.1-src-6.1.1-4" ,decompress "ffmpeg-7.1.1.tar.xz",
+there is a directory "ffmpeg-7.1.1-src-6.1.1-16" ,decompress "ffmpeg-7.1.1.tar.xz",
 it create a directory "ffmpeg-7.1.1" ,
-use files in "ffmpeg-7.1.1-src-6.1.1-4/fftools" to replace same name files in directory "ffmpeg-7.1.1/fftools",
+use files in "ffmpeg-7.1.1-src-6.1.1-16/fftools" to replace same name files in directory "ffmpeg-7.1.1/fftools",
 and compile it like FFmpeg, copy ffplay(.exe) to "app" directory,then you can play media file.
 
 it can display "sound river",it separate audio to 117 parts by frequency,display it like a river,
@@ -108,12 +108,17 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
   version 6.1-40-n has modularized mini GUI lib.
   
   version 6.1.1-4 is for ffmpeg-7.1.1
+  
+  version 6.1.1-16 changed user interface,you can double click mouse left button to open a 
+  directory or play a file,player will play all files in this directory,or,you can
+  use click/Ctrl+click/Shift+click to select file,and then click mouse right button
+  to open a menu to play selected files,you can choose play repeatedly.
 
-小戴媒体播放器2 6.1.1-4
+小戴媒体播放器2 6.1.1-16
 
 是一个开源软件,全媒体,包括视频,音频,跨平台(Windows 7/10,Ubuntu),可以显示声音河流 .
 
-这里有目录ffmpeg-7.1.1-src-6.1.1-4,解压ffmpeg-7.1.1.tar.xz,将创建ffmpeg-7.1.1目录, 用ffmpeg-7.1.1-src-6.1.1-4/fftools里的文件,替换掉ffmpeg-7.1.1/fftools里的同名文件, 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
+这里有目录ffmpeg-7.1.1-src-6.1.1-16,解压ffmpeg-7.1.1.tar.xz,将创建ffmpeg-7.1.1目录, 用ffmpeg-7.1.1-src-6.1.1-16/fftools里的文件,替换掉ffmpeg-7.1.1/fftools里的同名文件, 按照原来一样的方法编译,然后把ffplay(.exe)拷贝到app目录.
 
 可以显示声音河流,把声音按照频率分成117段,象显示一条河流一样显示出来, (点击窗口右下角的"River On"),最下面的是20KHz,最上面的是20Hz,河流从左向右流动,
 
@@ -191,11 +196,18 @@ Ubuntu 18.04/20.04 or Linux Mint 20, you need open terminal window, move to "app
 
 5.1-3版本有 mini GUI lib.
 
-5.1.1-10版本有lib automatic return 现在的文件名通常很长,屏幕很小,lib automatic return用最好的方法把一行较长的文件名分成几行
+5.1.1-10版本有lib automatic return 现在的文件名通常很长,屏幕很小,lib automatic return用最好
+  的方法把一行较长的文件名分成几行
 
 5.1.1-18版本有更好的GUI.
 
 6.1-40-n版本有模块化的mini GUI Lib.
 
 6.1.1-4版本有ffmpeg-7.1.1
+
+6.1.1-16版本改变了用户界面,用户可以用鼠标双击打开一个目录或者播放一个文件,播放器将播放目录下
+  的所有文件,或者,用户可以点击鼠标左键/Ctrl+鼠标左键/Shift+鼠标左键选择文件,然后点击鼠标右键
+  打开一个菜单播放这些文件,可以选择重复播放.
+
+
 

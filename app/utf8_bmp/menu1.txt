@@ -1,0 +1,5 @@
+// main menu
+fathercode:0,item:Play,            selfcode:11,notfather,,
+fathercode:0,item:,                selfcode:00,notfather,separation,
+fathercode:0,item:Play Repeatedly, selfcode:12,notfather,,
+
